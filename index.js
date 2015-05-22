@@ -161,7 +161,9 @@ function evaluateSpecial(localVars, form, cb) {
   if (f == 'let') {
     evaluateLet(localVars, form, cb);
   } else if (f == 'do') {
-    evaluateForms()
+    evaluateForms(localVars, form.slice(1), cb);
+  } else {
+    cb();
   }
 }
 

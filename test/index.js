@@ -111,4 +111,16 @@ describe('evaluateSymbol', function() {
       done();
     });
   });
+
+  it('do', function(done) {
+    dd.evaluateForm(
+      {}, ["do",
+	   [console.log, "RULLE!"],
+	   [console.log, "SIGNE!"],
+	  119],
+      function(err, result) {
+	assert.equal(result, 119);
+	done();
+      });
+  });
 });
