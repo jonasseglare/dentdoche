@@ -120,7 +120,49 @@ function pushLocalVars(a, b) {
 }
 
 function isSpecial(x) {
-  return x == 'let' || x == 'fn' || x == 'def' || x == 'if';
+  return x == 'let' || x == 'fn' || x == 'def' || x == 'if' || x == 'do';
+}
+
+function buildLocalVars(localVars, bindings, cb) {
+  if (!(bindings.length % 2 == 0)) {
+    cb(new Error('Odd number of bindings'));
+  } else {
+    if (bindings.length == 0) {
+      cb();
+    } else {
+      var sym = getName(bindings[0]);
+      evaluateForm(localVars, bindings[1], function(err, result) {
+	if (err) {
+	  cb(err);
+	} else {
+	  localVars[sym] = result;
+	  buildLocalVars(localVars, bindings.slice(2), cb);
+	}
+      });
+    }
+  }
+}
+
+function evaluateLet(localVars, form, cb) {
+  assert(form.length >= 2);
+  var bindings = form[1];
+  var body = form.slice(2);
+  buildLocalVars(pushLocalVars({}, localVars), bindings, function(err, nextLocalVars) {
+    if (err) {
+      cb(err);
+    } else {
+      evaluateForms(nextLocalVars, body, cb);
+    }
+  });
+}
+
+function evaluateSpecial(localVars, form, cb) {
+  var f = form[0];
+  if (f == 'let') {
+    evaluateLet(localVars, form, cb);
+  } else if (f == 'do') {
+    evaluateForms()
+  }
 }
 
 var operators = ['+', '-', '*', '/', '&&', '!', '||'];
@@ -189,9 +231,21 @@ function evaluateSExpr(localVars, form, cb) {
   assert(form.length > 0);
   var f = form[0];
   if (isSpecial(f)) {
-    evaluateSpecial(localVars, f, cb);
+    evaluateSpecial(localVars, form, cb);
   } else {
     evaluateNow(localVars, form, cb);
+  }
+}
+
+function evaluateForms(localVars, forms, cb) {
+  if (forms.length == 0) {
+    cb();
+  } else if (forms.length == 1) {
+    evaluateForm(localVars, forms[0], cb);
+  } else {
+    evaluateForm(localVars, forms[0], function(err, result) {
+      evaluateForms(localVars, forms.slice(1), cb);
+    });
   }
 }
 
