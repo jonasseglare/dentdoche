@@ -29,18 +29,32 @@ function getOperatorFunctionSub(x) {
 }
 
 function getOperatorFunction(x) {
-  var op = getOperatorFunctionSub(x);
-  var n = (getParamNames(op)).length;
-  if (n == 1) {
-    return op;
-  } else {
+  if (x == '-') {
     return function() {
       var args = argsToArray(arguments);
-      var result = args[0];
-      for (var i = 1; i < args.length; i++) {
-	result = op(result, args[i]);
+      if (args.length == 1) {
+	return -args[0];
+      } else if (args.length == 2) {
+	return args[0] - args[1];
+      } else {
+	// ERROR!!!
+	return undefined;
       }
-      return result;
+    }
+  } else {
+    var op = getOperatorFunctionSub(x);
+    var n = (getParamNames(op)).length;
+    if (n == 1) {
+      return op;
+    } else {
+      return function() {
+	var args = argsToArray(arguments);
+	var result = args[0];
+	for (var i = 1; i < args.length; i++) {
+	  result = op(result, args[i]);
+	}
+	return result;
+      }
     }
   }
 }

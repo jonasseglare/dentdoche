@@ -54,6 +54,13 @@ describe('evaluateSymbol', function() {
     })
   });
 
+  it('evaluateForm negate', function(done) {
+    dd.evaluateNow({}, ["-", 119], function(err, value) {
+      assert(value == -119);
+      done();
+    })
+  });
+
   it('getOperatorFunction', function() {
     var f = dd.getOperatorFunction('+');
     assert(typeof f == 'function');
