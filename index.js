@@ -36,8 +36,11 @@ function getOperatorFunction(x) {
       var args = argsToArray(arguments);
       console.log('args to op: %j', args);
       var result = args[0];
-      for (var i = 1; i < result.length; i++) {
+      for (var i = 1; i < args.length; i++) {
+	console.log('result = %j', result)
+	console.log('args[i] = %j', args[i]);
 	result = op(result, args[i]);
+	console.log('result = %j', result);
       }
       return result;
     }
@@ -129,6 +132,7 @@ function evaluateArgs(localVars, args, cb) {
     result[i] = value;
     counter++;
     if (counter == n) {
+      console.log('now move on');
       cb(null, result);
     }
   }
@@ -145,25 +149,26 @@ function evaluateArgs(localVars, args, cb) {
 }
 
 function evaluateNow(localVars, form, cb) {
-  var f = form[0];
+  var fun = form[0];
   console.log('form = %j', form);
-  if (isOperator(f)) {
-    f = getOperatorFunction(f);
-  } else if (isSymbol(f) || typeof f == 'string') {
-    f = evaluateSymbol(localVars, f);
+  if (isOperator(fun)) {
+    fun = getOperatorFunction(fun);
+  } else if (isSymbol(fun) || typeof fun == 'string') {
+    fun = evaluateSymbol(localVars, fun);
   }
-  
-  assert(typeof f == 'function');
-  evaluateArgs(localVars, form.slice(1), function(err, evaluatedArgs) {
-    if (isAsync(f)) {
-      f.apply(null, evaluatedArgs.concat([cb]));
-    } else {
-      console.log('evaluatedArgs = %j', evaluatedArgs);
-      var r = f.apply(null, evaluatedArgs);
-      console.log('r = %j', r);
-      cb(null, r);
-    }
-  });
+  var isFunction = (typeof fun) == 'function';
+  if (!isFunction) {
+    cb(new Error('Not a function'));
+  } else {
+    evaluateArgs(localVars, form.slice(1), function(err, evaluatedArgs) {
+      if (isAsync(fun)) {
+	fun.apply(null, evaluatedArgs.concat([cb]));
+      } else {
+	var r = fun.apply(null, evaluatedArgs);
+	cb(null, r);
+      }
+    });
+  }
 }
 
 function evaluateSExpr(localVars, form, cb) {
