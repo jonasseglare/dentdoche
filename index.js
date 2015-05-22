@@ -289,7 +289,7 @@ function makeLocalVars(symbols, values) {
 
 
 // Define an asynchronous function
-function fna(args, body) {
+function afn(args, body) {
   var f = function() {
     var allArgs = argsToArray(arguments);
     var lastIndex = allArgs.length - 1;
@@ -339,4 +339,4 @@ module.exports.isAsync = isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.sym = sym;
 module.exports.fn = fn;
-module.exports.fna = fna;
+module.exports.afn = afn;

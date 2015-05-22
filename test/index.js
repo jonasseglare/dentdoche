@@ -88,8 +88,8 @@ describe('evaluateSymbol', function() {
     assert(f(9, 10, 11) == 10);
   });
 
-  it('fna', function(done) {
-    var f = dd.fna(['a', 'b', 'c'],
+  it('afn', function(done) {
+    var f = dd.afn(['a', 'b', 'c'],
 		   ['+', ['-', dd.sym('a'), dd.sym('b')],
 		    dd.sym('c')]);
     assert(typeof f == 'function');
@@ -100,9 +100,9 @@ describe('evaluateSymbol', function() {
   });
 
   it('myAdd', function(done) {
-    var myAdd = dd.fna(['a', 'b'],
+    var myAdd = dd.afn(['a', 'b'],
 		      ['+', dd.sym('a'), dd.sym('b')]);
-    var add3 = dd.fna(['a', 'b', 'c'],
+    var add3 = dd.afn(['a', 'b', 'c'],
 		      [myAdd, dd.sym('a'),
 		       [myAdd, dd.sym('b'),
 			dd.sym('c')]]);
