@@ -130,7 +130,6 @@ function evaluateArgs(localVars, args, cb) {
     result[i] = value;
     counter++;
     if (counter == n) {
-      console.log('now move on');
       cb(null, result);
     }
   }
@@ -148,7 +147,6 @@ function evaluateArgs(localVars, args, cb) {
 
 function evaluateNow(localVars, form, cb) {
   var fun = form[0];
-  console.log('form = %j', form);
   if (isOperator(fun)) {
     fun = getOperatorFunction(fun);
   } else if (isSymbol(fun) || typeof fun == 'string') {
