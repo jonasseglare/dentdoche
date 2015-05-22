@@ -180,6 +180,28 @@ function evaluateFn(localVars, form, cb) {
   }
 }
 
+function evaluateIf(localVars, form, cb) {
+  if (form.length == 4 || form.length == 3) {
+    evaluateForm(localVars, form[1], function(err, p) {
+      if (err) {
+	cb(err);
+      } else {
+	if (p) {
+	  evaluateForm(localVars, form[2], cb);
+	} else {
+	  if (form.length == 4) {
+	    evaluateForm(localVars, form[3], cb);
+	  } else {
+	    cb();
+	  }
+	}
+      }
+    });
+  } else {
+    cb(new Error('Malformed if statement'));
+  }
+}
+
 function evaluateSpecial(localVars, form, cb) {
   var f = form[0];
   if (f == 'let') {
@@ -190,6 +212,8 @@ function evaluateSpecial(localVars, form, cb) {
     evaluateAfn(localVars, form, cb);
   } else if (f == 'fn') {
     evaluateFn(localVars, form, cb);
+  } else if (f == 'if') {
+    evaluateIf(localVars, form, cb);
   } else {
     cb();
   }
@@ -236,7 +260,6 @@ function evaluateArgs(localVars, args, cb) {
 }
 
 function evaluateNow(localVars, form, cb) {
-  console.log('Evaluate now: %j (%j)', form, form.length);
   var fun = form[0];
   if (isOperator(fun)) {
     fun = getOperatorFunction(fun);
@@ -248,7 +271,6 @@ function evaluateNow(localVars, form, cb) {
     cb(new Error('Not a function'));
   } else {
     evaluateArgs(localVars, form.slice(1), function(err, evaluatedArgs) {
-      console.log('Evaluated args to %j', evaluatedArgs);
       if (isAsync(fun)) {
 	fun.apply(null, evaluatedArgs.concat([cb]));
       } else {
