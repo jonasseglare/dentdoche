@@ -46,6 +46,13 @@ describe('evaluateSymbol', function() {
       done();
     })
   });
+  
+  it('evaluateForm many args', function(done) {
+    dd.evaluateNow({}, ["+", 1, 2, 3, 4], function(err, value) {
+      assert(value == 10);
+      done();
+    })
+  });
 
   it('getOperatorFunction', function() {
     var f = dd.getOperatorFunction('+');
