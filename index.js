@@ -24,26 +24,28 @@ function getParamNames(func) {
   return result;
 }
 
-var operators = ['+', '-', '*', '/', '&&', '!', '||'];
+
+var opmap = {
+  '=': function(a, b) {return a == b;},
+  '==': function(a, b) {return a == b;},
+  '!=': function(a, b) {return a != b;},
+  '<': function(a, b) {return a < b;},
+  '>': function(a, b) {return a > b;},
+  '<=': function(a, b) {return a <= b;},
+  '>=': function(a, b) {return a >= b;},
+  '+': function(a, b) {return a + b;},
+  '-': function(a, b) {return a - b;},
+  '/': function(a, b) {return a/b;},
+  '*': function(a, b) {return a*b;},
+  '&&': function(a, b) {return a && b;},
+  '||': function(a, b) {return a || b;},
+  '!': function(a) {return !a;}
+};
 
 function getOperatorFunctionSub(x) {
-  return {
-    '=': function(a, b) {return a == b;},
-    '==': function(a, b) {return a == b;},
-    '!=': function(a, b) {return a != b;},
-    '<': function(a, b) {return a < b;},
-    '>': function(a, b) {return a > b;},
-    '<=': function(a, b) {return a <= b;},
-    '>=': function(a, b) {return a >= b;},
-    '+': function(a, b) {return a + b;},
-    '-': function(a, b) {return a - b;},
-    '/': function(a, b) {return a/b;},
-    '*': function(a, b) {return a*b;},
-    '&&': function(a, b) {return a && b;},
-    '||': function(a, b) {return a || b;},
-    '!': function(a) {return !a;}
-  }[x];
+  return opmap[x];
 }
+
 
 function getOperatorFunction(x) {
   if (x == '-') {
@@ -131,7 +133,7 @@ function evaluateSymbol(localVars, symbol) {
   } else if (localVars.hasOwnProperty('___next')) {
     return evaluateSymbol(localVars.___next, symbol);
   }
-  return undefined;
+  return new Error('The symbol ' + symbol + ' has not been bound');
 }
 
 function pushLocalVars(a, b) {
@@ -252,12 +254,7 @@ function evaluateSpecial(localVars, form, cb) {
 
 
 function isOperator(x) {
-  for (var i = 0; i < operators.length; i++) {
-    if (x == operators[i]) {
-      return true;
-    }
-  }
-  return false;
+  return opmap[x];
 }
 
 function plus(a, b) {
@@ -298,7 +295,7 @@ function evaluateNow(localVars, form, cb) {
   }
   var isFunction = (typeof fun) == 'function';
   if (!isFunction) {
-    cb(new Error('Not a function'));
+    cb(new Error('Not a function: ' + fun));
   } else {
     evaluateArgs(localVars, form.slice(1), function(err, evaluatedArgs) {
       if (isAsync(fun)) {

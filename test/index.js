@@ -160,4 +160,20 @@ describe('evaluateSymbol', function() {
       }
     );
   });
+
+  it('recursion', function(done) {
+    dd.evaluateForm(
+      {},
+      ['let', ['fak', ['fn', ['n'],
+		       ['if', ['==', 0, dd.sym('n')],
+			1,
+			['*', dd.sym('n'),
+			 ['fak', ['-', dd.sym('n'), 1]]]]]],
+       [dd.sym('fak'), 7]],
+      function(err, value) {
+	assert.equal(value, 1*2*3*4*5*6*7);
+	done();
+      }
+    );
+  });
 });
