@@ -1,5 +1,25 @@
 var assert = require('assert');
 
+/*
+    How to get the names of function parameters:
+    
+      http://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically-from-javascript
+*/
+var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+var ARGUMENT_NAMES = /([^\s,]+)/g;
+function getParamNames(func) {
+  var fnStr = func.toString().replace(STRIP_COMMENTS, '');
+  var result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+  if(result === null)
+     result = [];
+  return result;
+}
+
+
+function argsToArray(x) {
+  return Array.prototype.slice.call(x); // see mail.http.js
+}
+
 function Symbol(x) {
   this.name = x;
 }
@@ -14,8 +34,6 @@ function toSymbol(x) {
   }
   return new Symbole(x);
 }
-
-
 
 function getName(x) {
   if (typeof x == 'string') {
@@ -68,7 +86,7 @@ function isOperator(x) {
   return false;
 }
 
-function getOperatorFunction(x) {
+function getOperatorFunctionSub(x) {
   return {
     '+': function(a, b) {return a + b;},
     '-': function(a, b) {return a - b;},
@@ -77,6 +95,23 @@ function getOperatorFunction(x) {
     '&&': function(a, b) {return a && b;},
     '||': function(a, b) {return a || b},
     '!': function(a) {return !a;}
+  }
+}
+
+function getOperatorFunction(x) {
+  var op = getOperatorFunctionSub(x);
+  var n = (getParamNames(op)).length;
+  if (n == 1) {
+    return op;
+  } else {
+    return function() {
+      var args = argsToArray(arguments);
+      var result = args[0];
+      for (var i = 1; i < result.length; i++) {
+	result = op(result, args[i]);
+      }
+      return result;
+    }
   }
 }
 
