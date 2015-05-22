@@ -222,14 +222,38 @@ function isAsync(x) {
   return x.async;
 }
 
-// Define a synchronous function
-function defn(args, body) {
+function makeLocalVars(symbols, values) {
+  assert(symbols.length == values.length);
+  var dst = {};
+  for (var i = 0; i < symbols.length; i++) {
+    dst[symbols[i]] = values[i];
+  }
+  return dst;
 }
 
+
 // Define an asynchronous function
-function defna(args, body) {
-  return async(defnaSub(args, body));
+function fna(args, body) {
+
 }
+
+// Create a synchronous function
+function fn(args, body) {
+  return function() {
+    var evaluatedArgs = argsToArray(arguments);
+    var localVars = makeLocalVars(args, evaluatedArgs);
+    var result = 'UNDEFINED RESULT THAT SHOULD BE OVERWRITTEN!!!';
+    evaluateForm(localVars, body, function(err, r) {
+      if (err) {
+	throw err;
+      } else {
+	result = r;
+      }
+    });
+    return result;
+  }
+}
+
 
 function defmacro(args, body) {
   var x = defmacroSub(args, body);
@@ -250,3 +274,4 @@ module.exports.async = async;
 module.exports.isAsync = isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.sym = sym;
+module.exports.fn = fn;

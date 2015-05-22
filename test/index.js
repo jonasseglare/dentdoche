@@ -72,4 +72,12 @@ describe('evaluateSymbol', function() {
     var f = dd.getOperatorFunction('+');
     assert(typeof f == 'function');
   });
+
+  it('defn', function() {
+    var f = dd.fn(['a', 'b', 'c'],
+		   ['+', ['-', dd.sym('a'), dd.sym('b')],
+		    dd.sym('c')]);
+    assert(typeof f == 'function');
+    assert(f(9, 10, 11) == 10);
+  });
 });
