@@ -61,6 +61,13 @@ describe('evaluateSymbol', function() {
     })
   });
 
+  it('evaluateForm local var', function(done) {
+    dd.evaluateNow({k: 3}, ["+", 119, dd.sym('k')], function(err, value) {
+      assert(value == 122);
+      done();
+    })
+  });
+
   it('getOperatorFunction', function() {
     var f = dd.getOperatorFunction('+');
     assert(typeof f == 'function');

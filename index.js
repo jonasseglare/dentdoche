@@ -76,7 +76,11 @@ function toSymbol(x) {
   if (isSymbol(x)) {
     return x;
   }
-  return new Symbole(x);
+  return new Symbol(x);
+}
+
+function sym(x) {
+  return toSymbol(x);
 }
 
 function getName(x) {
@@ -245,3 +249,4 @@ module.exports.evaluateNow = evaluateNow;
 module.exports.async = async;
 module.exports.isAsync = isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
+module.exports.sym = sym;
