@@ -98,4 +98,15 @@ describe('evaluateSymbol', function() {
       done();
     });
   });
+
+  it('myAdd', function(done) {
+    var myAdd = dd.fna(['a', 'b'],
+		      ['+', dd.sym('a'), dd.sym('b')]);
+    var add3 = dd.fna(['a', 'b', 'c'],
+		      [myAdd, dd.sym('a'), [myAdd, dd.sym('b'), dd.sym('c')]]);
+    add3(3, 4, 5, function(err, r) {
+      assert.equal(r, 12);
+      done();
+    });
+  });
 });
