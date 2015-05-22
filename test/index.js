@@ -32,4 +32,11 @@ describe('evaluateSymbol', function() {
       done();
     })
   });
+
+  it('evaluateForm2', function(done) {
+    dd.evaluateForm({}, ["+", 2, 3], function(err, value) {
+      assert(value == 5);
+      done();
+    })
+  });
 });

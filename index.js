@@ -115,6 +115,30 @@ function getOperatorFunction(x) {
   }
 }
 
+function evaluateArgs(localVars, args, cb) {
+  var n = args.length;
+  var result = new Array(n);
+  var counter = 0;
+
+  var evalComplete = function(i, value) {
+    result[i] = value;
+    counter++;
+    if (counter == n) {
+      cb(null, result);
+    }
+  }
+  
+  for (var i = 0; i < n; i++) {
+    evaluateForm(localVars, args[i], function(err, y) {
+      if (err) {
+	cb(err);
+      } else {
+	evalComplete(i, y);
+      }
+    });
+  }
+}
+
 function evaluateNow(localVars, form, cb) {
   var f = form[0];
   if (isOperator(f)) {
@@ -123,41 +147,9 @@ function evaluateNow(localVars, form, cb) {
     f = evaluateSymbol(localVars, f);
   }
   assert(typeof f == 'function');
-  evaluateArgs(form.slice(1), function(err, evaluatedArgs) {
-    evaluateFunction(f, evaluatedArgs, cb);
-  });
-}
-
-function evaluateSExpr(localVars, form, cb) {
-  if (form.length == 0) {
-    cb(null, undefined);
-  } else {
-    var f = form[0];
-    if (isMacro(f)) {
-      evaluateMacro(localVars, form, function(err, newForm) {
-	if (err) {
-	  cb(err);
-	} else {
-	  evaluateForm(localVars, newForm, cb);
-	}
-      });
-    } else if (isSpecial(f)) {
-      evaluateSpecial(localVars, form, cb);
-    } else {
-      evaluateNow(localVars, form, cb);
-    }
-  }
-}
-
-// Always passes the result to cb, no matter if it is sync or not.
-function evaluateForm(localVars, form, cb) {
-  if (isArray(form)) {
-    evaluateSExpr(localVars, form, cb);
-  } else if (isSymbol(form)) {
-    cb(null, evaluateSymbol(localVars, form));
-  } else {
+  evaluateArgs(localVars, form.slice(1), function(err, evaluatedArgs) {
     cb(null, form);
-  }
+  });
 }
 
 // Mark a function as async.
