@@ -35,8 +35,14 @@ describe('evaluateSymbol', function() {
 
   it('evaluateForm2', function(done) {
     dd.evaluateNow({}, ["+", 2, 3], function(err, value) {
-      console.log('value == %j', value);
       assert(value == 5);
+      done();
+    })
+  });
+  
+  it('evaluateForm nested', function(done) {
+    dd.evaluateNow({}, ["-", ["+", 2, 3], 14], function(err, value) {
+      assert(value == -9);
       done();
     })
   });
