@@ -17,13 +17,15 @@ function getParamNames(func) {
 
 
 function getOperatorFunctionSub(x) {
-  if (x == '+') {
-    assert(typeof plus == 'function');
-    return plus;
-  } else {
-    console.log('return mjao');
-    return 'mjao';
-  }
+  return {
+    '+': function(a, b) {return a + b;},
+    '-': function(a, b) {return a - b;},
+    '/': function(a, b) {return a/b;},
+    '*': function(a, b) {return a*b;},
+    '&&': function(a, b) {return a && b;},
+    '||': function(a, b) {return a || b;},
+    '!': function(a) {return !a;}
+  }[x];
 }
 
 function getOperatorFunction(x) {
@@ -34,13 +36,9 @@ function getOperatorFunction(x) {
   } else {
     return function() {
       var args = argsToArray(arguments);
-      console.log('args to op: %j', args);
       var result = args[0];
       for (var i = 1; i < args.length; i++) {
-	console.log('result = %j', result)
-	console.log('args[i] = %j', args[i]);
 	result = op(result, args[i]);
-	console.log('result = %j', result);
       }
       return result;
     }
@@ -182,7 +180,6 @@ function evaluateSExpr(localVars, form, cb) {
 }
 
 function evaluateForm(localVars, form, cb) {
-  console.log('FORM TO EVALUATE: %j', form);
   if (isArray(form)) {
     if (form.length == 0) {
       cb(null, undefined);
