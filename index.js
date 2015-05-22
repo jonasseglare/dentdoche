@@ -124,6 +124,7 @@ function isSpecial(x) {
 }
 
 function buildLocalVars(localVars, bindings, cb) {
+  
   if (!(bindings.length % 2 == 0)) {
     cb(new Error('Odd number of bindings'));
   } else {
@@ -144,10 +145,13 @@ function buildLocalVars(localVars, bindings, cb) {
 }
 
 function evaluateLet(localVars, form, cb) {
+  assert(isArray(form));
   assert(form.length >= 2);
   var bindings = form[1];
   var body = form.slice(2);
-  buildLocalVars(pushLocalVars({}, localVars), bindings, function(err, nextLocalVars) {
+  buildLocalVars(
+    pushLocalVars({}, localVars),
+    bindings, function(err, nextLocalVars) {
     if (err) {
       cb(err);
     } else {
@@ -178,6 +182,8 @@ function evaluateSpecial(localVars, form, cb) {
     evaluateForms(localVars, form.slice(1), cb);
   } else if (f == 'afn') {
     evaluateAfn(localVars, form, cb);
+  } else if (f == 'fn') {
+    evaluateFn(localVars, form, cb);
   } else {
     cb();
   }
@@ -224,6 +230,7 @@ function evaluateArgs(localVars, args, cb) {
 }
 
 function evaluateNow(localVars, form, cb) {
+  console.log('Evaluate now: %j (%j)', form, form.length);
   var fun = form[0];
   if (isOperator(fun)) {
     fun = getOperatorFunction(fun);
@@ -235,6 +242,7 @@ function evaluateNow(localVars, form, cb) {
     cb(new Error('Not a function'));
   } else {
     evaluateArgs(localVars, form.slice(1), function(err, evaluatedArgs) {
+      console.log('Evaluated args to %j', evaluatedArgs);
       if (isAsync(fun)) {
 	fun.apply(null, evaluatedArgs.concat([cb]));
       } else {

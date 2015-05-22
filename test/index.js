@@ -133,4 +133,16 @@ describe('evaluateSymbol', function() {
 	     done();
 	   });
   });
+
+  it('fn2', function(done) {
+    dd.evaluateForm(
+      {},
+      ['let', ['k', ['fn', ['a', 'b'], ['+', ['*', dd.sym('a'), dd.sym('a')],
+					     ['*', dd.sym('b'), dd.sym('b')]]]],
+       [dd.sym('k'), 3, 4]],
+      function(err, result) {
+	assert.equal(result, 25);
+	done();
+      });
+  });
 });
