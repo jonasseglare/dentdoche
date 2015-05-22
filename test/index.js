@@ -25,4 +25,11 @@ describe('evaluateSymbol', function() {
     assert(dd.isAsync(dd.async(x)));
     assert(!dd.isAsync(console.log));
   });
+  
+  it('evaluateForm', function(done) {
+    dd.evaluateForm({}, 119, function(err, value) {
+      assert(value == 119);
+      done();
+    })
+  });
 });
