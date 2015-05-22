@@ -15,9 +15,17 @@ function getParamNames(func) {
   return result;
 }
 
+var operators = ['+', '-', '*', '/', '&&', '!', '||'];
 
 function getOperatorFunctionSub(x) {
   return {
+    '=': function(a, b) {return a == b;},
+    '==': function(a, b) {return a == b;},
+    '!=': function(a, b) {return a != b;},
+    '<': function(a, b) {return a < b;},
+    '>': function(a, b) {return a > b;},
+    '<=': function(a, b) {return a <= b;},
+    '>=': function(a, b) {return a >= b;},
     '+': function(a, b) {return a + b;},
     '-': function(a, b) {return a - b;},
     '/': function(a, b) {return a/b;},
@@ -219,7 +227,6 @@ function evaluateSpecial(localVars, form, cb) {
   }
 }
 
-var operators = ['+', '-', '*', '/', '&&', '!', '||'];
 
 function isOperator(x) {
   for (var i = 0; i < operators.length; i++) {
