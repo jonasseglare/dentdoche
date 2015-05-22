@@ -120,7 +120,7 @@ function pushLocalVars(a, b) {
 }
 
 function isSpecial(x) {
-  return x == 'let' || x == 'fn' || x == 'def' || x == 'if' || x == 'do';
+  return x == 'let' || x == 'fn' || x == 'afn' || x == 'if' || x == 'do';
 }
 
 function buildLocalVars(localVars, bindings, cb) {
@@ -288,24 +288,34 @@ function makeLocalVars(symbols, values) {
 }
 
 
+function initLVars(x) {
+  if (x == undefined) {
+    return {};
+  } else {
+    return x;
+  }
+}
+
 // Define an asynchronous function
-function afn(args, body) {
+function afn(args, body, lvars) {
   var f = function() {
     var allArgs = argsToArray(arguments);
     var lastIndex = allArgs.length - 1;
     var evaluatedArgs = allArgs.slice(0, lastIndex);
     var cb = allArgs[lastIndex];
-    var localVars = makeLocalVars(args, evaluatedArgs);
+    var localVars = pushLocalVars(makeLocalVars(args, evaluatedArgs),
+				  initLVars(lvars));
     evaluateForm(localVars, body, cb);
   }
   return async(f);
 }
 
 // Create a synchronous function
-function fn(args, body) {
+function fn(args, body, lvars) {
   return function() {
     var evaluatedArgs = argsToArray(arguments);
-    var localVars = makeLocalVars(args, evaluatedArgs);
+    var localVars = pushLocalVars(makeLocalVars(args, evaluatedArgs),
+				  initLVars(lvars));
     var result = 'UNDEFINED RESULT THAT SHOULD BE OVERWRITTEN!!!';
     evaluateForm(localVars, body, function(err, r) {
       if (err) {
