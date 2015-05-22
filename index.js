@@ -316,14 +316,17 @@ function fn(args, body, lvars) {
     var evaluatedArgs = argsToArray(arguments);
     var localVars = pushLocalVars(makeLocalVars(args, evaluatedArgs),
 				  initLVars(lvars));
-    var result = 'UNDEFINED RESULT THAT SHOULD BE OVERWRITTEN!!!';
+    var assigned = false;
+    var result = undefined;
     evaluateForm(localVars, body, function(err, r) {
       if (err) {
 	throw err;
       } else {
+	assigned = true;
 	result = r;
       }
     });
+    assert(assigned, 'Result was not assigned. Most likely, your result is delivered asynchronously, but this function is synchronous.');
     return result;
   }
 }
