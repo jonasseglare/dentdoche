@@ -164,7 +164,7 @@ describe('evaluateSymbol', function() {
   it('recursion', function(done) {
     dd.evaluateForm(
       {},
-      ['let', ['fak', ['fn', ['n'],
+      ['let', ['fak', ['afn', ['n'],
 		       ['if', ['==', 0, dd.sym('n')],
 			1,
 			['*', dd.sym('n'),
