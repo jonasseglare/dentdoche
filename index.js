@@ -156,12 +156,28 @@ function evaluateLet(localVars, form, cb) {
   });
 }
 
+function evaluateAfn(localVars, form, cb) {
+  assert(form.length == 3);
+  args = form[1];
+  body = form[2];
+  return afn(args, body, localVars);
+}
+
+function evaluateFn(localVars, form, cb) {
+  assert(form.length == 3);
+  args = form[1];
+  body = form[2];
+  return fn(args, body, localVars);
+}
+
 function evaluateSpecial(localVars, form, cb) {
   var f = form[0];
   if (f == 'let') {
     evaluateLet(localVars, form, cb);
   } else if (f == 'do') {
     evaluateForms(localVars, form.slice(1), cb);
+  } else if (f == 'afn') {
+    evaluateAfn(localVars, form, cb);
   } else {
     cb();
   }
