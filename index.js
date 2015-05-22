@@ -16,6 +16,35 @@ function getParamNames(func) {
 }
 
 
+function getOperatorFunctionSub(x) {
+  if (x == '+') {
+    assert(typeof plus == 'function');
+    return plus;
+  } else {
+    console.log('return mjao');
+    return 'mjao';
+  }
+}
+
+function getOperatorFunction(x) {
+  var op = getOperatorFunctionSub(x);
+  var n = (getParamNames(op)).length;
+  if (n == 1) {
+    return op;
+  } else {
+    return function() {
+      var args = argsToArray(arguments);
+      console.log('args to op: %j', args);
+      var result = args[0];
+      for (var i = 1; i < result.length; i++) {
+	result = op(result, args[i]);
+      }
+      return result;
+    }
+  }
+}
+
+
 function argsToArray(x) {
   return Array.prototype.slice.call(x); // see mail.http.js
 }
@@ -86,34 +115,10 @@ function isOperator(x) {
   return false;
 }
 
-function getOperatorFunctionSub(x) {
-  return {
-    '+': function(a, b) {return a + b;},
-    '-': function(a, b) {return a - b;},
-    '*': function(a, b) {return a*b;},
-    '/': function(a, b) {return a/b},
-    '&&': function(a, b) {return a && b;},
-    '||': function(a, b) {return a || b},
-    '!': function(a) {return !a;}
-  }
+function plus(a, b) {
+  return a + b;
 }
 
-function getOperatorFunction(x) {
-  var op = getOperatorFunctionSub(x);
-  var n = (getParamNames(op)).length;
-  if (n == 1) {
-    return op;
-  } else {
-    return function() {
-      var args = argsToArray(arguments);
-      var result = args[0];
-      for (var i = 1; i < result.length; i++) {
-	result = op(result, args[i]);
-      }
-      return result;
-    }
-  }
-}
 
 function evaluateArgs(localVars, args, cb) {
   var n = args.length;
@@ -141,6 +146,7 @@ function evaluateArgs(localVars, args, cb) {
 
 function evaluateNow(localVars, form, cb) {
   var f = form[0];
+  console.log('form = %j', form);
   if (isOperator(f)) {
     f = getOperatorFunction(f);
   } else if (isSymbol(f) || typeof f == 'string') {
@@ -148,9 +154,42 @@ function evaluateNow(localVars, form, cb) {
   }
   assert(typeof f == 'function');
   evaluateArgs(localVars, form.slice(1), function(err, evaluatedArgs) {
-    cb(null, form);
+    if (isAsync(f)) {
+      f.apply(null, evaluatedArgs.concat([cb]));
+    } else {
+      console.log('evaluatedArgs = %j', evaluatedArgs);
+      var r = f.apply(null, evaluatedArgs);
+      console.log('r = %j', r);
+      cb(null, r);
+    }
   });
 }
+
+function evaluateSExpr(localVars, form, cb) {
+  assert(form.length > 0);
+  var f = form[0];
+  if (isSpecial(f)) {
+    evaluateSpecial(localVars, f, cb);
+  } else {
+    evaluateNow(localVars, form, cb);
+  }
+}
+
+function evaluateForm(localVars, form, cb) {
+  if (isArray(form)) {
+    if (form.length == 0) {
+      cb(null, undefined);
+    } else {
+      assert(form.length >= 0);
+      evaluateSExpr(localVars, form, cb);
+    }
+  } else if (typeof form == 'string' || isSymbol(form)) {
+    cb(null, evaluateSymbol(localVars, form));
+  } else {
+    cb(null, form);
+  }
+}
+
 
 // Mark a function as async.
 function async(x) {
@@ -188,3 +227,4 @@ module.exports.pushLocalVars = pushLocalVars;
 module.exports.evaluateForm = evaluateForm;
 module.exports.async = async;
 module.exports.isAsync = isAsync;
+module.exports.getOperatorFunction = getOperatorFunction;
