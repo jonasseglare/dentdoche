@@ -123,4 +123,14 @@ describe('evaluateSymbol', function() {
 	done();
       });
   });
+
+  it('let', function(done) {
+    dd.evaluateForm(
+      {}, ['let', ['a', 30,
+		   'b', 40],
+	   ['+', dd.sym('a'), dd.sym('b')]], function(err, result) {
+	     assert(result == 70);
+	     done();
+	   });
+  });
 });

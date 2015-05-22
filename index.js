@@ -128,7 +128,7 @@ function buildLocalVars(localVars, bindings, cb) {
     cb(new Error('Odd number of bindings'));
   } else {
     if (bindings.length == 0) {
-      cb();
+      cb(null, localVars);
     } else {
       var sym = getName(bindings[0]);
       evaluateForm(localVars, bindings[1], function(err, result) {
