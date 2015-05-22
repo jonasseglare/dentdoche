@@ -223,7 +223,7 @@ function isAsync(x) {
 }
 
 function makeLocalVars(symbols, values) {
-  assert(symbols.length == values.length);
+  assert.equal(symbols.length, values.length);
   var dst = {};
   for (var i = 0; i < symbols.length; i++) {
     dst[symbols[i]] = values[i];
@@ -234,7 +234,15 @@ function makeLocalVars(symbols, values) {
 
 // Define an asynchronous function
 function fna(args, body) {
-
+  var f = function() {
+    var allArgs = argsToArray(arguments);
+    var lastIndex = allArgs.length - 1;
+    var evaluatedArgs = allArgs.slice(0, lastIndex);
+    var cb = allArgs[lastIndex];
+    var localVars = makeLocalVars(args, evaluatedArgs);
+    evaluateForm(localVars, body, cb);
+  }
+  return async(f);
 }
 
 // Create a synchronous function
@@ -275,3 +283,4 @@ module.exports.isAsync = isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.sym = sym;
 module.exports.fn = fn;
+module.exports.fna = fna;
