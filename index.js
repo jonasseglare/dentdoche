@@ -152,6 +152,7 @@ function evaluateNow(localVars, form, cb) {
   } else if (isSymbol(f) || typeof f == 'string') {
     f = evaluateSymbol(localVars, f);
   }
+  
   assert(typeof f == 'function');
   evaluateArgs(localVars, form.slice(1), function(err, evaluatedArgs) {
     if (isAsync(f)) {
@@ -176,6 +177,7 @@ function evaluateSExpr(localVars, form, cb) {
 }
 
 function evaluateForm(localVars, form, cb) {
+  console.log('FORM TO EVALUATE: %j', form);
   if (isArray(form)) {
     if (form.length == 0) {
       cb(null, undefined);
@@ -225,6 +227,7 @@ module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.pushLocalVars = pushLocalVars;
 module.exports.evaluateForm = evaluateForm;
+module.exports.evaluateNow = evaluateNow;
 module.exports.async = async;
 module.exports.isAsync = isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
