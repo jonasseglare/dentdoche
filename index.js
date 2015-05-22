@@ -203,7 +203,7 @@ function evaluateForm(localVars, form, cb) {
       assert(form.length >= 0);
       evaluateSExpr(localVars, form, cb);
     }
-  } else if (typeof form == 'string' || isSymbol(form)) {
+  } else if (isSymbol(form)) {
     cb(null, evaluateSymbol(localVars, form));
   } else {
     cb(null, form);

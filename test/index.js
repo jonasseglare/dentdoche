@@ -73,7 +73,14 @@ describe('evaluateSymbol', function() {
     assert(typeof f == 'function');
   });
 
-  it('defn', function() {
+    it('evaluate string concat', function(done) {
+      dd.evaluateForm({}, ['+', 'Rulle', ' ', 'Östlund'], function(err, value) {
+	assert.equal(value, 'Rulle Östlund');
+	done();
+      });
+  });
+
+  it('fn', function() {
     var f = dd.fn(['a', 'b', 'c'],
 		   ['+', ['-', dd.sym('a'), dd.sym('b')],
 		    dd.sym('c')]);
