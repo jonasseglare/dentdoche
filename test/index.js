@@ -19,4 +19,10 @@ describe('evaluateSymbol', function() {
     var v = dd.evaluateSymbol(dd.pushLocalVars({}, {a: 119}), sym);
     assert.equal(v, 119);
   });
+
+  it('Should study async tagging', function() {
+    var x = function(x) {console.log('mjao, %j', x);};
+    assert(dd.isAsync(dd.async(x)));
+    assert(!dd.isAsync(console.log));
+  });
 });
