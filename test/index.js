@@ -145,4 +145,19 @@ describe('evaluateSymbol', function() {
 	done();
       });
   });
+
+  it('if', function(done) {
+    dd.evaluateForm(
+      {},
+      ['let', ['a', ['if', false, 3, 4],
+	       'b', ['if', true, 9, 11]],
+       [dd.array, dd.sym('a'), dd.sym('b')]],
+      function(err, result) {
+	assert(result.length == 2);
+	assert(result[0] == 4);
+	assert(result[1] == 9);
+	done();
+      }
+    );
+  });
 });

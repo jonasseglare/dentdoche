@@ -1,3 +1,12 @@
+/*
+  
+  + Write asynchronous code as if it is synchronous
+  + No extra compilation step (vs streamline.js)
+  + Macros
+  - Some overhead
+  - More involved syntax
+
+  */
 var assert = require('assert');
 
 /*
@@ -72,6 +81,10 @@ function argsToArray(x) {
   return Array.prototype.slice.call(x); // see mail.http.js
 }
 
+function makeArrayFromArgs() {
+  return argsToArray(arguments);
+}
+
 function Symbol(x) {
   this.name = x;
 }
@@ -128,7 +141,7 @@ function pushLocalVars(a, b) {
 }
 
 function isSpecial(x) {
-  return x == 'let' || x == 'fn' || x == 'afn' || x == 'if' || x == 'do';
+  return x == 'let' || x == 'fn' || x == 'afn' || x == 'if' || x == 'do' || x == "'";
 }
 
 function buildLocalVars(localVars, bindings, cb) {
@@ -210,6 +223,14 @@ function evaluateIf(localVars, form, cb) {
   }
 }
 
+function evaluateQuote(localVars, form, cb) {
+  if (form.length == 2) {
+    cb(null, form[1]);
+  } else {
+    cb(new Error('Quote takes one argument'));
+  }
+}
+
 function evaluateSpecial(localVars, form, cb) {
   var f = form[0];
   if (f == 'let') {
@@ -222,6 +243,8 @@ function evaluateSpecial(localVars, form, cb) {
     evaluateFn(localVars, form, cb);
   } else if (f == 'if') {
     evaluateIf(localVars, form, cb);
+  } else if (f == "'") {
+    evaluateQuote(localVars, form, cb);
   } else {
     cb();
   }
@@ -412,3 +435,4 @@ module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.sym = sym;
 module.exports.fn = fn;
 module.exports.afn = afn;
+module.exports.array = makeArrayFromArgs;
