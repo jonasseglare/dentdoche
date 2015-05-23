@@ -694,6 +694,7 @@ function makeSpecialFormMacro(keyword) {
 
 var quoteMacro = makeSpecialFormMacro("quote");
 var letMacro = makeSpecialFormMacro("let");
+var doMacro = makeSpecialFormMacro("do");
 
 
 module.exports.evaluateSymbol = evaluateSymbol;
@@ -724,3 +725,4 @@ module.exports.reduce = reduceAsync;
 module.exports.filter = filterAsync;
 module.exports.quote = quoteMacro;
 module.exports.let = letMacro;
+module.exports.do = doMacro;
