@@ -325,25 +325,11 @@ function plus(a, b) {
 
 function evaluateArgs(localVars, args, cb) {
   var n = args.length;
-  var result = new Array(n);
-  var counter = 0;
-
-  var evalComplete = function(i, value) {
-    result[i] = value;
-    counter++;
-    if (counter == n) {
-      cb(null, result);
-    }
-  }
-  
+  var result = new ResultArray(n, cb);
   for (var i = 0; i < n; i++) {
-    evaluateFormWithoutMacros(localVars, args[i], function(err, y) {
-      if (err) {
-	cb(err);
-      } else {
-	evalComplete(i, y);
-      }
-    });
+    evaluateFormWithoutMacros(
+      localVars, args[i],
+      result.makeSetter(i));
   }
 }
 
