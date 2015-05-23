@@ -689,6 +689,11 @@ var quoteMacro = macro(function(x) {
   return ["quote", x];
 });
 
+var letMacro = macro(function() {
+  var args = argsToArray(arguments);
+  return ["let"].concat(args);
+});
+
 
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
@@ -697,6 +702,7 @@ module.exports.evaluateNow = evaluateNow;
 module.exports.async = async;
 module.exports.isAsync = isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
+module.exports.S = sym;
 module.exports.sym = sym;
 module.exports.fn = fn;
 module.exports.afn = afn;
@@ -716,3 +722,4 @@ module.exports.map = mapAsync;
 module.exports.reduce = reduceAsync;
 module.exports.filter = filterAsync;
 module.exports.quote = quoteMacro;
+module.exports.let = letMacro;

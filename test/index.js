@@ -396,7 +396,7 @@ describe('evaluateSymbol', function() {
     
     dd.evaluateForm(
       null,
-      ["let", ["basenames", ["quote",
+      [dd.let, ["basenames", ["quote",
 			     ["a.txt", "b.txt", "c.txt"]],
 	       "fullnames", [dd.map, addTmp, dd.sym("basenames")],
 	       "writeRulle", ["afn", ["fname"],
@@ -405,7 +405,7 @@ describe('evaluateSymbol', function() {
 			       [fs.writeFile, dd.sym("fname"), "Rulle!!!"],
 			       dd.sym("fname")]]],
        [dd.map, dd.sym("writeRulle"), dd.sym('fullnames')],
-       ["let", ["strings", [dd.map,
+       [dd.let, ["strings", [dd.map,
 			    ["afn", ["fname"], // Forgetting to use afn here instead of fn
 			                       // may cause errors: The return value will
 			                       // both be used, and the async callback will
