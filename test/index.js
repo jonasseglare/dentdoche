@@ -335,12 +335,33 @@ describe('evaluateSymbol', function() {
       function(err, value) {
 	assert(!err);
 	var r = [1, 3, 5, 7, 9];
-	console.log('value = %j', value);
 	assert.equal(r.length, value.length);
 	for (var i = 0; i < r.length; i++) {
 	  assert.equal(r[i], value[i]);
 	}
 	done();
       });
+  });
+
+  it('Composed of filter, map, reduce', function(done) {
+    var plus = function(a, b) {
+      console.log(' plus: %j + %j = %j', a, b, a + b);
+      return a + b;
+    }
+    var odd = function(x) {
+      return x % 2 == 1;
+    }
+
+    var square = function(x) {
+      return x*x;
+    }
+    
+    var f = dd.fn(
+      [],
+      [dd.reduce, plus, [dd.map, square, [dd.filter, odd,
+						 dd.sym("arguments")]]]);
+    var result = f(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    assert.equal(result, 165);
+    done();
   });
 });

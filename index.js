@@ -639,10 +639,10 @@ function mapAsync(fun0) {
 } async(mapAsync);
 
 function reduceAsync(fun0, coll, cb) {
-  if (coll.length == 0) {
+  if (coll.length == undefined) {
     cb(null, []);
   } else if (coll.length == 1) {
-    cb(null, coll);
+    cb(null, coll[0]);
   } else {
     var fun = convertToAsync(fun0);
     var middle = Math.floor(coll.length/2);
@@ -690,7 +690,6 @@ function filterAsync(fun0, coll, cb) {
 	  keep[k] = true;
 	}
 	if (counter == n) {
-	  console.log('keep = %j', keep);
 	  var result = new Array(toKeep);
 	  var r = 0;
 	  for (var j = 0; j < n; j++) {
@@ -699,7 +698,6 @@ function filterAsync(fun0, coll, cb) {
 	      r++;
 	    }
 	  }
-	  console.log('result = %j', result);
 	  if (r == toKeep) {
 	    cb(null, result);
 	  } else {
