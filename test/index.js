@@ -443,19 +443,28 @@ describe('evaluateSymbol', function() {
     );
   });
 
-  it('recursion with later', function(done) {
-    var fun = undefined;
-    fun = dd.afn(["n"],
-		//['if',
-		 ["==", 0, dd.sym('n')]);
-		 //1,
-		 //["later",
-		 //[dd.sym('-'),
-		  //dd.sym('n'),
-		  //[fun, ["-", dd.sym('n'), 1]]]]);
-    fun(3000, function(err, sum) {
-      assert.equal(3000*3001/2, sum);
+  it('Try later', function(done) {
+    var fun = dd.afn(['n'],
+		     ["later", 1199]);
+    
+    fun(9, function(err, value) {
+      assert.equal(value, 1199);
       done();
-    })
+    });
   });
+  
+  // it('recursion with later', function(done) {
+  //   var fun = undefined;
+  //   fun = dd.afn(["n"],
+  // 		['if',
+  // 		 ["==", 0, dd.sym('n')],
+  // 		 1,
+  // 		 ["later", 3]]);
+  // 		 //[dd.sym('-'),
+  // 		  //dd.sym('n'),
+  // 		  //[fun, ["-", dd.sym('n'), 1]]]]);
+  //   fun(3000, function(err, sum) {
+  //     assert.equal(3000*3001/2, sum);
+  //     done();
+  //   })
 });

@@ -288,11 +288,8 @@ function evaluateDo(localVars, form, cb) {
 }
 
 function evaluateLater(localVars, form, cb) {
-  for (var i = 0; i < 3000; i++) {
-    console.log('LATER: %j', form);
-  }
   setTimeout(function() {
-    evaluateForm(localVars, form, cb);
+    evaluateFormsWithoutMacros(localVars, form.slice(1), cb);
   }, 0);
 }
 
