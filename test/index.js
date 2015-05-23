@@ -239,6 +239,10 @@ describe('evaluateSymbol', function() {
     assert(result.length == 2);
     assert(result[0]);
     assert(!result[1]);
+
+    dd.evaluateForm({}, [myAnd, true, true], function(err, value) {
+      assert.equal(value, true);
+    });
   });
 });
 
