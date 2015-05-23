@@ -344,11 +344,15 @@ function evaluateNowSub(fun, localVars, form, cb) {
     cb(new Error('Not a function: ' + fun));
   } else {
     evaluateArgs(localVars, form.slice(1), function(err, evaluatedArgs) {
-      if (isAsync(fun)) {
-	fun.apply(null, evaluatedArgs.concat([cb]));
+      if (err) {
+	cb(err);
       } else {
-	var r = fun.apply(null, evaluatedArgs);
-	cb(null, r);
+	if (isAsync(fun)) {
+	  fun.apply(null, evaluatedArgs.concat([cb]));
+	} else {
+	  var r = fun.apply(null, evaluatedArgs);
+	  cb(null, r);
+	}
       }
     });
   }
@@ -450,7 +454,10 @@ function async(x) {
 }
 
 function isAsync(x) {
-  return x.async;
+  if (typeof x == 'function') {
+    return x.async;
+  }
+  return false;
 }
 
 function makeLocalVars(lvars, symbols, values) {
@@ -752,13 +759,17 @@ function loopSync(fun, initialState, cb) {
   }
 }
 
-function loop(fun, initialState, cb) {
-  if (isAsync(fun)) {
-    loopAsync(fun, initialState, cb);
+function loop(initialState, fun, cb) {
+  if (typeof fun == 'function') {
+    if (isAsync(fun)) {
+      loopAsync(fun, initialState, cb);
+    } else {
+      loopSync(fun, initialState, cb);
+    }
   } else {
-    loopSync(fun, initialState, cb);
+    cb(new Error(util.format('This is not a function: %j', fun)));
   }
-}
+} async(loop);
 
 
 module.exports.evaluateSymbol = evaluateSymbol;

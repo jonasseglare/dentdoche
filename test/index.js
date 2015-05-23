@@ -492,7 +492,7 @@ describe('evaluateSymbol', function() {
       }
     }
 
-    dd.loop(f, [1, 5], function(err, value) {
+    dd.loop([1, 5], f, function(err, value) {
       assert.equal(value, 1*2*3*4*5);
     });
   });
@@ -510,7 +510,7 @@ describe('evaluateSymbol', function() {
     }
 
     var n = 5;
-    dd.loop(dd.convertToAsync(f), [0, n], function(err, value) {
+    dd.loop([0, n], dd.convertToAsync(f), function(err, value) {
       assert(!err);
       assert.equal(value, n*(n + 1)/2);
       done();
@@ -521,7 +521,7 @@ describe('evaluateSymbol', function() {
     var factorial = dd.fn(
       ['n'],
       [dd.loop,
-       [dd.array, 1, dd.sym('n')]
+       [dd.array, 1, dd.sym('n')],
        [dd.Afn, ['state'],
 	[dd.let, ['product', [dd.get, dd.sym('state'), 0],
 		  'x',       [dd.get, dd.sym('state'), 1]],
@@ -531,6 +531,10 @@ describe('evaluateSymbol', function() {
 			    ['*', dd.sym('product'), dd.sym('x')],
 			    ['-', dd.sym('x'), 1]]]]]]]
     );
-    done();
+    factorial(5, function(err, value) {
+      assert(!err);
+      assert(value == 5*4*3*2*1);
+      done();
+    });
   });
 });
