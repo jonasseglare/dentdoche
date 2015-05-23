@@ -685,14 +685,15 @@ function filterAsync(fun0, coll, cb) {
   });
 } async(filterAsync);
 
-var quoteMacro = macro(function(x) {
-  return ["quote", x];
-});
+function makeSpecialFormMacro(keyword) {
+  return macro(function() {
+    var args = argsToArray(arguments);
+    return [keyword].concat(args);
+  });
+}
 
-var letMacro = macro(function() {
-  var args = argsToArray(arguments);
-  return ["let"].concat(args);
-});
+var quoteMacro = makeSpecialFormMacro("quote");
+var letMacro = makeSpecialFormMacro("let");
 
 
 module.exports.evaluateSymbol = evaluateSymbol;
