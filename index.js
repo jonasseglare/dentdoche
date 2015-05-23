@@ -331,8 +331,11 @@ function evaluateNow(localVars, form, cb) {
       } else {
 	var f = fun.slice(1);
 	wf(null, function() {
-	  var args = argsToArray(arguments);
-	  f.apply(args[0], args.slice(1));
+	  var allArgs = argsToArray(arguments);
+	  var args = allArgs;
+	  var obj = args[0];
+	  var method = obj[f];
+	  return method.apply(obj, args.slice(1));
 	});
       }
     } else {
