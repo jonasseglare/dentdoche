@@ -27,7 +27,7 @@ describe('evaluateSymbol', function() {
   });
   
   it('evaluateForm', function(done) {
-    dd.evaluateForm({}, 119, function(err, value) {
+    dd.evaluateFormWithoutMacros({}, 119, function(err, value) {
       assert(value == 119);
       done();
     })
@@ -74,7 +74,7 @@ describe('evaluateSymbol', function() {
   });
 
     it('evaluate string concat', function(done) {
-      dd.evaluateForm({}, ['+', 'Rulle', ' ', 'Östlund'], function(err, value) {
+      dd.evaluateFormWithoutMacros({}, ['+', 'Rulle', ' ', 'Östlund'], function(err, value) {
 	assert.equal(value, 'Rulle Östlund');
 	done();
       });
@@ -113,7 +113,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('do', function(done) {
-    dd.evaluateForm(
+    dd.evaluateFormWithoutMacros(
       {}, ["do",
 	   [console.log, "RULLE!"],
 	   [console.log, "SIGNE!"],
@@ -125,7 +125,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('let', function(done) {
-    dd.evaluateForm(
+    dd.evaluateFormWithoutMacros(
       {}, ['let', ['a', 30,
 		   'b', 40],
 	   ['+', dd.sym('a'), dd.sym('b')]], function(err, result) {
@@ -135,7 +135,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('fn2', function(done) {
-    dd.evaluateForm(
+    dd.evaluateFormWithoutMacros(
       {},
       ['let', ['k', ['fn', ['a', 'b'], ['+', ['*', dd.sym('a'), dd.sym('a')],
 					     ['*', dd.sym('b'), dd.sym('b')]]]],
@@ -147,7 +147,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('if', function(done) {
-    dd.evaluateForm(
+    dd.evaluateFormWithoutMacros(
       {},
       ['let', ['a', ['if', false, 3, 4],
 	       'b', ['if', true, 9, 11]],
@@ -162,7 +162,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('recursion', function(done) {
-    dd.evaluateForm(
+    dd.evaluateFormWithoutMacros(
       {},
       ['let', ['fak', ['afn', ['n'],
 		       ['if', ['==', 0, dd.sym('n')],
@@ -178,7 +178,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('Complex call', function(done) {
-    dd.evaluateForm(
+    dd.evaluateFormWithoutMacros(
       {},
       [['fn', ['a', 'b'], ['+', ['*', dd.sym('a'), dd.sym('a')],
 			   ['*', dd.sym('b'), dd.sym('b')]]],
@@ -190,7 +190,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('Fields', function(done) {
-    dd.evaluateForm(
+    dd.evaluateFormWithoutMacros(
       {},
       ['let', ['q', {b: 119}],
        ['.-b', dd.sym('q')]],
@@ -201,7 +201,7 @@ describe('evaluateSymbol', function() {
     });
 
   it('Methods', function(done) {
-    dd.evaluateForm(
+    dd.evaluateFormWithoutMacros(
       {},
       ['.toString', 119],
       function(err, value) {
@@ -216,6 +216,29 @@ describe('evaluateSymbol', function() {
     assert(!dd.isMacro(f));
     dd.macro(f);
     assert(dd.isMacro(f));
+  });
+
+  it('my-and macro', function() {
+    var makeIfStatements = function(args) {
+      if (args.length == 1) {
+	return args[0];
+      } else {
+	return ["if", args[0], makeIfStatements(args.slice(1))];
+      }
+    }
+    
+    var myAnd = dd.macro(function() {
+      var args = dd.argsToArray(arguments);
+      return makeIfStatements(args);
+    });
+
+    var myFun = dd.fn([], ["let", ["a", [myAnd, true, true, true],
+			           "b", [myAnd, true, true, false]],
+			   [dd.array, dd.sym("a"), dd.sym("b")]]);
+    var result = myFun();
+    assert(result.length == 2);
+    assert(result[0]);
+    assert(!result[1]);
   });
 });
 

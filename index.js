@@ -159,7 +159,7 @@ function buildLocalVars(localVars, bindings, cb) {
       cb(null, localVars);
     } else {
       var sym = getName(bindings[0]);
-      evaluateForm(localVars, bindings[1], function(err, result) {
+      evaluateFormWithoutMacros(localVars, bindings[1], function(err, result) {
 	if (err) {
 	  cb(err);
 	} else {
@@ -182,7 +182,7 @@ function evaluateLet(localVars, form, cb) {
     if (err) {
       cb(err);
     } else {
-      evaluateForms(nextLocalVars, body, cb);
+      evaluateFormsWithoutMacros(nextLocalVars, body, cb);
     }
   });
 }
@@ -209,15 +209,15 @@ function evaluateFn(localVars, form, cb) {
 
 function evaluateIf(localVars, form, cb) {
   if (form.length == 4 || form.length == 3) {
-    evaluateForm(localVars, form[1], function(err, p) {
+    evaluateFormWithoutMacros(localVars, form[1], function(err, p) {
       if (err) {
 	cb(err);
       } else {
 	if (p) {
-	  evaluateForm(localVars, form[2], cb);
+	  evaluateFormWithoutMacros(localVars, form[2], cb);
 	} else {
 	  if (form.length == 4) {
-	    evaluateForm(localVars, form[3], cb);
+	    evaluateFormWithoutMacros(localVars, form[3], cb);
 	  } else {
 	    cb();
 	  }
@@ -238,7 +238,7 @@ function evaluateQuote(localVars, form, cb) {
 }
 
 function evaluateDo(localVars, form, cb) {
-  evaluateForms(localVars, form.slice(1), cb);
+  evaluateFormsWithoutMacros(localVars, form.slice(1), cb);
 }
 
 var specialMap = {
@@ -289,7 +289,7 @@ function evaluateArgs(localVars, args, cb) {
   }
   
   for (var i = 0; i < n; i++) {
-    evaluateForm(localVars, args[i], function(err, y) {
+    evaluateFormWithoutMacros(localVars, args[i], function(err, y) {
       if (err) {
 	cb(err);
       } else {
@@ -348,7 +348,7 @@ function evaluateNow(localVars, form, cb) {
   } else if (isSymbol(fun)) {
     wf(null, evaluateSymbol(localVars, fun));
   } else {
-    evaluateForm(localVars, fun, wf);
+    evaluateFormWithoutMacros(localVars, fun, wf);
   }
 }
 
@@ -362,19 +362,19 @@ function evaluateSExpr(localVars, form, cb) {
   }
 }
 
-function evaluateForms(localVars, forms, cb) {
+function evaluateFormsWithoutMacros(localVars, forms, cb) {
   if (forms.length == 0) {
     cb();
   } else if (forms.length == 1) {
-    evaluateForm(localVars, forms[0], cb);
+    evaluateFormWithoutMacros(localVars, forms[0], cb);
   } else {
-    evaluateForm(localVars, forms[0], function(err, result) {
-      evaluateForms(localVars, forms.slice(1), cb);
+    evaluateFormWithoutMacros(localVars, forms[0], function(err, result) {
+      evaluateFormsWithoutMacros(localVars, forms.slice(1), cb);
     });
   }
 }
 
-function evaluateForm(localVars, form, cb) {
+function evaluateFormWithoutMacros(localVars, form, cb) {
   if (isArray(form)) {
     if (form.length == 0) {
       cb(null, undefined);
@@ -428,7 +428,7 @@ function afn(args, body, lvars) {
     var cb = allArgs[lastIndex];
     var localVars = pushLocalVars(makeLocalVars(args, evaluatedArgs),
 				  initLVars(lvars));
-    evaluateForm(localVars, expandMacros(body), cb);
+    evaluateFormWithoutMacros(localVars, expandMacros(body), cb);
   }
   return async(f);
 }
@@ -441,7 +441,7 @@ function fn(args, body, lvars) {
 				  initLVars(lvars));
     var assigned = false;
     var result = undefined;
-    evaluateForm(localVars, expandMacros(body), function(err, r) {
+    evaluateFormWithoutMacros(localVars, expandMacros(body), function(err, r) {
       if (err) {
 	throw err;
       } else {
@@ -491,7 +491,7 @@ function expandMacros(x) {
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.pushLocalVars = pushLocalVars;
-module.exports.evaluateForm = evaluateForm;
+module.exports.evaluateFormWithoutMacros = evaluateFormWithoutMacros;
 module.exports.evaluateNow = evaluateNow;
 module.exports.async = async;
 module.exports.isAsync = isAsync;
@@ -502,3 +502,4 @@ module.exports.afn = afn;
 module.exports.array = makeArrayFromArgs;
 module.exports.macro = macro;
 module.exports.isMacro = isMacro;
+module.exports.argsToArray = argsToArray;
