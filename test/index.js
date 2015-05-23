@@ -558,7 +558,6 @@ describe('evaluateSymbol', function() {
       [],
       [dd.map,
        [dd.Afn, ['filename'],
-	[console.log, ['+', 'Write file ', dd.sym('filename')]],
 	[fs.writeFile,
 	 [appendBasePath,
 	  dd.sym('filename')],
@@ -569,7 +568,7 @@ describe('evaluateSymbol', function() {
       [], // <-- No named parameters
       [dd.let, ['file-fmt', 'utf8'], // <-- A local variable bound to a string.
        [dd.reduce,
-	'+',                     // <-- Will be converted to a function.
+	dd.sym('+'),                    
 	[dd.map,                 // <-- Create a new array with the function applied to all
 	 [dd.Afn, ["filename"],  // <-- Construct an anonymous, asynchronous, function.
 	                         //     Capital A in Afn instead of afn means that
@@ -586,9 +585,8 @@ describe('evaluateSymbol', function() {
 			  ['aa.txt', 'bb.txt', 'cc.txt']]], // <-- An array of data.
        [dd.apply,
 	makeSomeFiles, dd.sym('files')],
-       //[dd.apply,
-       //readAndConcatFiles, dd.sym('files')],
-       dd.sym('files')]);
+       [dd.apply,
+	readAndConcatFiles, dd.sym('files')]]);
 
     writeAndConcat(function(err, concatenated) {
       console.log('Concated files: %j', concatenated);
