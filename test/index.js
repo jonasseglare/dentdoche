@@ -161,6 +161,7 @@ describe('evaluateSymbol', function() {
 			 ['fak', ['-', dd.S('n'), 1]]]]]],
        [dd.S('fak'), 7]],
       function(err, value) {
+	assert(!err);
 	assert.equal(value, 1*2*3*4*5*6*7);
 	done();
       }
@@ -420,4 +421,27 @@ describe('evaluateSymbol', function() {
       }
     );
   });
+
+  /*it('Factorial 2222', function(done) {
+    dd.evaluateForm(
+      null,
+      ['let', ['fak', ['afn', ['n'],
+		       ['if', ['==', 0, dd.S('n')],
+			1,
+			['*', dd.S('n'),
+			 [dd.S('fak'), ['-', dd.S('n'), 1]]]]]],
+       [console.log, ["+", "Value of fak is ", dd.sym('fak')]],
+       //[dd.S('fak'), 7]],
+       dd.S('fak')],
+      function(err, value) {
+	value(7, function(err, fak7) {
+	  console.log('fak7 = %j', fak7);
+	});
+	assert(!err);
+	assert.equal(value, 1*2*3*4*5*6*7);
+	done();
+      }
+    );
+  });*/
+
 });
