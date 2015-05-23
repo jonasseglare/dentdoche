@@ -515,5 +515,5 @@ module.exports.array = makeArrayFromArgs;
 module.exports.macro = macro;
 module.exports.isMacro = isMacro;
 module.exports.argsToArray = argsToArray;
-module.exports.jsSet = jsSet;
-module.exports.jsGet = jsGet;
+module.exports.set = jsSet;
+module.exports.get = jsGet;

@@ -257,8 +257,8 @@ describe('evaluateSymbol', function() {
     dd.evaluateForm(
       {},
       ["let", ["x", {}],
-       [dd.jsSet, dd.sym("x"), "RULLE", 119],
-       [dd.array, dd.sym("x"), [dd.jsGet, dd.sym("x"), "RULLE"]]],
+       [dd.set, dd.sym("x"), "RULLE", 119],
+       [dd.array, dd.sym("x"), [dd.get, dd.sym("x"), "RULLE"]]],
       function(err, value) {
 	assert(!err);
 	console.log("value = %j", value);
