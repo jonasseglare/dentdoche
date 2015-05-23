@@ -699,7 +699,8 @@ function filterAsync(fun0, coll, cb) {
 	      r++;
 	    }
 	  }
-	  if (r == counter) {
+	  console.log('result = %j', result);
+	  if (r == toKeep) {
 	    cb(null, result);
 	  } else {
 	     cb(new Error('Error in the filter'));
