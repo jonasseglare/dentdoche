@@ -268,4 +268,12 @@ describe('evaluateSymbol', function() {
 		      assert.equal(result[2], 303);
 		    });
   });
+
+  it('Should get all arguments', function() {
+    var f = dd.fn([], dd.sym("arguments"));
+    var result = f(1, 2, 3);
+    console.log('result = %j', result);
+    assert(result.length == 3);
+    assert(result[1] == 2);
+  });
 });

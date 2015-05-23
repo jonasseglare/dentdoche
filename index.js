@@ -428,9 +428,10 @@ function isAsync(x) {
 }
 
 function makeLocalVars(lvars, symbols, values) {
-  assert.equal(symbols.length, values.length);
+  assert(symbols.length <= values.length);
+  lvars = lvars.set('arguments', values);
   for (var i = 0; i < symbols.length; i++) {
-    lvars = lvars.set(symbols[i], values[i]);
+    lvars = lvars.set(getName(symbols[i]), values[i]);
   }
   return lvars;
 }
@@ -542,6 +543,7 @@ function functionalMap() {
   }
   return result;
 }
+
 
 
 module.exports.evaluateSymbol = evaluateSymbol;
