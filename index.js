@@ -488,10 +488,14 @@ function expandMacros(x) {
   return x;
 }
 
+function evaluateForm(localVars, form, cb) {
+  evaluateFormWithoutMacros(localVars, expandMacros(form), cb);
+}
+
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.pushLocalVars = pushLocalVars;
-module.exports.evaluateFormWithoutMacros = evaluateFormWithoutMacros;
+module.exports.evaluateForm = evaluateForm;
 module.exports.evaluateNow = evaluateNow;
 module.exports.async = async;
 module.exports.isAsync = isAsync;
