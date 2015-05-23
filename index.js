@@ -812,7 +812,6 @@ module.exports.new = callConstructorWithArgs;
 module.exports.map = mapAsync;
 module.exports.reduce = reduceAsync;
 module.exports.filter = filterAsync;
-
 module.exports.quote = makeSpecialFormMacro("quote");
 module.exports.let = makeSpecialFormMacro("let");
 module.exports.do = makeSpecialFormMacro("do");
@@ -824,5 +823,4 @@ module.exports.Afn = makeSpecialFormMacro("afn");
 module.exports.if = makeSpecialFormMacro("if");
 module.exports.later = makeSpecialFormMacro("later");
 module.exports.loop = loop;
-
 module.exports.convertToAsync = convertToAsync;
