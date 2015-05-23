@@ -678,7 +678,6 @@ function filterAsync(fun0, coll, cb) {
   var keep = new Array(n);
   for (var i0 = 0; i0 < n; i0++) {
     var i = i0;
-    keep[0] = 1;
     var x = coll[i];
     var k = i;
     fun(x, function(err, value) {
@@ -691,10 +690,11 @@ function filterAsync(fun0, coll, cb) {
 	  keep[k] = true;
 	}
 	if (counter == n) {
+	  console.log('keep = %j', keep);
 	  var result = new Array(toKeep);
 	  var r = 0;
 	  for (var j = 0; j < n; j++) {
-	    if (keep[i]) {
+	    if (keep[j]) {
 	      result[r] = coll[j];
 	      r++;
 	    }

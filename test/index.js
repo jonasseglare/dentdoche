@@ -334,11 +334,12 @@ describe('evaluateSymbol', function() {
       null, [dd.filter, odd, ["quote", [1, 2, 3, 4, 5, 6, 7, 8, 9]]],
       function(err, value) {
 	assert(!err);
-	// var r = [1, 3, 5, 7, 9];
-	// assert.equal(r.length, value.length);
-	// for (var i = 0; i < r.length; i++) {
-	//   assert.equal(r[i], value[i]);
-	// }
+	var r = [1, 3, 5, 7, 9];
+	console.log('value = %j', value);
+	assert.equal(r.length, value.length);
+	for (var i = 0; i < r.length; i++) {
+	  assert.equal(r[i], value[i]);
+	}
 	done();
       });
   });
