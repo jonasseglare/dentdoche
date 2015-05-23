@@ -345,7 +345,6 @@ describe('evaluateSymbol', function() {
 
   it('Composed of filter, map, reduce', function(done) {
     var plus = function(a, b) {
-      console.log(' plus: %j + %j = %j', a, b, a + b);
       return a + b;
     }
     var odd = function(x) {

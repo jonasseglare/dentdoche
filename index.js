@@ -640,7 +640,7 @@ function mapAsync(fun0) {
 
 function reduceAsync(fun0, coll, cb) {
   if (coll.length == undefined) {
-    cb(null, []);
+    cb(null, undefined);
   } else if (coll.length == 1) {
     cb(null, coll[0]);
   } else {
