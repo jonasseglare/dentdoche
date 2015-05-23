@@ -608,6 +608,36 @@ function callConstructorWithArgs(Constructor) {
   return Object(ret) === ret ? ret : inst;
 }
 
+function mapAsync(fun0) {
+  var fun = convertToAsync(fun0);
+  var allArgs = argsToArray(arguments);
+  var last = allArgs.length - 1;
+  var colls = allArgs.slice(1, last);
+  var collCount = colls.length;
+  var cb = allArgs[last];
+  var n = colls[0].length;
+  var result = new Array(n);
+  var counter = 0;
+  for (var i = 0; i < n; i++) {
+    var localArgs = new Array(collCount + 1);
+    localArgs[collCount] = function(err, value) {
+      if (err) {
+	cb(err);
+      } else {
+      	counter++;
+      	result[i] = value;
+      	if (counter == n) {
+      	  cb(null, result);
+      	}
+      }
+    };
+    for (var j = 0; j < collCount; j++) {
+      localArgs[j] = (colls[j])[i];
+    }
+    fun.apply(null, localArgs);
+  }
+} async(mapAsync);
+
 
 
 module.exports.evaluateSymbol = evaluateSymbol;
@@ -632,3 +662,4 @@ module.exports.applyAsync = applyAsync;
 module.exports.apply = applyAsync;
 module.exports.callConstructorWithArgs = callConstructorWithArgs;
 module.exports.New = callConstructorWithArgs;
+module.exports.map = mapAsync;
