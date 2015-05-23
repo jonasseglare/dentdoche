@@ -261,6 +261,7 @@ describe('evaluateSymbol', function() {
        [dd.array, dd.sym("x"), [dd.jsGet, dd.sym("x"), "RULLE"]]],
       function(err, value) {
 	assert(!err);
+	console.log("value = %j", value);
 	assert.equal(value.length, 2);
 	assert.equal(value[1], 119);
       }
