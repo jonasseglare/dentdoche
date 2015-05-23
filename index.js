@@ -509,8 +509,10 @@ function fn(args, body, lvars) {
       }
     });
     if (!assigned) {
-      var message = util.format('RESULT NOT DELIVERED IN FUNCTION DEFINED FROM ARGS %j AND BODY %j',
-				 args, body);
+      var message = util.format(
+	'RESULT NOT DELIVERED IN FUNCTION DEFINED FROM ARGS %j AND BODY %j',
+	args, body
+      );
       console.log(message);
       console.log('You should probably use afn instead of fn.');
       throw new Error(message);
@@ -794,7 +796,7 @@ module.exports.applySync = applySync;
 module.exports.applyAsync = applyAsync;
 module.exports.apply = applyAsync;
 module.exports.callConstructorWithArgs = callConstructorWithArgs;
-module.exports.New = callConstructorWithArgs;
+module.exports.new = callConstructorWithArgs;
 module.exports.map = mapAsync;
 module.exports.reduce = reduceAsync;
 module.exports.filter = filterAsync;
