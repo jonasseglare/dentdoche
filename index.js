@@ -451,8 +451,8 @@ function fn(args, body, lvars) {
 }
 
 
-function macro(args, body) {
-  var x = defmacroSub(args, body);
+// Marks a function as being a macro.
+function macro(x) {
   x.isMacro = true;
   return x;
 }
