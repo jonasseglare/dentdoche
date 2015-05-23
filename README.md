@@ -133,6 +133,26 @@ Here is a summary of important functions/macros:
  * ```async(fun)``` : Mark a function ```fun``` as being asynchronous so that Dentdoche can treat it as such.
  * ```Fn(argList, ..., bodyForms, ...)```: A macro to create a local function that will, in contrast to fn, capture the local context.
  * ```Afn(argList, ..., bodyForms, ...)```: Like Fn, but asynchronous.
+ * ```macro(fun)```: Mark regular function as being a macro, meaning that it will be applied to its arguments before instead of after they have been evaluated.
+
+Some special constructs, also common in Lisp:
+ * ```let```: Bind local variables. Work like the same construct in Clojure.
+ * ```do```: Evaluate the forms one at a time, returning the last one.
+ * ```quote```: Prevent evaluation.
+ * ```if```: If form.
+
+Higher order functions common in Lisp:
+ * ```map```: Apply a function to one or many arrays.
+ * ```reduce```: Reduce an array to a single value by apply a function to pairs of elements.
+ * ```filter```: Create a new array that only contains elements for which a function returns true.
+
+Special facilities:
+ * ```later```: Run a form later.
+ * ```loop```: A special looping function. It takes an initial state and a function. The function returns a pair of elements. The first element is a boolean value that should be true whenever we should continue looping. The second element is the next state.
+ * ```new```: Used to call Javascript constructor.
+
+ 
+ 
 ## To do
  * Try-catch macro.
 
