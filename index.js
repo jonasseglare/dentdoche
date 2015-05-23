@@ -142,7 +142,7 @@ function evaluateSymbol(localVars, symbol) {
   if (localVars.constructor.name == 'src_Map__Map') {
     if (localVars.has(key)) {
       var v = localVars.get(key);
-      if (v.constructor.name == 'PromisedValue') {
+      if (v instanceof PromisedValue) {
 	return v.value;
       }
       return v;
