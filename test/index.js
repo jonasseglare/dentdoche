@@ -267,4 +267,16 @@ describe('evaluateSymbol', function() {
       }
     );
   });
+
+  it('should map', function() {
+    dd.evaluateForm({}, [dd.map, dd.sym("+"),
+			           ["quote", [1, 2, 3]],
+			           ["quote", [100, 200, 300]]],
+		    function(err, result) {
+		      assert.equal(result.length, 3);
+		      assert.equal(result[0], 101);
+		      assert.equal(result[1], 202);
+		      assert.equal(result[2], 303);
+		    });
+  });
 });

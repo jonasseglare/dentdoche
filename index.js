@@ -141,8 +141,14 @@ function evaluateSymbol(localVars, symbol) {
     return localVars[key];
   } else if (localVars.hasOwnProperty('___next')) {
     return evaluateSymbol(localVars.___next, symbol);
+  } else {
+    var f = getOperatorFunction(getName(symbol));
+    if (f) {
+      return f;
+    } else {
+      return new Error('The symbol ' + symbol + ' has not been bound');
+    }
   }
-  return new Error('The symbol ' + symbol + ' has not been bound');
 }
 
 function pushLocalVars(a, b) {
@@ -513,8 +519,17 @@ function functionalMap() {
   var colls = args.slice(1);
   var n = colls[0].length;
   for (var i = 1; i < colls.length; i++) {
-    
+    assert(n == colls[i].length);
   }
+  var localArgs = new Array(colls.length);
+  var result = new Array(n);
+  for (var i = 0; i < n; i++) {
+    for (var j = 0; j < colls.length; j++) {
+      localArgs[j] = (colls[j])[i];
+    }
+    result[i] = f.apply(null, localArgs);
+  }
+  return result;
 }
 
 module.exports.evaluateSymbol = evaluateSymbol;
@@ -534,3 +549,4 @@ module.exports.isMacro = isMacro;
 module.exports.argsToArray = argsToArray;
 module.exports.set = jsSet;
 module.exports.get = jsGet;
+module.exports.map = functionalMap;
