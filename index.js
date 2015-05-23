@@ -22,6 +22,27 @@
 var assert = require('assert');
 var immutable = require('immutable');
 
+function ResultArray(n, cb) {
+  this.dst = new Array(n);
+  this.counter = 0;
+  this.cb = cb;
+}
+
+ResultArray.prototype.makeSetter = function(index) {
+  var self = this;
+  return function(err, value) {
+    if (err) {
+      self.cb(err);
+    } else {
+      self.dst[index] = value;
+      self.counter++;
+      if (self.counter == self.dst.length) {
+	self.cb(null, self.dst);
+      }
+    }
+  };
+}
+
 /*
     How to get the names of function parameters:
     
@@ -616,21 +637,11 @@ function mapAsync(fun0) {
   var collCount = colls.length;
   var cb = allArgs[last];
   var n = colls[0].length;
-  var result = new Array(n);
-  var counter = 0;
+  console.log('n = %j', n);
+  var result = new ResultArray(n, cb);
   for (var i = 0; i < n; i++) {
     var localArgs = new Array(collCount + 1);
-    localArgs[collCount] = function(err, value) {
-      if (err) {
-	cb(err);
-      } else {
-      	counter++;
-      	result[i] = value;
-      	if (counter == n) {
-      	  cb(null, result);
-      	}
-      }
-    };
+    localArgs[collCount] = result.makeSetter(i);
     for (var j = 0; j < collCount; j++) {
       localArgs[j] = (colls[j])[i];
     }
