@@ -4,6 +4,8 @@ var immutable = require('immutable');
 var fs = require('fs');
 
 describe('evaluateSymbol', function() {
+  this.timeout(50000);
+  
   it('Should evaluate a symbol', function() {
     var sym = new dd.Symbol("a");
     var v = dd.evaluateSymbol(immutable.Map({a: 119}), sym);
@@ -454,25 +456,28 @@ describe('evaluateSymbol', function() {
   });
   
   it('recursion with later', function(done) {
+    setTimeout(done, 40000);
     var fun = 'undefined-fun';
     fun = dd.afn(["n"],
 		 [dd.let, ['inner',
 			   ['afn', ['m'],
 			    ['do',
-			     [console.log, ['+', 'Call inner with ', dd.sym('m')]],
+			     //[console.log, ['+', 'Call inner with ', dd.sym('m')]],
   			     ['if', 
   			      [dd.sym("="),
 			       0,
 			       dd.sym('m')],
   			      0,
-			      ['later', ['+', dd.sym('m'), [dd.sym('inner'),
+			      ['later',
+			       ['+', dd.sym('m'), [dd.sym('inner'),
 							    ['-', dd.sym('m'), 1]]]]]]]],
 		  [dd.sym('inner'), dd.sym('n')]]);
-    fun(30, function(err, sum) {
+    var n = 1000;
+    fun(n, function(err, sum) {
       console.log('   err = ' + err);
       console.log('   value = ' + sum);
-      //assert(!err);
-      //assert.equal(3000*3001/2, sum);
+      assert(!err);
+      assert.equal((n*(n + 1))/2, sum);
       done();
     });
   });

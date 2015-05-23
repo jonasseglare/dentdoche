@@ -754,3 +754,4 @@ module.exports.do = makeSpecialFormMacro("do");
 module.exports.Fn = makeSpecialFormMacro("fn");
 module.exports.Afn = makeSpecialFormMacro("afn");
 module.exports.if = makeSpecialFormMacro("if");
+module.exports.later = makeSpecialFormMacro("later");
