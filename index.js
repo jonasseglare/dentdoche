@@ -241,7 +241,6 @@ function evaluateDo(localVars, form, cb) {
   evaluateForms(localVars, form.slice(1), cb);
 }
 
-
 var specialMap = {
   'let': evaluateLet,
   'do': evaluateDo,  
@@ -250,7 +249,7 @@ var specialMap = {
   'if': evaluateIf,
   "'": evaluateQuote,
   "quote": evaluateQuote
-}
+};
 
 function isSpecial(x) {
   return specialMap[x];
@@ -324,7 +323,22 @@ function evaluateNow(localVars, form, cb) {
   var fun = form[0];
   if (isOperator(fun)) {
     wf(null, getOperatorFunction(fun));
-  } else if (isSymbol(fun) || typeof fun == 'string') {
+  } else if (typeof fun == 'string') {
+    if (fun[0] == '.') {
+      if (fun[1] == '-') {
+	var f = fun.slice(2);
+	wf(null, function(obj) {return obj[f];});
+      } else {
+	var f = fun.slice(1);
+	wf(null, function() {
+	  var args = argsToArray(arguments);
+	  f.apply(args[0], args.slice(1));
+	});
+      }
+    } else {
+      wf(null, evaluateSymbol(localVars, fun));
+    }
+  } else if (isSymbol(fun)) {
     wf(null, evaluateSymbol(localVars, fun));
   } else {
     evaluateForm(localVars, fun, wf);
