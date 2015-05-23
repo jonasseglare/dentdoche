@@ -209,5 +209,13 @@ describe('evaluateSymbol', function() {
 	done();
       });
   });
+
+  it('Macro', function() {
+    assert(!dd.isMacro(9));
+    var f = function() {};
+    assert(!dd.isMacro(f));
+    dd.macro(f);
+    assert(dd.isMacro(f));
+  });
 });
 

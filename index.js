@@ -458,7 +458,14 @@ function macro(x) {
 }
 
 function isMacro(x) {
-  return x.isMacro;
+  if (typeof x == 'function') {
+    return x.isMacro;
+  }
+  return false;
+}
+
+function expandMacros(x) {
+  
 }
 
 module.exports.evaluateSymbol = evaluateSymbol;
@@ -474,3 +481,4 @@ module.exports.fn = fn;
 module.exports.afn = afn;
 module.exports.array = makeArrayFromArgs;
 module.exports.macro = macro;
+module.exports.isMacro = isMacro;
