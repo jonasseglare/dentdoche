@@ -69,17 +69,19 @@ function getOperatorFunction(x) {
     }
   } else {
     var op = getOperatorFunctionSub(x);
-    var n = (getParamNames(op)).length;
-    if (n == 1) {
-      return op;
-    } else {
-      return function() {
-	var args = argsToArray(arguments);
-	var result = args[0];
-	for (var i = 1; i < args.length; i++) {
-	  result = op(result, args[i]);
+    if (op) {
+      var n = (getParamNames(op)).length;
+      if (n == 1) {
+	return op;
+      } else {
+	return function() {
+	  var args = argsToArray(arguments);
+	  var result = args[0];
+	  for (var i = 1; i < args.length; i++) {
+	    result = op(result, args[i]);
+	  }
+	  return result;
 	}
-	return result;
       }
     }
   }
