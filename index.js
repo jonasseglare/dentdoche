@@ -736,6 +736,15 @@ function makeSpecialFormMacro(keyword) {
   });
 }
 
+function makeFn(keyword) {
+  return macro(function() {
+    var args = argsToArray(arguments);
+    var argList = args[0];
+    var body = args.slice(1);
+    return [keyword].concat([argList, ["do"].concat(body)]);
+  });
+}
+
 function loopAsync(fun, initialState, cb) {
   var state = initialState;
   var iterate = function() {
@@ -818,8 +827,8 @@ module.exports.do = makeSpecialFormMacro("do");
 
 // Use for local functions, instead of fn and afn:
 // Those function will not capture local variables.
-module.exports.Fn = makeSpecialFormMacro("fn");
-module.exports.Afn = makeSpecialFormMacro("afn");
+module.exports.Fn = makeFn("fn");
+module.exports.Afn = makeFn("afn");
 module.exports.if = makeSpecialFormMacro("if");
 module.exports.later = makeSpecialFormMacro("later");
 module.exports.loop = loop;
