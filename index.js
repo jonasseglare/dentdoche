@@ -11,9 +11,7 @@
   
     * Syntax for calling constructors
     * Loop macro
-    * reduce/filter/map
     * ordered evaluation of arguments
-    * apply
 
   RULES:
     * 
@@ -526,8 +524,9 @@ function expandMacros(x) {
 }
 
 function evaluateForm(localVars, form, cb) {
+  var expandedForm = expandMacros(form);
   evaluateFormWithoutMacros(
-    initLVars(localVars), expandMacros(form), cb);
+    initLVars(localVars), expandedForm, cb);
 }
 
 function jsGet(obj, key) {
