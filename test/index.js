@@ -1,25 +1,14 @@
 var dd = require('../index.js');
 var assert = require('assert');
+var immutable = require('immutable');
 
 describe('evaluateSymbol', function() {
   it('Should evaluate a symbol', function() {
     var sym = new dd.Symbol("a");
-    var v = dd.evaluateSymbol({a: 119}, sym);
+    var v = dd.evaluateSymbol(immutable.Map({a: 119}), sym);
     assert.equal(v, 119);
   });
   
-  it('Should evaluate a symbol deeper', function() {
-    var sym = new dd.Symbol("a");
-    var v = dd.evaluateSymbol({___next: {a: 119}}, sym);
-    assert.equal(v, 119);
-  });
-
-  it('Should evaluate a symbol with pushLocalVars', function() {
-    var sym = new dd.Symbol("a");
-    var v = dd.evaluateSymbol(dd.pushLocalVars({}, {a: 119}), sym);
-    assert.equal(v, 119);
-  });
-
   it('Should study async tagging', function() {
     var x = function(x) {console.log('mjao, %j', x);};
     assert(dd.isAsync(dd.async(x)));
@@ -27,35 +16,35 @@ describe('evaluateSymbol', function() {
   });
   
   it('evaluateForm', function(done) {
-    dd.evaluateForm({}, 119, function(err, value) {
+    dd.evaluateForm(null, 119, function(err, value) {
       assert(value == 119);
       done();
     })
   });
 
   it('evaluateForm2', function(done) {
-    dd.evaluateNow({}, ["+", 2, 3], function(err, value) {
+    dd.evaluateNow(null, ["+", 2, 3], function(err, value) {
       assert(value == 5);
       done();
     })
   });
   
   it('evaluateForm nested', function(done) {
-    dd.evaluateNow({}, ["-", ["+", 2, 3], 14], function(err, value) {
+    dd.evaluateNow(null, ["-", ["+", 2, 3], 14], function(err, value) {
       assert(value == -9);
       done();
     })
   });
   
   it('evaluateForm many args', function(done) {
-    dd.evaluateNow({}, ["+", 1, 2, 3, 4], function(err, value) {
+    dd.evaluateNow(null, ["+", 1, 2, 3, 4], function(err, value) {
       assert(value == 10);
       done();
     })
   });
 
   it('evaluateForm negate', function(done) {
-    dd.evaluateNow({}, ["-", 119], function(err, value) {
+    dd.evaluateNow(null, ["-", 119], function(err, value) {
       assert(value == -119);
       done();
     })
@@ -74,7 +63,7 @@ describe('evaluateSymbol', function() {
   });
 
     it('evaluate string concat', function(done) {
-      dd.evaluateForm({}, ['+', 'Rulle', ' ', 'Östlund'], function(err, value) {
+      dd.evaluateForm(null, ['+', 'Rulle', ' ', 'Östlund'], function(err, value) {
 	assert.equal(value, 'Rulle Östlund');
 	done();
       });
@@ -114,7 +103,7 @@ describe('evaluateSymbol', function() {
 
   it('do', function(done) {
     dd.evaluateForm(
-      {}, ["do",
+      null, ["do",
 	   [console.log, "RULLE!"],
 	   [console.log, "SIGNE!"],
 	  119],
@@ -126,7 +115,7 @@ describe('evaluateSymbol', function() {
 
   it('let', function(done) {
     dd.evaluateForm(
-      {}, ['let', ['a', 30,
+      null, ['let', ['a', 30,
 		   'b', 40],
 	   ['+', dd.sym('a'), dd.sym('b')]], function(err, result) {
 	     assert(result == 70);
@@ -136,7 +125,7 @@ describe('evaluateSymbol', function() {
 
   it('fn2', function(done) {
     dd.evaluateForm(
-      {},
+      null,
       ['let', ['k', ['fn', ['a', 'b'], ['+', ['*', dd.sym('a'), dd.sym('a')],
 					     ['*', dd.sym('b'), dd.sym('b')]]]],
        [dd.sym('k'), 3, 4]],
@@ -148,7 +137,7 @@ describe('evaluateSymbol', function() {
 
   it('if', function(done) {
     dd.evaluateForm(
-      {},
+      null,
       ['let', ['a', ['if', false, 3, 4],
 	       'b', ['if', true, 9, 11]],
        [dd.array, dd.sym('a'), dd.sym('b')]],
@@ -163,7 +152,7 @@ describe('evaluateSymbol', function() {
 
   it('recursion', function(done) {
     dd.evaluateForm(
-      {},
+      null,
       ['let', ['fak', ['afn', ['n'],
 		       ['if', ['==', 0, dd.sym('n')],
 			1,
@@ -179,7 +168,7 @@ describe('evaluateSymbol', function() {
 
   it('Complex call', function(done) {
     dd.evaluateForm(
-      {},
+      null,
       [['fn', ['a', 'b'], ['+', ['*', dd.sym('a'), dd.sym('a')],
 			   ['*', dd.sym('b'), dd.sym('b')]]],
        3, 4], function(err, result) {
@@ -191,7 +180,7 @@ describe('evaluateSymbol', function() {
 
   it('Fields', function(done) {
     dd.evaluateForm(
-      {},
+      null,
       ['let', ['q', {b: 119}],
        ['.-b', dd.sym('q')]],
       function(err, result) {
@@ -202,7 +191,7 @@ describe('evaluateSymbol', function() {
 
   it('Methods', function(done) {
     dd.evaluateForm(
-      {},
+      null,
       ['.toString', 119],
       function(err, value) {
 	assert.equal(value, '119');
@@ -212,7 +201,7 @@ describe('evaluateSymbol', function() {
 
   it('Macro', function() {
     assert(!dd.isMacro(9));
-    var f = function() {};
+    var f = function() {}
     assert(!dd.isMacro(f));
     dd.macro(f);
     assert(dd.isMacro(f));
@@ -240,22 +229,22 @@ describe('evaluateSymbol', function() {
     assert(result[0]);
     assert(!result[1]);
 
-    dd.evaluateForm({}, [myAnd, true, true], function(err, value) {
+    dd.evaluateForm(null, [myAnd, true, true], function(err, value) {
       assert.equal(value, true);
     });
     
-    dd.evaluateForm({}, [myAnd, true, true, true, true, false, true], function(err, value) {
+    dd.evaluateForm(null, [myAnd, true, true, true, true, false, true], function(err, value) {
       assert(!value);
     });
     
-    dd.evaluateForm({}, [myAnd, true, true, true, true, true, true], function(err, value) {
+    dd.evaluateForm(null, [myAnd, true, true, true, true, true, true], function(err, value) {
       assert(value);
     });
   });
 
   it('get and set', function() {
     dd.evaluateForm(
-      {},
+      null,
       ["let", ["x", {}],
        [dd.set, dd.sym("x"), "RULLE", 119],
        [dd.array, dd.sym("x"), [dd.get, dd.sym("x"), "RULLE"]]],
@@ -269,7 +258,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('should map', function() {
-    dd.evaluateForm({}, [dd.map, dd.sym("+"),
+    dd.evaluateForm(null, [dd.map, dd.sym("+"),
 			           ["quote", [1, 2, 3]],
 			           ["quote", [100, 200, 300]]],
 		    function(err, result) {

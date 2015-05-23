@@ -15,6 +15,7 @@
   
   */
 var assert = require('assert');
+var immutable = require('immutable');
 
 /*
     How to get the names of function parameters:
@@ -137,10 +138,15 @@ function cloneShallow(x) {
 
 function evaluateSymbol(localVars, symbol) {
   var key = getName(symbol);
+  
+  if (localVars.constructor.name == 'src_Map__Map') {
+    if (localVars.has(key)) {
+      return localVars.get(key);
+    }
+  }
+  
   if (localVars.hasOwnProperty(key)) {
     return localVars[key];
-  } else if (localVars.hasOwnProperty('___next')) {
-    return evaluateSymbol(localVars.___next, symbol);
   } else {
     var f = getOperatorFunction(getName(symbol));
     if (f) {
@@ -150,13 +156,6 @@ function evaluateSymbol(localVars, symbol) {
     }
   }
 }
-
-function pushLocalVars(a, b) {
-  var a2 = cloneShallow(a);
-  a2.___next = b;
-  return a2;
-}
-
 
 function buildLocalVars(localVars, bindings, cb) {
   
@@ -171,8 +170,7 @@ function buildLocalVars(localVars, bindings, cb) {
 	if (err) {
 	  cb(err);
 	} else {
-	  localVars[sym] = result;
-	  buildLocalVars(localVars, bindings.slice(2), cb);
+	  buildLocalVars(localVars.set(sym, result), bindings.slice(2), cb);
 	}
       });
     }
@@ -185,7 +183,7 @@ function evaluateLet(localVars, form, cb) {
   var bindings = form[1];
   var body = form.slice(2);
   buildLocalVars(
-    pushLocalVars({}, localVars),
+    localVars,
     bindings, function(err, nextLocalVars) {
     if (err) {
       cb(err);
@@ -414,19 +412,18 @@ function isAsync(x) {
   return x.async;
 }
 
-function makeLocalVars(symbols, values) {
+function makeLocalVars(lvars, symbols, values) {
   assert.equal(symbols.length, values.length);
-  var dst = {};
   for (var i = 0; i < symbols.length; i++) {
-    dst[symbols[i]] = values[i];
+    lvars = lvars.set(symbols[i], values[i]);
   }
-  return dst;
+  return lvars;
 }
 
 
 function initLVars(x) {
   if (x == undefined) {
-    return {};
+    return immutable.Map({});
   } else {
     return x;
   }
@@ -439,8 +436,7 @@ function afn(args, body, lvars) {
     var lastIndex = allArgs.length - 1;
     var evaluatedArgs = allArgs.slice(0, lastIndex);
     var cb = allArgs[lastIndex];
-    var localVars = pushLocalVars(makeLocalVars(args, evaluatedArgs),
-				  initLVars(lvars));
+    var localVars = makeLocalVars(initLVars(lvars), args, evaluatedArgs);
     evaluateFormWithoutMacros(localVars, expandMacros(body), cb);
   }
   return async(f);
@@ -450,8 +446,7 @@ function afn(args, body, lvars) {
 function fn(args, body, lvars) {
   return function() {
     var evaluatedArgs = argsToArray(arguments);
-    var localVars = pushLocalVars(makeLocalVars(args, evaluatedArgs),
-				  initLVars(lvars));
+    var localVars = makeLocalVars(initLVars(lvars), args, evaluatedArgs);
     var assigned = false;
     var result = undefined;
     evaluateFormWithoutMacros(localVars, expandMacros(body), function(err, r) {
@@ -502,7 +497,8 @@ function expandMacros(x) {
 }
 
 function evaluateForm(localVars, form, cb) {
-  evaluateFormWithoutMacros(localVars, expandMacros(form), cb);
+  evaluateFormWithoutMacros(
+    initLVars(localVars), expandMacros(form), cb);
 }
 
 function jsGet(obj, key) {
@@ -532,9 +528,9 @@ function functionalMap() {
   return result;
 }
 
+
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
-module.exports.pushLocalVars = pushLocalVars;
 module.exports.evaluateForm = evaluateForm;
 module.exports.evaluateNow = evaluateNow;
 module.exports.async = async;
