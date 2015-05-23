@@ -134,6 +134,7 @@ Here is a summary of important functions/macros:
  * ```Fn(argList, ..., bodyForms, ...)```: A macro to create a local function that will, in contrast to fn, capture the local context.
  * ```Afn(argList, ..., bodyForms, ...)```: Like Fn, but asynchronous.
  * ```macro(fun)```: Mark regular function as being a macro, meaning that it will be applied to its arguments before instead of after they have been evaluated.
+ * ```sym(x)```: Create a symbol from a string.
 
 ### Other things
 All these work with asynchronous and synchronous functions.
