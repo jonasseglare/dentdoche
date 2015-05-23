@@ -469,7 +469,7 @@ function afn(args, body, lvars) {
     evaluateFormWithoutMacros(localVars, expandMacros(body), cb);
   }
   return async(f);
-}
+} macro(afn);
 
 // Create a synchronous function
 function fn(args, body, lvars) {
@@ -489,7 +489,7 @@ function fn(args, body, lvars) {
     assert(assigned, 'Result was not assigned. Most likely, your result is delivered asynchronously, but this function is synchronous.');
     return result;
   }
-}
+} macro(fn);
 
 
 // Marks a function as being a macro.

@@ -399,14 +399,14 @@ describe('evaluateSymbol', function() {
       [dd.let, ["basenames", ["quote",
 			     ["a.txt", "b.txt", "c.txt"]],
 	       "fullnames", [dd.map, addTmp, dd.S("basenames")],
-	       "writeRulle", ["afn", ["fname"],
+	       "writeRulle", [dd.afn, ["fname"],
 			      ["do",
 			       [console.log, ["+", "For file ", dd.S("fname")]],
 			       [fs.writeFile, dd.S("fname"), "Rulle!!!"],
 			       dd.S("fname")]]],
        [dd.map, dd.S("writeRulle"), dd.S('fullnames')],
        [dd.let, ["strings", [dd.map,
-			    ["afn", ["fname"], // Forgetting to use afn here instead of fn
+			    [dd.afn, ["fname"], // Forgetting to use afn here instead of fn
 			                       // may cause errors: The return value will
 			                       // both be used, and the async callback will
 			                       // pass it on.
