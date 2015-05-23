@@ -6,6 +6,15 @@
   - Some overhead
   - More involved syntax
 
+
+  TODO:
+  
+    * Syntax for calling constructors
+    * Initial macro expansion
+    * Syntax for calling methods
+    * Evaluate the first symbol of the S-expr. So that we can
+      construct functions and call directly.
+  
   */
 var assert = require('assert');
 
@@ -286,13 +295,7 @@ function evaluateArgs(localVars, args, cb) {
   }
 }
 
-function evaluateNow(localVars, form, cb) {
-  var fun = form[0];
-  if (isOperator(fun)) {
-    fun = getOperatorFunction(fun);
-  } else if (isSymbol(fun) || typeof fun == 'string') {
-    fun = evaluateSymbol(localVars, fun);
-  }
+function evaluateNowSub(fun, localVars, form, cb) {
   var isFunction = (typeof fun) == 'function';
   if (!isFunction) {
     cb(new Error('Not a function: ' + fun));
@@ -306,6 +309,17 @@ function evaluateNow(localVars, form, cb) {
       }
     });
   }
+}
+
+function evaluateNow(localVars, form, cb) {
+  var fun = form[0];
+  if (isOperator(fun)) {
+    fun = getOperatorFunction(fun);
+  } else if (isSymbol(fun) || typeof fun == 'string') {
+    fun = evaluateSymbol(localVars, fun);
+  }
+
+  evaluateNowSub(fun, localVars, form, cb);
 }
 
 function evaluateSExpr(localVars, form, cb) {
