@@ -524,8 +524,11 @@ function fn(args, body, lvars) {
       console.log('You should probably use afn instead of fn.');
       throw new Error(message);
     }
-    assert(assigned,
-	   'Result was not assigned. Most likely, your result is delivered asynchronously, but this function is synchronous.');
+    assert(
+      assigned,
+      'Result was not assigned. Most likely, your result is delivered'
+      + 'asynchronously, but this function is synchronous.'
+    );
     return result;
   }
 } macro(fn);
