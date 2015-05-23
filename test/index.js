@@ -276,4 +276,13 @@ describe('evaluateSymbol', function() {
     assert(result.length == 3);
     assert(result[1] == 2);
   });
+
+  it('Test apply sync', function() {
+    dd.evaluateForm(
+      null, [dd.applySync, dd.sym('+'), ["quote", [1, 2, 3, 4]]],
+      function (err, value) {
+	assert(!err);
+	assert(value == 10);
+      });
+  });
 });

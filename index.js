@@ -10,8 +10,10 @@
   TODO:
   
     * Syntax for calling constructors
-    * Initial macro expansion
-    * Syntax for calling methods
+    * Loop macro
+    * reduce/filter/map
+    * ordered evaluation of arguments
+    * apply
   
   */
 var assert = require('assert');
@@ -544,6 +546,17 @@ function functionalMap() {
   return result;
 }
 
+function applySync(fun, args) {
+  return fun.apply(this, args);
+}
+
+function applyAsync(fun, args, cb) {
+  
+}
+async(applyAsync);
+
+
+
 
 
 module.exports.evaluateSymbol = evaluateSymbol;
@@ -563,3 +576,5 @@ module.exports.argsToArray = argsToArray;
 module.exports.set = jsSet;
 module.exports.get = jsGet;
 module.exports.map = functionalMap;
+module.exports.applySync = applySync;
+//module.exports.applyAsync = applyAsync;
