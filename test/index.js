@@ -64,8 +64,8 @@ describe('evaluateSymbol', function() {
   });
 
     it('evaluate string concat', function(done) {
-      dd.evaluateForm(null, ['+', 'Rulle', ' ', 'Östlund'], function(err, value) {
-	assert.equal(value, 'Rulle Östlund');
+      dd.evaluateForm(null, ['+', 'Rulle', ' ', 'Mjao'], function(err, value) {
+	assert.equal(value, 'Rulle Mjao');
 	done();
       });
   });
@@ -404,7 +404,12 @@ describe('evaluateSymbol', function() {
 			       [console.log, ["+", "For file ", dd.sym("fname")]],
 			       [fs.writeFile, dd.sym("fname"), "Rulle!!!"],
 			       dd.sym("fname")]]],
-       [dd.map, dd.sym("writeRulle"), dd.sym('fullnames')]],
+       [dd.map, dd.sym("writeRulle"), dd.sym('fullnames')],
+       ["let", ["strings", [dd.map,
+			    ["afn", ["fname"],
+			     [fs.readFile, dd.sym("fname"), "utf8"]],
+			    dd.sym("fullnames")]],
+	dd.sym("strings")]],
       function(err, value) {
 	console.log('value = %j', value);
 	done();
