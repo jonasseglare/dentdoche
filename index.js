@@ -339,6 +339,7 @@ function resolveFunction(localVars, fun, wf) {
   } else if (isSymbol(fun)) {
     wf(null, evaluateSymbol(localVars, fun));
   } else {
+    // E.g. [["fn", ..], ...]
     evaluateFormWithoutMacros(localVars, fun, wf);
   }
 }
@@ -507,7 +508,11 @@ function jsSet(obj, key, newValue) {
 function functionalMap() {
   var args = argsToArray(arguments);
   var f = args[0];
-  
+  var colls = args.slice(1);
+  var n = colls[0].length;
+  for (var i = 1; i < colls.length; i++) {
+    
+  }
 }
 
 module.exports.evaluateSymbol = evaluateSymbol;
