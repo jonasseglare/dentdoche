@@ -670,6 +670,38 @@ function reduceAsync(fun0, coll, cb) {
   }
 } async(reduceAsync);
 
+function filterAsync(fun0, coll, cb) {
+  var fun = convertToAsync(fun0);
+  var counter = 0;
+  var toKeep = 0;
+  var n = coll.length;
+  var keep = new Array(n);
+  for (var i = 0; i < n; i++) {
+    fun(coll[i], function(err, value) {
+      if (err) {
+	cb(err);
+      } else {
+	counter++;
+	if (value) {
+	  toKeep++;
+	  keep[i] = true;
+	}
+	if (counter == n) {
+	  var result = new Array(toKeep);
+	  var r = 0;
+	  for (var i = 0; i < n; i++) {
+	    if (keep[i]) {
+	      result[r] = coll[i];
+	      r++;
+	    }
+	  }
+	  cb(null, result);
+	}
+      }
+    });
+  }
+} async(filterAsync);
+
 
 
 module.exports.evaluateSymbol = evaluateSymbol;
@@ -696,3 +728,4 @@ module.exports.callConstructorWithArgs = callConstructorWithArgs;
 module.exports.New = callConstructorWithArgs;
 module.exports.map = mapAsync;
 module.exports.reduce = reduceAsync;
+module.exports.filter = filterAsync;
