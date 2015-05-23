@@ -149,9 +149,6 @@ function pushLocalVars(a, b) {
   return a2;
 }
 
-function isSpecial(x) {
-  return x == 'let' || x == 'fn' || x == 'afn' || x == 'if' || x == 'do' || x == "'";
-}
 
 function buildLocalVars(localVars, bindings, cb) {
   
@@ -240,23 +237,29 @@ function evaluateQuote(localVars, form, cb) {
   }
 }
 
+function evaluateDo(localVars, form, cb) {
+  evaluateForms(localVars, form.slice(1), cb);
+}
+
+
+var specialMap = {
+  'let': evaluateLet,
+  'do': evaluateDo,  
+  'afn': evaluateAfn,
+  'fn': evaluateFn,
+  'if': evaluateIf,
+  "'": evaluateQuote,
+  "quote": evaluateQuote
+}
+
+function isSpecial(x) {
+  return specialMap[x];
+}
+
+
 function evaluateSpecial(localVars, form, cb) {
   var f = form[0];
-  if (f == 'let') {
-    evaluateLet(localVars, form, cb);
-  } else if (f == 'do') {
-    evaluateForms(localVars, form.slice(1), cb);
-  } else if (f == 'afn') {
-    evaluateAfn(localVars, form, cb);
-  } else if (f == 'fn') {
-    evaluateFn(localVars, form, cb);
-  } else if (f == 'if') {
-    evaluateIf(localVars, form, cb);
-  } else if (f == "'" || f == 'quote') {
-    evaluateQuote(localVars, form, cb);
-  } else {
-    cb();
-  }
+  specialMap[f](localVars, form, cb);
 }
 
 
@@ -431,7 +434,7 @@ function fn(args, body, lvars) {
 }
 
 
-function defmacro(args, body) {
+function macro(args, body) {
   var x = defmacroSub(args, body);
   x.isMacro = true;
   return x;
@@ -453,3 +456,4 @@ module.exports.sym = sym;
 module.exports.fn = fn;
 module.exports.afn = afn;
 module.exports.array = makeArrayFromArgs;
+module.exports.macro = macro;
