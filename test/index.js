@@ -465,8 +465,8 @@ describe('evaluateSymbol', function() {
 			       0,
 			       dd.sym('m')],
   			      0,
-			      ['+', dd.sym('m'), [dd.sym('inner'),
-						  ['-', dd.sym('m'), 1]]]]]]],
+			      ['later', ['+', dd.sym('m'), [dd.sym('inner'),
+							    ['-', dd.sym('m'), 1]]]]]]]],
 		  [dd.sym('inner'), dd.sym('n')]]);
     fun(30, function(err, sum) {
       console.log('   err = ' + err);
