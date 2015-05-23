@@ -315,16 +315,7 @@ function evaluateNowSub(fun, localVars, form, cb) {
   }
 }
 
-function evaluateNow(localVars, form, cb) {
-  var wf = function(err, f) {
-    if (err) {
-      cb(err);
-    } else {
-      evaluateNowSub(f, localVars, form, cb);
-    }
-  }
-  
-  var fun = form[0];
+function resolveFunction(localVars, fun, wf) {
   if (isOperator(fun)) {
     wf(null, getOperatorFunction(fun));
   } else if (typeof fun == 'string') {
@@ -350,6 +341,19 @@ function evaluateNow(localVars, form, cb) {
   } else {
     evaluateFormWithoutMacros(localVars, fun, wf);
   }
+}
+
+function evaluateNow(localVars, form, cb) {
+  var wf = function(err, f) {
+    if (err) {
+      cb(err);
+    } else {
+      evaluateNowSub(f, localVars, form, cb);
+    }
+  }
+  
+  var fun = form[0];
+  resolveFunction(localVars, fun, wf);
 }
 
 function evaluateSExpr(localVars, form, cb) {
@@ -498,6 +502,12 @@ function jsGet(obj, key) {
 
 function jsSet(obj, key, newValue) {
   obj[key] = newValue;
+}
+
+function functionalMap() {
+  var args = argsToArray(arguments);
+  var f = args[0];
+  
 }
 
 module.exports.evaluateSymbol = evaluateSymbol;
