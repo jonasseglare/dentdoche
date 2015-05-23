@@ -442,4 +442,20 @@ describe('evaluateSymbol', function() {
       }
     );
   });
+
+  it('recursion with later', function(done) {
+    var fun = undefined;
+    fun = dd.afn(["n"],
+		//['if',
+		 ["==", 0, dd.sym('n')]);
+		 //1,
+		 //["later",
+		 //[dd.sym('-'),
+		  //dd.sym('n'),
+		  //[fun, ["-", dd.sym('n'), 1]]]]);
+    fun(3000, function(err, sum) {
+      assert.equal(3000*3001/2, sum);
+      done();
+    })
+  });
 });

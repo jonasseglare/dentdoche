@@ -287,6 +287,14 @@ function evaluateDo(localVars, form, cb) {
   evaluateFormsWithoutMacros(localVars, form.slice(1), cb);
 }
 
+function evaluateLater(localVars, form, cb) {
+  for (var i = 0; i < 3000; i++) {
+    console.log('LATER: %j', form);
+  }
+  setTimeout(function() {
+    evaluateForm(localVars, form, cb);
+  }, 0);
+}
 
 var specialMap = {
   'let': evaluateLet,
@@ -295,7 +303,8 @@ var specialMap = {
   'fn': evaluateFn,
   'if': evaluateIf,
   "'": evaluateQuote,
-  "quote": evaluateQuote
+  "quote": evaluateQuote,
+  "later": evaluateLater
 };
 
 function isQuote(x) {
@@ -702,6 +711,7 @@ function makeSpecialFormMacro(keyword) {
     return [keyword].concat(args);
   });
 }
+
 
 
 
