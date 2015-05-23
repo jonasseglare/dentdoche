@@ -1,15 +1,6 @@
 var dd = require('../index.js');
 var assert = require('assert');
 
-function Rulle(x) {
-  this.y = 1134;
-  this.x = x;
-}
-
-Rulle.prototype.toString = function() {
-  return '' + this.x;
-}
-
 describe('evaluateSymbol', function() {
   it('Should evaluate a symbol', function() {
     var sym = new dd.Symbol("a");
@@ -210,11 +201,9 @@ describe('evaluateSymbol', function() {
     });
 
   it('Methods', function(done) {
-    var x = new Rulle(119);
-    assert(x['toString']);
     dd.evaluateForm(
       {},
-      ['.toString', x],
+      ['.toString', 119],
       function(err, value) {
 	assert.equal(value, '119');
 	done();
