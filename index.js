@@ -710,7 +710,6 @@ function filterAsync(fun0, coll, cb) {
 } async(filterAsync);
 
 
-
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.evaluateForm = evaluateForm;

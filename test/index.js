@@ -1,6 +1,7 @@
 var dd = require('../index.js');
 var assert = require('assert');
 var immutable = require('immutable');
+var fs = require('fs');
 
 describe('evaluateSymbol', function() {
   it('Should evaluate a symbol', function() {
@@ -364,12 +365,17 @@ describe('evaluateSymbol', function() {
        [dd.map, square,
 	[dd.filter, odd,
 	 dd.sym("arguments")]]]);
+
     var f2 = dd.afn(
       [],
-      [dd.reduce, plus,
-       [dd.map, square,
-	[dd.filter, odd,
-	 dd.sym("arguments")]]]);
+      ["do",
+       [console.log, ["+", "You provided ",
+		      [".-length", dd.sym('arguments')],
+		      " arguments"]],
+       [dd.reduce, plus,
+	[dd.map, square,
+	 [dd.filter, odd,
+	  dd.sym("arguments")]]]]);
     
     var result = f(1, 2, 3, 4, 5, 6, 7, 8, 9);
     assert.equal(result, 165);
@@ -378,5 +384,32 @@ describe('evaluateSymbol', function() {
       assert(value == 165);
       done();
     });
+  });
+
+  it('Try files and async stuff', function(done) {
+    dd.async(fs.readFile);
+    dd.async(fs.writeFile);
+    
+    var addTmp = function(x) {
+      return "/tmp/" + x;
+    }
+    
+    dd.evaluateForm(
+      null,
+      ["let", ["basenames", ["quote",
+			     ["a.txt", "b.txt", "c.txt"]],
+	       "fullnames", [dd.map, addTmp, dd.sym("basenames")],
+	       "writeRulle", ["afn", ["fname"],
+			      ["do",
+			       [console.log, ["+", "For file ", dd.sym("fname")]],
+			       [fs.writeFile, dd.sym("fname"), "Rulle!!!"],
+			       dd.sym("fname")]]],
+       dd.sym("fullnames"),
+       [dd.map, dd.sym("writeRulle"), dd.sym('fullnames')]],
+      function(err, value) {
+	console.log('value = %j', value);
+	done();
+      }
+    );
   });
 });
