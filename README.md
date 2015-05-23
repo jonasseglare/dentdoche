@@ -59,6 +59,10 @@ Dentdoche makes it easy to write asynchronous code as if it were synchronous cod
       done();
     });
 ```
+which will output the following:
+```
+Concated files: "[Contents of file aa.txt][Contents of file bb.txt][Contents of file cc.txt]"
+```
 
 ## Basics
 Dentdoche distinguishes between two types of functions: synchronous and asynchronous ones. Functions in Dentdoche are regular Javascript functions. To use Dentdoche, you first install it using npm by typing:
