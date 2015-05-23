@@ -421,4 +421,21 @@ describe('evaluateSymbol', function() {
       }
     );
   });
+
+  it('recursion with wrong use.', function(done) {
+    dd.evaluateForm(
+      null,
+      ['let', ['fak', [dd.afn, ['n'],
+		       ['if', ['==', 0, dd.S('n')],
+			1,
+			['*', dd.S('n'),
+			 ['fak', ['-', dd.S('n'), 1]]]]]],
+       [dd.S('fak'), 7]],
+      function(err, value) {
+	assert(err);
+	done();
+      }
+    );
+  });
+
 });

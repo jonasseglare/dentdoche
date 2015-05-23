@@ -180,7 +180,8 @@ function evaluateSymbol(localVars, symbol) {
     if (f) {
       return f;
     } else {
-      return new Error('The symbol ' + symbol + ' has not been bound');
+      throw new Error('ERROR LOOKING UP SYMBOL: The symbol "' + symbol + '" has not been bound. Are you using fn or afn do define a local recursive function? Or did you just refer to a symbol that is not bound?');
+      return null;
     }
   }
 }
@@ -348,31 +349,35 @@ function evaluateNowSub(fun, localVars, form, cb) {
 }
 
 function resolveFunction(localVars, fun, wf) {
-  if (isOperator(fun)) {
-    wf(null, getOperatorFunction(fun));
-  } else if (typeof fun == 'string') {
-    if (fun[0] == '.') {
-      if (fun[1] == '-') {
-	var f = fun.slice(2);
-	wf(null, function(obj) {return obj[f];});
+  try {
+    if (isOperator(fun)) {
+      wf(null, getOperatorFunction(fun));
+    } else if (typeof fun == 'string') {
+      if (fun[0] == '.') {
+	if (fun[1] == '-') {
+	  var f = fun.slice(2);
+	  wf(null, function(obj) {return obj[f];});
+	} else {
+	  var f = fun.slice(1);
+	  wf(null, function() {
+	    var allArgs = argsToArray(arguments);
+	    var args = allArgs;
+	    var obj = args[0];
+	    var method = obj[f];
+	    return method.apply(obj, args.slice(1));
+	  });
+	}
       } else {
-	var f = fun.slice(1);
-	wf(null, function() {
-	  var allArgs = argsToArray(arguments);
-	  var args = allArgs;
-	  var obj = args[0];
-	  var method = obj[f];
-	  return method.apply(obj, args.slice(1));
-	});
+	wf(null, evaluateSymbol(localVars, fun));
       }
-    } else {
+    } else if (isSymbol(fun)) {
       wf(null, evaluateSymbol(localVars, fun));
+    } else {
+      // E.g. [["fn", ..], ...]
+      evaluateFormWithoutMacros(localVars, fun, wf);
     }
-  } else if (isSymbol(fun)) {
-    wf(null, evaluateSymbol(localVars, fun));
-  } else {
-    // E.g. [["fn", ..], ...]
-    evaluateFormWithoutMacros(localVars, fun, wf);
+  } catch (e) {
+    wf(e);
   }
 }
 
@@ -691,9 +696,6 @@ function makeSpecialFormMacro(keyword) {
   });
 }
 
-var quoteMacro = makeSpecialFormMacro("quote");
-var letMacro = makeSpecialFormMacro("let");
-var doMacro = makeSpecialFormMacro("do");
 
 
 module.exports.evaluateSymbol = evaluateSymbol;
@@ -722,6 +724,13 @@ module.exports.New = callConstructorWithArgs;
 module.exports.map = mapAsync;
 module.exports.reduce = reduceAsync;
 module.exports.filter = filterAsync;
-module.exports.quote = quoteMacro;
-module.exports.let = letMacro;
-module.exports.do = doMacro;
+
+module.exports.quote = makeSpecialFormMacro("quote");
+module.exports.let = makeSpecialFormMacro("let");
+module.exports.do = makeSpecialFormMacro("do");
+
+// Use for local functions, instead of fn and afn:
+// Those function will not capture local variables.
+module.exports.Fn = makeSpecialFormMacro("fn");
+module.exports.Afn = makeSpecialFormMacro("afn");
+
