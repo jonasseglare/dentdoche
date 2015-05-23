@@ -280,7 +280,7 @@ describe('evaluateSymbol', function() {
 
   it('Test apply sync', function() {
     dd.evaluateForm(
-      null, [dd.applySync, dd.sym('+'), ["quote", [1, 2, 3, 4]]],
+      null, [dd.applySync, dd.sym('+'), [dd.quote, [1, 2, 3, 4]]],
       function (err, value) {
 	assert(!err);
 	assert(value == 10);

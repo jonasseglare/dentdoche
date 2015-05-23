@@ -685,6 +685,10 @@ function filterAsync(fun0, coll, cb) {
   });
 } async(filterAsync);
 
+var quoteMacro = macro(function(x) {
+  return ["quote", x];
+});
+
 
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
@@ -711,3 +715,4 @@ module.exports.New = callConstructorWithArgs;
 module.exports.map = mapAsync;
 module.exports.reduce = reduceAsync;
 module.exports.filter = filterAsync;
+module.exports.quote = quoteMacro;
