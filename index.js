@@ -141,7 +141,11 @@ function evaluateSymbol(localVars, symbol) {
   
   if (localVars.constructor.name == 'src_Map__Map') {
     if (localVars.has(key)) {
-      return localVars.get(key);
+      var v = localVars.get(key);
+      if (v.constructor.name == 'PromisedValue') {
+	return v.value;
+      }
+      return v;
     }
   }
   
@@ -157,6 +161,14 @@ function evaluateSymbol(localVars, symbol) {
   }
 }
 
+function PromisedValue() {
+  this.value = undefined;
+}
+
+PromisedValue.prototype.set = function(v) {
+  this.value = v;
+}
+
 function buildLocalVars(localVars, bindings, cb) {
   
   if (!(bindings.length % 2 == 0)) {
@@ -166,10 +178,13 @@ function buildLocalVars(localVars, bindings, cb) {
       cb(null, localVars);
     } else {
       var sym = getName(bindings[0]);
-      evaluateFormWithoutMacros(localVars, bindings[1], function(err, result) {
+      var promisedValue = new PromisedValue(undefined);
+      evaluateFormWithoutMacros(localVars.set(sym, promisedValue), // To support recursion
+				bindings[1], function(err, result) {
 	if (err) {
 	  cb(err);
 	} else {
+	  promisedValue.set(result);
 	  buildLocalVars(localVars.set(sym, result), bindings.slice(2), cb);
 	}
       });
