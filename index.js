@@ -638,6 +638,37 @@ function mapAsync(fun0) {
   }
 } async(mapAsync);
 
+function reduceAsync(fun0, coll, cb) {
+  if (coll.length == 0) {
+    cb(null, []);
+  } else if (coll.length == 1) {
+    cb(null, coll);
+  } else {
+    var middle = Math.floor(coll.length/2);
+    var counter = 0;
+    var a = undefined;
+    var b = undefined;
+    var gotValue = function(err) {
+      if (err) {
+	cb(err);
+      } else {
+	counter++;
+	if (counter == 2) {
+	  fun(a, b, cb);
+	}
+      }
+    }
+    reduceAsync(fun, coll.slice(0, middle), function(err, value) {
+      a = value;
+      gotValue(err);
+    });
+    reduceAsync(fun, coll.slice(middle), function(err, value) {
+      b = value;
+      gotValue(err);
+    });
+  }
+}
+
 
 
 module.exports.evaluateSymbol = evaluateSymbol;
