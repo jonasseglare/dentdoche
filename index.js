@@ -126,7 +126,7 @@ function Symbol(x) {
 }
 
 function isSymbol(x) {
-  return x.constructor.name == 'Symbol';
+  return x instanceof Symbol;
 }
 
 function toSymbol(x) {
@@ -149,7 +149,7 @@ function getName(x) {
 }
 
 function isArray(x) {
-  return x.constructor.name == 'Array';
+  return x instanceof Array;
 }
 
 function cloneShallow(x) {
@@ -290,7 +290,7 @@ function evaluateDo(localVars, form, cb) {
 function evaluateLater(localVars, form, cb) {
   setTimeout(function() {
     evaluateFormsWithoutMacros(localVars, form.slice(1), cb);
-  }, 0);
+  }, 1);
 }
 
 var specialMap = {
@@ -423,17 +423,21 @@ function evaluateFormsWithoutMacros(localVars, forms, cb) {
 }
 
 function evaluateFormWithoutMacros(localVars, form, cb) {
-  if (isArray(form)) {
-    if (form.length == 0) {
-      cb(null, undefined);
+  try {
+    if (isArray(form)) {
+      if (form.length == 0) {
+	cb(null, undefined);
+      } else {
+	assert(form.length >= 0);
+	evaluateSExpr(localVars, form, cb);
+      }
+    } else if (isSymbol(form)) {
+      cb(null, evaluateSymbol(localVars, form));
     } else {
-      assert(form.length >= 0);
-      evaluateSExpr(localVars, form, cb);
+      cb(null, form);
     }
-  } else if (isSymbol(form)) {
-    cb(null, evaluateSymbol(localVars, form));
-  } else {
-    cb(null, form);
+  } catch (e) {
+    cb(e);
   }
 }
 
