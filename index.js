@@ -428,7 +428,7 @@ function afn(args, body, lvars) {
     var cb = allArgs[lastIndex];
     var localVars = pushLocalVars(makeLocalVars(args, evaluatedArgs),
 				  initLVars(lvars));
-    evaluateForm(localVars, body, cb);
+    evaluateForm(localVars, expandMacros(body), cb);
   }
   return async(f);
 }
@@ -441,7 +441,7 @@ function fn(args, body, lvars) {
 				  initLVars(lvars));
     var assigned = false;
     var result = undefined;
-    evaluateForm(localVars, body, function(err, r) {
+    evaluateForm(localVars, expandMacros(body), function(err, r) {
       if (err) {
 	throw err;
       } else {
