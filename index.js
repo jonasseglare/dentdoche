@@ -683,41 +683,21 @@ function reduceAsync(fun0, coll, cb) {
 
 function filterAsync(fun0, coll, cb) {
   var fun = convertToAsync(fun0);
-  var counter = 0;
-  var toKeep = 0;
-  var n = coll.length;
-  var keep = new Array(n);
-  for (var i0 = 0; i0 < n; i0++) {
-    var i = i0;
-    var x = coll[i];
-    var k = i;
-    fun(x, function(err, value) {
-      if (err) {
-	cb(err);
-      } else {
-	counter++;
-	if (value) {
-	  toKeep++;
-	  keep[k] = true;
-	}
-	if (counter == n) {
-	  var result = new Array(toKeep);
-	  var r = 0;
-	  for (var j = 0; j < n; j++) {
-	    if (keep[j]) {
-	      result[r] = coll[j];
-	      r++;
-	    }
-	  }
-	  if (r == toKeep) {
-	    cb(null, result);
-	  } else {
-	     cb(new Error('Error in the filter'));
-	  }
+  mapAsync(fun, coll, function(err, mask) {
+    if (err) {
+      cb(err);
+    } else {
+      var dst = new Array(mask.length);
+      var counter = 0;
+      for (var i = 0; i < mask.length; i++) {
+	if (mask[i]) {
+	  dst[counter] = coll[i];
+	  counter++;
 	}
       }
-    });
-  }
+      cb(null, dst.slice(0, counter));
+    }
+  });
 } async(filterAsync);
 
 
