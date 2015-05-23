@@ -435,7 +435,7 @@ describe('evaluateSymbol', function() {
     );
   });
 
-  it('recursion with wrong use.', function(done) {
+  it('Try something here', function(done) {
     dd.evaluateForm(
       null,
       ['let', ['fak', [dd.Afn, ['n'],
@@ -445,7 +445,7 @@ describe('evaluateSymbol', function() {
 			 ['fak', ['-', dd.S('n'), 1]]]]]],
        [dd.S('fak'), 7]],
       function(err, value) {
-	assert(err);
+	assert(!err);
 	done();
       }
     );
