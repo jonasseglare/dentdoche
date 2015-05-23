@@ -63,6 +63,27 @@ which will output the following:
 ```
 Concated files: "[Contents of file aa.txt][Contents of file bb.txt][Contents of file cc.txt]"
 ```
+And of course there are macros too:
+```js
+    myAnd = dd.macro(function() {
+      var args = dd.argsToArray(arguments);
+      if (args.length == 1) {
+	return args[0];
+      } else {
+	// Recursive macro:
+	return ["if", args[0], [myAnd].concat(args.slice(1))];
+      }
+    });
+
+    var myAnd3 = dd.fn(
+      ['a', 'b', 'c'],
+      [myAnd, dd.sym('a'), dd.sym('b'), dd.sym('c')]
+    );
+
+    console.log('False and true and false is %j', myAnd3(false, true, false));
+    console.log('True and true true is %j', myAnd3(true, true, true));
+
+```
 
 ## Basics
 Dentdoche distinguishes between two types of functions: synchronous and asynchronous ones. Functions in Dentdoche are regular Javascript functions. To use Dentdoche, you first install it using npm by typing:

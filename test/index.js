@@ -223,6 +223,14 @@ describe('evaluateSymbol', function() {
       }
     });
 
+    var myAnd3 = dd.fn(
+      ['a', 'b', 'c'],
+      [myAnd, dd.sym('a'), dd.sym('b'), dd.sym('c')]
+    );
+
+    console.log('False and true and false is %j', myAnd3(false, true, false));
+    console.log('True and true true is %j', myAnd3(true, true, true));
+
     var myFun = dd.fn([], ["let", ["a", [myAnd, true, true, true],
 			           "b", [myAnd, true, true, false]],
 			   [dd.array, dd.S("a"), dd.S("b")]]);
