@@ -235,7 +235,7 @@ function evaluateLet(localVars, form, cb) {
 
 function evaluateAfn(localVars, form, cb) {
   if (form.length != 3) {
-    cb(new Error('Bad length of form'));
+    cb(new Error('Bad length of form of Afn'));
   } else {
     args = form[1];
     body = form[2];
@@ -245,7 +245,7 @@ function evaluateAfn(localVars, form, cb) {
 
 function evaluateFn(localVars, form, cb) {
   if (form.length != 3) {
-    cb(new Error('Bad length of form'));
+    cb(new Error('Bad length of form of Fn'));
   } else {
     args = form[1];
     body = form[2];
