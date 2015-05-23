@@ -325,4 +325,21 @@ describe('evaluateSymbol', function() {
 		      done();
 		    });
   });
+
+  it('Should filter out odd numbers', function(done) {
+    var odd = function(x) {
+      return x % 2 == 1;
+    }
+    dd.evaluateForm(
+      null, [dd.filter, odd, ["quote", [1, 2, 3, 4, 5, 6, 7, 8, 9]]],
+      function(err, value) {
+	assert(!err);
+	// var r = [1, 3, 5, 7, 9];
+	// assert.equal(r.length, value.length);
+	// for (var i = 0; i < r.length; i++) {
+	//   assert.equal(r[i], value[i]);
+	// }
+	done();
+      });
+  });
 });

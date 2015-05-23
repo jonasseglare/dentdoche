@@ -676,26 +676,34 @@ function filterAsync(fun0, coll, cb) {
   var toKeep = 0;
   var n = coll.length;
   var keep = new Array(n);
-  for (var i = 0; i < n; i++) {
-    fun(coll[i], function(err, value) {
+  for (var i0 = 0; i0 < n; i0++) {
+    var i = i0;
+    keep[0] = 1;
+    var x = coll[i];
+    var k = i;
+    fun(x, function(err, value) {
       if (err) {
 	cb(err);
       } else {
 	counter++;
 	if (value) {
 	  toKeep++;
-	  keep[i] = true;
+	  keep[k] = true;
 	}
 	if (counter == n) {
 	  var result = new Array(toKeep);
 	  var r = 0;
-	  for (var i = 0; i < n; i++) {
+	  for (var j = 0; j < n; j++) {
 	    if (keep[i]) {
-	      result[r] = coll[i];
+	      result[r] = coll[j];
 	      r++;
 	    }
 	  }
-	  cb(null, result);
+	  if (r == counter) {
+	    cb(null, result);
+	  } else {
+	     cb(new Error('Error in the filter'));
+	  }
 	}
       }
     });
