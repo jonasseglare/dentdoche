@@ -458,13 +458,17 @@ describe('evaluateSymbol', function() {
     fun = dd.afn(["n"],
 		 [dd.let, ['inner',
 			   ['afn', ['m'],
-  			    ['if', 
-  			     [dd.sym("="),
-			      0,
-			      dd.sym('m')],
-  			     1, dd.sym('m')]]], //   ['inner', ['-', dd.sym('m'), 1]]]]],
+			    ['do',
+			     [console.log, ['+', 'Call inner with ', dd.sym('m')]],
+  			     ['if', 
+  			      [dd.sym("="),
+			       0,
+			       dd.sym('m')],
+  			      0,
+			      ['+', dd.sym('m'), [dd.sym('inner'),
+						  ['-', dd.sym('m'), 1]]]]]]],
 		  [dd.sym('inner'), dd.sym('n')]]);
-    fun(3000, function(err, sum) {
+    fun(30, function(err, sum) {
       console.log('   err = ' + err);
       console.log('   value = ' + sum);
       //assert(!err);
