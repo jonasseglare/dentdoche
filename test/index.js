@@ -559,12 +559,15 @@ describe('evaluateSymbol', function() {
       [],
       [dd.map,
        [dd.Afn, ['filename'],
-	[console.log, ['+', 'Write file ', dd.sym('filename')]],
-	[fs.writeFile,
-	 [appendBasePath,
-	  dd.sym('filename')],
-	 ['+', '[Contents of file ', dd.sym('filename'), ']']]],
+	[console.log, ['+', 'Write file ', dd.sym('filename')]]],
+	// [fs.writeFile,
+	//  [appendBasePath,
+	//   dd.sym('filename')],
+	//  ['+', '[Contents of file ', dd.sym('filename'), ']']]],
        dd.sym('arguments')]);
+    makeSomeFiles("aa.txt", "bb.txt", "cc.txt", function(err, v) {
+      console.log('v = %j', v);
+    });
 
     var readAndConcatFiles = dd.afn(
       [], // <-- No named parameters
@@ -586,7 +589,7 @@ describe('evaluateSymbol', function() {
     var writeAndConcat = dd.afn(
       [],
       [dd.let, ['files', [dd.quote, // <-- Special form to prevent evaluation
-			  ['a.txt', 'b.txt', 'c.txt']]], // <-- An array of data.
+			  ['aa.txt', 'bb.txt', 'cc.txt']]], // <-- An array of data.
        [makeSomeFiles, dd.sym('files')],
        [readAndConcatFiles, dd.sym('files')]]);
 
