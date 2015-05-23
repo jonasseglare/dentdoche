@@ -243,5 +243,14 @@ describe('evaluateSymbol', function() {
     dd.evaluateForm({}, [myAnd, true, true], function(err, value) {
       assert.equal(value, true);
     });
+    
+    dd.evaluateForm({}, [myAnd, true, true, true, true, false, true], function(err, value) {
+      assert(!value);
+    });
+    
+    dd.evaluateForm({}, [myAnd, true, true, true, true, true, true], function(err, value) {
+      assert(value);
+    });
+    
   });
 });
