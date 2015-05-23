@@ -401,7 +401,7 @@ describe('evaluateSymbol', function() {
 			     ["a.txt", "b.txt", "c.txt"]],
 	       "fullnames", [dd.map, addTmp, dd.S("basenames")],
 	       "writeRulle", [dd.afn, ["fname"],
-			      ["do",
+			      [dd.do,
 			       [console.log, ["+", "For file ", dd.S("fname")]],
 			       [fs.writeFile, dd.S("fname"), "Rulle!!!"],
 			       dd.S("fname")]]],
