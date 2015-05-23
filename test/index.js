@@ -554,29 +554,34 @@ describe('evaluateSymbol', function() {
        '/tmp/',
        dd.sym('fname')]); // <-- Refer to the input parameter.
     
-    var readAndConcatFiles = dd.afn(
-      [], // <-- No named parameters
-      [dd.let ['file-fmt', 'utf8'], // <-- A local variable bound to a string.
-       [dd.map,                 // <-- Create a new array with the function applied to all
-	                        //     elements.
-	[dd.Afn, ["filename"],  // <-- Construct an anonymous, asynchronous, function.
-	                        //     Capital A in Afn instead of afn means that
-	                        //     local variables will be captured (in this case file-fmt).
-	 [fs.readFile,          // <-- Call to a function marked as *asynchronous*
-	  [appendBasePath,      // <-- Call to previously *synchronous* function
-	   dd.sym('filename')], // <-- This is a symbol referring to the filename parameter.
-	  dd.sym('file-fmt')]], // <-- The captured format parameter.
-	dd.sym('arguments')]]); // <-- An array of all parameters.
 
     var makeSomeFiles = dd.afn(
       [],
       [dd.map,
        [dd.Afn, ['filename'],
+	[console.log, ['+', 'Write file ', dd.sym('filename')]],
 	[fs.writeFile,
 	 [appendBasePath,
 	  dd.sym('filename')],
 	 ['+', '[Contents of file ', dd.sym('filename'), ']']]],
        dd.sym('arguments')]);
+
+    var readAndConcatFiles = dd.afn(
+      [], // <-- No named parameters
+      [dd.let, ['file-fmt', 'utf8'], // <-- A local variable bound to a string.
+//       [dd.reduce,
+//	'+',                     // <-- Will be converted to a function.
+	[dd.map,                 // <-- Create a new array with the function applied to all
+	 //     elements.
+	 [dd.Afn, ["filename"],  // <-- Construct an anonymous, asynchronous, function.
+	  //     Capital A in Afn instead of afn means that
+	  //     local variables will be captured (in this case file-fmt).
+	  [fs.readFile,          // <-- Call to a function marked as *asynchronous*
+	   [appendBasePath,      // <-- Call to previously *synchronous* function
+	    dd.sym('filename')], // <-- This is a symbol referring to the filename parameter.
+	   dd.sym('file-fmt')]], // <-- The captured format parameter.
+	 dd.sym('arguments')]]); // <-- An array of all parameters.
+    
 
     var writeAndConcat = dd.afn(
       [],

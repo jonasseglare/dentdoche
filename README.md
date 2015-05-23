@@ -33,7 +33,7 @@ Dentdoche makes it easy to write asynchronous code as if it were synchronous cod
 	dd.sym('arguments')]]); // <-- An array of all parameters.
 
     var makeSomeFiles = dd.afn(
-      [],
+      [], // <-- No named parameters
       [dd.map,
        [dd.Afn, ['filename'],
 	[fs.writeFile,
@@ -49,7 +49,8 @@ Dentdoche makes it easy to write asynchronous code as if it were synchronous cod
        [makeSomeFiles, dd.sym('files')],
        [readAndConcatFiles, dd.sym('files')]]);
 
-
+    // writeAndConcat is created using ```afn``` and not ```fn```,
+    // so it delivers its result using a callback.
     writeAndConcat(function(err, concatenated) {
       console.log('Concated files: %j', concatenated);
       done();
