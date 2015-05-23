@@ -406,12 +406,16 @@ describe('evaluateSymbol', function() {
 			       dd.sym("fname")]]],
        [dd.map, dd.sym("writeRulle"), dd.sym('fullnames')],
        ["let", ["strings", [dd.map,
-			    ["afn", ["fname"],
+			    ["afn", ["fname"], // Forgetting to use afn here instead of fn
+			                       // may cause errors: The return value will
+			                       // both be used, and the async callback will
+			                       // pass it on.
 			     [fs.readFile, dd.sym("fname"), "utf8"]],
-			    dd.sym("fullnames")]],
-	dd.sym("strings")]],
+			    dd.sym("fullnames")],
+		"singleString", [dd.reduce, dd.sym('+'), dd.sym('strings')]],
+	dd.sym("singleString")]],
       function(err, value) {
-	console.log('value = %j', value);
+	assert.equal(value, 'Rulle!!!Rulle!!!Rulle!!!');
 	done();
       }
     );
