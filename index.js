@@ -251,6 +251,10 @@ var specialMap = {
   "quote": evaluateQuote
 };
 
+function isQuote(x) {
+  return x == "'" || x == "quote";
+}
+
 function isSpecial(x) {
   return specialMap[x];
 }
@@ -465,7 +469,23 @@ function isMacro(x) {
 }
 
 function expandMacros(x) {
-  
+  if (isArray(x)) {
+    if (1 <= x.length) {
+      var f = x[0];
+      if (isMacro(f)) {
+	return expandMacros(f.apply(null, x.slice(1)));
+      } else if (isQuote(f)) {
+	return x;
+      } else {
+	var y = new Array(x.length);
+	for (var i = 0; i < x.length; i++) {
+	  y[i] = expandMacros(x[i]);
+	}
+	return y;
+      }
+    }
+  }
+  return x;
 }
 
 module.exports.evaluateSymbol = evaluateSymbol;
