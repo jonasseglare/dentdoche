@@ -188,4 +188,16 @@ describe('evaluateSymbol', function() {
 	 done();
        });
   });
+
+  it('Fields', function(done) {
+    dd.evaluateForm(
+      {},
+      ['let', ['q', {b: 119}],
+       ['.-b', dd.sym('q')]],
+      function(err, result) {
+	assert(result == 119);
+	done();
+      });
+    });
 });
+
