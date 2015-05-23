@@ -219,17 +219,17 @@ describe('evaluateSymbol', function() {
   });
 
   it('my-and macro', function() {
-    var makeIfStatements = function(args) {
+    
+    var myAnd = undefined;
+    
+    myAnd = dd.macro(function() {
+      var args = dd.argsToArray(arguments);
       if (args.length == 1) {
 	return args[0];
       } else {
-	return ["if", args[0], makeIfStatements(args.slice(1))];
+	// Recursive macro:
+	return ["if", args[0], [myAnd].concat(args.slice(1))];
       }
-    }
-    
-    var myAnd = dd.macro(function() {
-      var args = dd.argsToArray(arguments);
-      return makeIfStatements(args);
     });
 
     var myFun = dd.fn([], ["let", ["a", [myAnd, true, true, true],
