@@ -9,6 +9,8 @@ Dentdoche follows a different approach to simplify development of asynchronous p
 ## Example usage
 Dentdoche makes it easy to write asynchronous code as if it were synchronous code:
 ```js
+    var dd = require('dentdoche');
+
     dd.async(fs.readFile);
     dd.async(fs.writeFile);
 
@@ -17,23 +19,9 @@ Dentdoche makes it easy to write asynchronous code as if it were synchronous cod
       ['+', // <-- The + operator of JS.
        '/tmp/',
        dd.sym('fname')]); // <-- Refer to the input parameter.
-    
-    var readAndConcatFiles = dd.afn(
-      [], // <-- No named parameters
-      [dd.let ['file-fmt', 'utf8'], // <-- A local variable bound to a string.
-       [dd.map,                 // <-- Create a new array with the function applied to all
-	                        //     elements.
-	[dd.Afn, ["filename"],  // <-- Construct an anonymous, asynchronous, function.
-	                        //     Capital A in Afn instead of afn means that
-	                        //     local variables will be captured (in this case file-fmt).
-	 [fs.readFile,          // <-- Call to a function marked as *asynchronous*
-	  [appendBasePath,      // <-- Call to previously *synchronous* function
-	   dd.sym('filename')], // <-- This is a symbol referring to the filename parameter.
-	  dd.sym('file-fmt')]], // <-- The captured format parameter.
-	dd.sym('arguments')]]); // <-- An array of all parameters.
 
     var makeSomeFiles = dd.afn(
-      [], // <-- No named parameters
+      [],
       [dd.map,
        [dd.Afn, ['filename'],
 	[fs.writeFile,
@@ -42,15 +30,30 @@ Dentdoche makes it easy to write asynchronous code as if it were synchronous cod
 	 ['+', '[Contents of file ', dd.sym('filename'), ']']]],
        dd.sym('arguments')]);
 
+    var readAndConcatFiles = dd.afn(
+      [], // <-- No named parameters
+      [dd.let, ['file-fmt', 'utf8'], // <-- A local variable bound to a string.
+       [dd.reduce,
+	dd.sym('+'),                    
+	[dd.map,                 // <-- Create a new array with the function applied to all
+	 [dd.Afn, ["filename"],  // <-- Construct an anonymous, asynchronous, function.
+	  //     Capital A in Afn instead of afn means that
+	  //     local variables will be captured (in this case file-fmt).
+	  [fs.readFile,          // <-- Call to a function marked as *asynchronous*
+	   [appendBasePath,      // <-- Call to previously *synchronous* function
+	    dd.sym('filename')], // <-- This is a symbol referring to the filename parameter.
+	   dd.sym('file-fmt')]], // <-- The captured format parameter.
+	 dd.sym('arguments')]]]);// <-- An array of all parameters.
+    
     var writeAndConcat = dd.afn(
-      [],
+      [], // <-- No named parameters
       [dd.let, ['files', [dd.quote, // <-- Special form to prevent evaluation
-			  ['a.txt', 'b.txt', 'c.txt']]], // <-- An array of data.
-       [makeSomeFiles, dd.sym('files')],
-       [readAndConcatFiles, dd.sym('files')]]);
+			  ['aa.txt', 'bb.txt', 'cc.txt']]], // <-- An array of data.
+       [dd.apply,
+	makeSomeFiles, dd.sym('files')],
+       [dd.apply,
+	readAndConcatFiles, dd.sym('files')]]);
 
-    // writeAndConcat is created using ```afn``` and not ```fn```,
-    // so it delivers its result using a callback.
     writeAndConcat(function(err, concatenated) {
       console.log('Concated files: %j', concatenated);
       done();
