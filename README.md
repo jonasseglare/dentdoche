@@ -126,7 +126,8 @@ Note that the two versions in Dentdoche are almost the same except for that we u
 
 ## To do
  * Support multiple forms in function bodies.
- * Option for ordered evaluation of function arguments.
+ * Option for ordered evaluation of function arguments. Currently, the function arguments
+   are not evaluated in any particular order unless they are all synchronous.
 
 ## Licence
 Copyright Jonas Östlund 2015.
