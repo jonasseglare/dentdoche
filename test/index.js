@@ -4,8 +4,6 @@ var immutable = require('immutable');
 var fs = require('fs');
 
 describe('evaluateSymbol', function() {
-  this.timeout(50000);
-  
   it('Should evaluate a symbol', function() {
     var sym = new dd.Symbol("a");
     var v = dd.evaluateSymbol(immutable.Map({a: 119}), sym);
@@ -472,12 +470,49 @@ describe('evaluateSymbol', function() {
 			       ['+', dd.sym('m'), [dd.sym('inner'),
 							    ['-', dd.sym('m'), 1]]]]]]]],
 		  [dd.sym('inner'), dd.sym('n')]]);
-    var n = 1000;
+    var n = 10;
     fun(n, function(err, sum) {
       console.log('   err = ' + err);
       console.log('   value = ' + sum);
       assert(!err);
       assert.equal((n*(n + 1))/2, sum);
+      done();
+    });
+  });
+
+  it('looping sync', function() {
+    var f = function(state) {
+      var x = state[1];
+      if (x == 0) {
+	var result = state[0];
+	return [false, result];
+      } else {
+	var nextState = [x*state[0], x-1];
+	return [true, nextState];
+      }
+    }
+
+    dd.loop(f, [1, 5], function(err, value) {
+      assert.equal(value, 1*2*3*4*5);
+    });
+  });
+
+  it('looping async', function(done) {
+    var f = function(state) {
+      var x = state[1];
+      if (x == 0) {
+	var result = state[0];
+	return [false, result];
+      } else {
+	var nextState = [x+state[0], x-1];
+	return [true, nextState];
+      }
+    }
+
+    var n = 5;
+    dd.loop(dd.convertToAsync(f), [0, n], function(err, value) {
+      assert(!err);
+      assert.equal(value, n*(n + 1)/2);
       done();
     });
   });

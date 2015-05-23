@@ -715,7 +715,56 @@ function makeSpecialFormMacro(keyword) {
   });
 }
 
+function loopAsync(fun, initialState, cb) {
+  var state = initialState;
+  var iterate = function() {
+    fun(state, function(err, value) {
+      console.log('VALUE = %j', value);
+      console.log('ERR   = %j', err);
+      if (err) {
+	cb(err);
+      } else {
+	var cont = value[0];
+	state = value[1];
+	console.log('Continue: %j', cont);
+	console.log('State:    %j', state);
+	if (cont) {
+	  console.log('CONTINUE!!!');
+	  setTimeout(iterate, 0);
+	} else {
+	  console.log('WE ARE DONE');
+	  cb(null, state);
+	}
+      }
+    });
+  }
+  iterate();
+}
 
+function loopSync(fun, initialState, cb) {
+  try {
+    var state = initialState;
+    while (state) {
+      var next = fun(state);
+      assert(next.length == 2);
+      state = next[1];
+      if (!next[0]) {
+	break;
+      }
+    }
+    cb(null, state);
+  } catch(e) {
+    cb(e);
+  }
+}
+
+function loop(fun, initialState, cb) {
+  if (isAsync(fun)) {
+    loopAsync(fun, initialState, cb);
+  } else {
+    loopSync(fun, initialState, cb);
+  }
+}
 
 
 module.exports.evaluateSymbol = evaluateSymbol;
@@ -755,3 +804,6 @@ module.exports.Fn = makeSpecialFormMacro("fn");
 module.exports.Afn = makeSpecialFormMacro("afn");
 module.exports.if = makeSpecialFormMacro("if");
 module.exports.later = makeSpecialFormMacro("later");
+module.exports.loop = loop;
+
+module.exports.convertToAsync = convertToAsync;
