@@ -14,6 +14,9 @@
     * reduce/filter/map
     * ordered evaluation of arguments
     * apply
+
+  RULES:
+    * 
   
   */
 var assert = require('assert');
@@ -547,15 +550,62 @@ function functionalMap() {
 }
 
 function applySync(fun, args) {
-  return fun.apply(this, args);
+  assert(!isAsync(fun));
+  return fun.apply(null, args);
 }
 
-function applyAsync(fun, args, cb) {
-  
+function convertToAsync(f) {
+  assert(typeof f == 'function');
+  if (isAsync(f)) {
+    return f;
+  } else {
+    return async(function() {
+      var allArgs = argsToArray(arguments);
+      var index = allArgs.length-1;
+      var butCB = allArgs.slice(0, index);
+      var cb = allArgs[index];
+      try {
+	assert(typeof f == 'function');
+	var result = f.apply(null, butCB);
+	cb(null, result);
+      } catch (e) {
+	cb(e);
+      }
+    });
+  }
 }
+
+function applyAsync(fun0, args, cb) {
+  assert(typeof fun0 == 'function');
+  var fun = convertToAsync(fun0);
+  assert(typeof fun == 'function');
+  fun.apply(null, args.concat([cb]));
+}
+
 async(applyAsync);
 
+// http://stackoverflow.com/questions/3362471/how-can-i-call-a-javascript-constructor-using-call-or-apply
+function callConstructorWithArgs(Constructor) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  
+  var Temp = function(){}, // temporary constructor
+  inst, ret; // other vars
 
+  // Give the Temp constructor the Constructor's prototype
+  Temp.prototype = Constructor.prototype;
+
+  // Create a new instance
+  inst = new Temp;
+
+  // Call the original Constructor with the temp
+  // instance as its context (i.e. its 'this' value)
+  ret = Constructor.apply(inst, args);
+
+  // If an object has been returned then return it otherwise
+  // return the original instance.
+  // (consistent with behaviour of the new operator)
+  return Object(ret) === ret ? ret : inst;
+}
 
 
 
@@ -577,4 +627,6 @@ module.exports.set = jsSet;
 module.exports.get = jsGet;
 module.exports.map = functionalMap;
 module.exports.applySync = applySync;
-//module.exports.applyAsync = applyAsync;
+module.exports.applyAsync = applyAsync;
+module.exports.apply = applyAsync;
+module.exports.callConstructorWithArgs = callConstructorWithArgs;

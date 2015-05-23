@@ -285,4 +285,26 @@ describe('evaluateSymbol', function() {
 	assert(value == 10);
       });
   });
+
+  it('Test apply async', function() {
+    dd.evaluateForm(
+      null, [dd.apply, dd.sym('+'), ["quote", [1, 2, 3, 4, 5]]],
+      function (err, value) {
+	assert(!err);
+	assert(value == 15);
+      });
+  });
+
+  it('Test call constructor', function() {
+    var MyObj = function(a) {
+      this.value = a;
+    }
+    var result = dd.callConstructorWithArgs(MyObj, 11);
+    assert.equal(result.value, 11);
+  });
+
+  it('Test call constructor 2', function() {
+    var result = dd.callConstructorWithArgs(Array, 11);
+    assert.equal(result.length, 11);
+  });  
 });
