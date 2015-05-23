@@ -501,19 +501,20 @@ function afn(args, body, lvars) {
 
 // Create a synchronous function
 function fn(args, body, lvars) {
+  var f = makeAfnSub(args, body, lvars);
   return function() {
-    var evaluatedArgs = argsToArray(arguments);
-    var localVars = makeLocalVars(initLVars(lvars), args, evaluatedArgs);
+    var allArgs = argsToArray(arguments);
     var assigned = false;
     var result = undefined;
-    evaluateFormWithoutMacros(localVars.set('this', this), expandMacros(body), function(err, r) {
+    var cb = function(err, value) {
+      assigned = true;
       if (err) {
 	throw err;
       } else {
-	assigned = true;
-	result = r;
+	result = value;
       }
-    });
+    }
+    f(allArgs.concat([cb]));
     if (!assigned) {
       var message = util.format(
 	'RESULT NOT DELIVERED IN FUNCTION DEFINED FROM ARGS %j AND BODY %j',
@@ -523,7 +524,8 @@ function fn(args, body, lvars) {
       console.log('You should probably use afn instead of fn.');
       throw new Error(message);
     }
-    assert(assigned, 'Result was not assigned. Most likely, your result is delivered asynchronously, but this function is synchronous.');
+    assert(assigned,
+	   'Result was not assigned. Most likely, your result is delivered asynchronously, but this function is synchronous.');
     return result;
   }
 } macro(fn);
