@@ -267,6 +267,7 @@ function evaluateDo(localVars, form, cb) {
   evaluateFormsWithoutMacros(localVars, form.slice(1), cb);
 }
 
+
 var specialMap = {
   'let': evaluateLet,
   'do': evaluateDo,  
@@ -630,3 +631,4 @@ module.exports.applySync = applySync;
 module.exports.applyAsync = applyAsync;
 module.exports.apply = applyAsync;
 module.exports.callConstructorWithArgs = callConstructorWithArgs;
+module.exports.New = callConstructorWithArgs;

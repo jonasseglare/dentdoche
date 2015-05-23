@@ -306,5 +306,11 @@ describe('evaluateSymbol', function() {
   it('Test call constructor 2', function() {
     var result = dd.callConstructorWithArgs(Array, 11);
     assert.equal(result.length, 11);
-  });  
+  });
+
+  it('Test new', function() {
+    dd.evaluateForm(null, [dd.New, Array, 34], function(err, value) {
+      assert(value.length == 34);
+    });
+  });
 });
