@@ -135,6 +135,9 @@ Here is a summary of important functions/macros:
  * ```Afn(argList, ..., bodyForms, ...)```: Like Fn, but asynchronous.
  * ```macro(fun)```: Mark regular function as being a macro, meaning that it will be applied to its arguments before instead of after they have been evaluated.
 
+### Other things
+All these work with asynchronous and synchronous functions.
+
 Some special constructs, also common in Lisp:
  * ```let```: Bind local variables. Work like the same construct in Clojure.
  * ```do```: Evaluate the forms one at a time, returning the last one.
