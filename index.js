@@ -478,10 +478,8 @@ function initLVars(x) {
   }
 }
 
-// Define an asynchronous function
-function afn(args, body, lvars) {
-  var f = function() {
-    var allArgs = argsToArray(arguments);
+function makeAfnSub(args, body, lvars) {
+  return function(allArgs) {
     var lastIndex = allArgs.length - 1;
     var evaluatedArgs = allArgs.slice(0, lastIndex);
     var cb = allArgs[lastIndex];
@@ -490,7 +488,15 @@ function afn(args, body, lvars) {
       localVars.set('this', this),
       expandMacros(body), cb);
   }
-  return async(f);
+}
+
+// Define an asynchronous function
+function afn(args, body, lvars) {
+  var f = makeAfnSub(args, body, lvars);
+  return async(function() {
+    var allArgs = argsToArray(arguments);
+    return f(allArgs);
+  });
 } macro(afn);
 
 // Create a synchronous function
