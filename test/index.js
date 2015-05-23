@@ -218,7 +218,7 @@ describe('evaluateSymbol', function() {
     assert(dd.isMacro(f));
   });
 
-  it('my-and macro', function() {
+  it('myAnd macro', function() {
     
     var myAnd = undefined;
     
