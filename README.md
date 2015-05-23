@@ -124,3 +124,10 @@ var myMulAsyncJS = function(a, b, cb) {
 ```
 Note that the two versions in Dentdoche are almost the same except for that we use ```dd.afn``` in the synchronous case instead of ```dd.fn```, whereas in the node.js case they are very different (although one could easily write a function that converts a generic synchronous function to an asynchronous one).
 
+## To do
+ * Support multiple forms in function bodies.
+ * Option for ordered evaluation of function arguments.
+
+## Licence
+Copyright Jonas Östlund 2015.
+Released under EPL (Eclipse Public Licence).

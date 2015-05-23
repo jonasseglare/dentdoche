@@ -1,19 +1,9 @@
 /*
   
-  + Write asynchronous code as if it is synchronous
-  + No extra compilation step (vs streamline.js)
-  + Macros
-  - Some overhead
-  - More involved syntax
-
-
   TODO:
-  
-    * Loop macro
     * ordered evaluation of arguments
+    * Function bodies can have many forms.
 
-  RULES:
-    * 
   
   */
 var assert = require('assert');
