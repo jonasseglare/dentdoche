@@ -245,4 +245,3 @@ describe('evaluateSymbol', function() {
     });
   });
 });
-
