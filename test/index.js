@@ -354,13 +354,29 @@ describe('evaluateSymbol', function() {
     var square = function(x) {
       return x*x;
     }
-    
+
+    // A function that takes all its arguments,
+    // keeps the odd ones, squares them, and sums them
+    // up.
     var f = dd.fn(
       [],
-      [dd.reduce, plus, [dd.map, square, [dd.filter, odd,
-						 dd.sym("arguments")]]]);
+      [dd.reduce, plus,
+       [dd.map, square,
+	[dd.filter, odd,
+	 dd.sym("arguments")]]]);
+    var f2 = dd.afn(
+      [],
+      [dd.reduce, plus,
+       [dd.map, square,
+	[dd.filter, odd,
+	 dd.sym("arguments")]]]);
+    
     var result = f(1, 2, 3, 4, 5, 6, 7, 8, 9);
     assert.equal(result, 165);
-    done();
+    f2(1, 2, 3, 4, 5, 6, 7, 8, 9, function(err, value) {
+      assert(!err);
+      assert(value == 165);
+      done();
+    });
   });
 });
