@@ -644,6 +644,7 @@ function reduceAsync(fun0, coll, cb) {
   } else if (coll.length == 1) {
     cb(null, coll);
   } else {
+    var fun = convertToAsync(fun0);
     var middle = Math.floor(coll.length/2);
     var counter = 0;
     var a = undefined;
@@ -667,7 +668,7 @@ function reduceAsync(fun0, coll, cb) {
       gotValue(err);
     });
   }
-}
+} async(reduceAsync);
 
 
 
@@ -694,3 +695,4 @@ module.exports.apply = applyAsync;
 module.exports.callConstructorWithArgs = callConstructorWithArgs;
 module.exports.New = callConstructorWithArgs;
 module.exports.map = mapAsync;
+module.exports.reduce = reduceAsync;

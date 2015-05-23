@@ -313,4 +313,13 @@ describe('evaluateSymbol', function() {
       assert(value.length == 34);
     });
   });
+
+  it('Should reduce asynchronously', function(done) {
+    dd.evaluateForm(null, [dd.reduce, dd.sym('+'), ["quote", [1, 2, 3, 4]]],
+		    function(err, value) {
+		      assert(!err);
+		      assert(value);
+		      done();
+		    });
+  });
 });
