@@ -6,6 +6,56 @@ Unfortunately, the code quickly becomes very complicated if it depends a lot on 
 
 Dentdoche follows a different approach to simplify development of asynchronous programs. It offers a Lisp-interpretator that is aware of the asynchronous callback style of node.js. Unlike other language extensions that intend to facilitate this, such as **streamline.js**, Dentdoche does not need an extra compilation step. The downside of Dentdoche is increased syntactic noise and extra overhead for interpreting programs. However, since you can mix Dentdoche-code with regular Javascript code, you can choose to use it only for those special situations where you really need to simplify the code. The good thing is that writing asynchronous code with Dentdoche is almost like writing synchronous code and you can almost entirely forget that it is asynchronous.
 
+## Example usage
+Dentdoche makes it easy to write asynchronous code as if it were synchronous code:
+```nodejs
+    dd.async(fs.readFile);
+    dd.async(fs.writeFile);
+
+    var appendBasePath = dd.fn( // <--  A regular synchronous function
+      ['fname'], // <-- Accepting a single argument
+      ['+', // <-- The + operator of JS.
+       '/tmp/',
+       dd.sym('fname')]); // <-- Refer to the input parameter.
+    
+    var readAndConcatFiles = dd.afn(
+      [], // <-- No named parameters
+      [dd.let ['file-fmt', 'utf8'], // <-- A local variable bound to a string.
+       [dd.map,                 // <-- Create a new array with the function applied to all
+	                        //     elements.
+	[dd.Afn, ["filename"],  // <-- Construct an anonymous, asynchronous, function.
+	                        //     Capital A in Afn instead of afn means that
+	                        //     local variables will be captured (in this case file-fmt).
+	 [fs.readFile,          // <-- Call to a function marked as *asynchronous*
+	  [appendBasePath,      // <-- Call to previously *synchronous* function
+	   dd.sym('filename')], // <-- This is a symbol referring to the filename parameter.
+	  dd.sym('file-fmt')]], // <-- The captured format parameter.
+	dd.sym('arguments')]]); // <-- An array of all parameters.
+
+    var makeSomeFiles = dd.afn(
+      [],
+      [dd.map,
+       [dd.Afn, ['filename'],
+	[fs.writeFile,
+	 [appendBasePath,
+	  dd.sym('filename')],
+	 ['+', '[Contents of file ', dd.sym('filename'), ']']]],
+       dd.sym('arguments')]);
+
+    var writeAndConcat = dd.afn(
+      [],
+      [dd.let, ['files', [dd.quote, // <-- Special form to prevent evaluation
+			  ['a.txt', 'b.txt', 'c.txt']]], // <-- An array of data.
+       [makeSomeFiles, dd.sym('files')],
+       [readAndConcatFiles, dd.sym('files')]]);
+
+
+    writeAndConcat(function(err, concatenated) {
+      console.log('Concated files: %j', concatenated);
+      done();
+    });
+```
+
 ## Basics
 Dentdoche distinguishes between two types of functions: synchronous and asynchronous ones. Functions in Dentdoche are regular Javascript functions. To use Dentdoche, you first install it using npm by typing:
 ```
