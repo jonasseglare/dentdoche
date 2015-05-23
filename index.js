@@ -719,20 +719,14 @@ function loopAsync(fun, initialState, cb) {
   var state = initialState;
   var iterate = function() {
     fun(state, function(err, value) {
-      console.log('VALUE = %j', value);
-      console.log('ERR   = %j', err);
       if (err) {
 	cb(err);
       } else {
 	var cont = value[0];
 	state = value[1];
-	console.log('Continue: %j', cont);
-	console.log('State:    %j', state);
 	if (cont) {
-	  console.log('CONTINUE!!!');
 	  setTimeout(iterate, 0);
 	} else {
-	  console.log('WE ARE DONE');
 	  cb(null, state);
 	}
       }

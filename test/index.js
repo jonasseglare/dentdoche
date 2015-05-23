@@ -516,4 +516,21 @@ describe('evaluateSymbol', function() {
       done();
     });
   });
+
+  it('looping', function(done) {
+    var factorial = dd.fn(
+      ['n'],
+      [dd.loop,
+       [dd.array, 1, dd.sym('n')]
+       [dd.Afn, ['state'],
+	[dd.let, ['product', [dd.get, dd.sym('state'), 0],
+		  'x',       [dd.get, dd.sym('state'), 1]],
+	 [dd.if, ['=', dd.sym('x'), 0],
+	  [dd.array, false, dd.sym('product')],
+	  [dd.array, true, [dd.array,
+			    ['*', dd.sym('product'), dd.sym('x')],
+			    ['-', dd.sym('x'), 1]]]]]]]
+    );
+    done();
+  });
 });
