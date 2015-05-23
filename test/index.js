@@ -3,6 +3,28 @@ var assert = require('assert');
 var immutable = require('immutable');
 var fs = require('fs');
 
+var fsub = dd.fn(
+  ['n'],
+  [dd.if, ["=", dd.sym('n'), 0], 1,
+   ['*', dd.sym('n'),
+    [factorial, ['-', dd.sym('n'), 1]]]]);
+
+
+function factorial() {
+  return fsub.apply(this, dd.argsToArray(arguments));
+}
+
+var fsubAsync = dd.afn(
+  ['n'],
+  [dd.if, ["=", dd.sym('n'), 0], 1,
+   ['*', dd.sym('n'),
+    [factorial, ['-', dd.sym('n'), 1]]]]);
+
+
+function factorialAsync() {
+  fsubAsync.apply(this, dd.argsToArray(arguments));
+} dd.async(factorialAsync);
+
 describe('evaluateSymbol', function() {
   it('Should evaluate a symbol', function() {
     var sym = new dd.Symbol("a");
@@ -653,6 +675,17 @@ describe('evaluateSymbol', function() {
     f(x, function(err, v) {
       assert.equal(x[0], 119);
       assert.equal(x[2], 120);
+    });
+  });
+
+  it('factorial', function() {
+    assert.equal(factorial(4), 4*3*2*1);
+  });
+  
+  it('factorialAsync', function(done) {
+    factorialAsync(4, function(err, v) {
+      assert.equal(v, 4*3*2*1);
+      done();
     });
   });
 });
