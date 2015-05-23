@@ -740,4 +740,4 @@ module.exports.do = makeSpecialFormMacro("do");
 // Those function will not capture local variables.
 module.exports.Fn = makeSpecialFormMacro("fn");
 module.exports.Afn = makeSpecialFormMacro("afn");
-
+module.exports.if = makeSpecialFormMacro("if");

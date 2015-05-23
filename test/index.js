@@ -139,8 +139,8 @@ describe('evaluateSymbol', function() {
   it('if', function(done) {
     dd.evaluateForm(
       null,
-      ['let', ['a', ['if', false, 3, 4],
-	       'b', ['if', true, 9, 11]],
+      ['let', ['a', [dd.if, false, 3, 4],
+	       'b', [dd.if, true, 9, 11]],
        [dd.array, dd.S('a'), dd.S('b')]],
       function(err, result) {
 	assert(result.length == 2);
@@ -431,7 +431,7 @@ describe('evaluateSymbol', function() {
     dd.evaluateForm(
       null,
       ['let', ['fak', [dd.afn, ['n'],
-		       ['if', ['==', 0, dd.S('n')],
+		       [dd.if, ['==', 0, dd.S('n')],
 			1,
 			['*', dd.S('n'),
 			 ['fak', ['-', dd.S('n'), 1]]]]]],
@@ -442,5 +442,4 @@ describe('evaluateSymbol', function() {
       }
     );
   });
-
 });
