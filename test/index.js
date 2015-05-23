@@ -251,6 +251,19 @@ describe('evaluateSymbol', function() {
     dd.evaluateForm({}, [myAnd, true, true, true, true, true, true], function(err, value) {
       assert(value);
     });
-    
+  });
+
+  it('get and set', function() {
+    dd.evaluateForm(
+      {},
+      ["let", ["x", {}],
+       [dd.jsSet, dd.sym("x"), "RULLE", 119],
+       [dd.array, dd.sym("x"), [dd.jsGet, dd.sym("x"), "RULLE"]]],
+      function(err, value) {
+	assert(!err);
+	assert.equal(value.length, 2);
+	assert.equal(value[1], 119);
+      }
+    );
   });
 });

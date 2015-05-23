@@ -492,6 +492,14 @@ function evaluateForm(localVars, form, cb) {
   evaluateFormWithoutMacros(localVars, expandMacros(form), cb);
 }
 
+function jsGet(obj, key) {
+  return obj[key];
+}
+
+function jsSet(obj, key, newValue) {
+  obj[key] = newValue;
+}
+
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.pushLocalVars = pushLocalVars;
@@ -507,3 +515,5 @@ module.exports.array = makeArrayFromArgs;
 module.exports.macro = macro;
 module.exports.isMacro = isMacro;
 module.exports.argsToArray = argsToArray;
+module.exports.jsSet = jsSet;
+module.exports.jsGet = jsGet;
