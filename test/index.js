@@ -571,8 +571,8 @@ describe('evaluateSymbol', function() {
 	dd.sym('+'),                    
 	[dd.map,                 // <-- Create a new array with the function applied to all
 	 [dd.Afn, ["filename"],  // <-- Construct an anonymous, asynchronous, function.
-	                         //     Capital A in Afn instead of afn means that
-	                         //     local variables will be captured (in this case file-fmt).
+	  //     Capital A in Afn instead of afn means that
+	  //     local variables will be captured (in this case file-fmt).
 	  [fs.readFile,          // <-- Call to a function marked as *asynchronous*
 	   [appendBasePath,      // <-- Call to previously *synchronous* function
 	    dd.sym('filename')], // <-- This is a symbol referring to the filename parameter.
