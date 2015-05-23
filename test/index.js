@@ -176,4 +176,16 @@ describe('evaluateSymbol', function() {
       }
     );
   });
+
+  it('Complex call', function(done) {
+    dd.evaluateForm(
+      {},
+      [['fn', ['a', 'b'], ['+', ['*', dd.sym('a'), dd.sym('a')],
+			   ['*', dd.sym('b'), dd.sym('b')]]],
+       3, 4], function(err, result) {
+	 assert(!err);
+	 assert.equal(result, 25);
+	 done();
+       });
+  });
 });
