@@ -128,11 +128,11 @@ Note that the two versions in Dentdoche are almost the same except for that we u
 See the test cases for details how to use Dentdoche.
 
 Here is a summary of important functions/macros:
- * ```js fn(argList, ..., bodyForms, ...) ```  : Create a new synchronous function, that returns its result.
- * ```js afn(argList, ..., bodyForms, ...) ```: Create a new asynchronous function, that passes its result to a callback.
- * ```js async(fun)``` : Mark a function ```fun``` as being asynchronous so that Dentdoche can treat it as such.
- * ```js Fn(argList, ..., bodyForms, ...)```: A macro to create a local function that will, in contrast to fn, capture the local context.
- * ```js Afn(argList, ..., bodyForms, ...)```: Like Fn, but asynchronous.
+ * ```fn(argList, ..., bodyForms, ...) ```  : Create a new synchronous function, that returns its result.
+ * ```afn(argList, ..., bodyForms, ...) ```: Create a new asynchronous function, that passes its result to a callback.
+ * ```async(fun)``` : Mark a function ```fun``` as being asynchronous so that Dentdoche can treat it as such.
+ * ```Fn(argList, ..., bodyForms, ...)```: A macro to create a local function that will, in contrast to fn, capture the local context.
+ * ```Afn(argList, ..., bodyForms, ...)```: Like Fn, but asynchronous.
 ## To do
  * Try-catch macro.
 
