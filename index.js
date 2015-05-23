@@ -479,7 +479,9 @@ function afn(args, body, lvars) {
     var evaluatedArgs = allArgs.slice(0, lastIndex);
     var cb = allArgs[lastIndex];
     var localVars = makeLocalVars(initLVars(lvars), args, evaluatedArgs);
-    evaluateFormWithoutMacros(localVars, expandMacros(body), cb);
+    evaluateFormWithoutMacros(
+      localVars.set('this', this),
+      expandMacros(body), cb);
   }
   return async(f);
 } macro(afn);
@@ -491,7 +493,7 @@ function fn(args, body, lvars) {
     var localVars = makeLocalVars(initLVars(lvars), args, evaluatedArgs);
     var assigned = false;
     var result = undefined;
-    evaluateFormWithoutMacros(localVars, expandMacros(body), function(err, r) {
+    evaluateFormWithoutMacros(localVars.set('this', this), expandMacros(body), function(err, r) {
       if (err) {
 	throw err;
       } else {
