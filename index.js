@@ -9,7 +9,6 @@
 
   TODO:
   
-    * Syntax for calling constructors
     * Loop macro
     * ordered evaluation of arguments
 
@@ -19,6 +18,7 @@
   */
 var assert = require('assert');
 var immutable = require('immutable');
+var util = require('util');
 
 function ResultArray(n, cb) {
   this.dst = new Array(n);
@@ -489,6 +489,13 @@ function fn(args, body, lvars) {
 	result = r;
       }
     });
+    if (!assigned) {
+      var message = util.format('RESULT NOT DELIVERED IN FUNCTION DEFINED FROM ARGS %j AND BODY %j',
+				 args, body);
+      console.log(message);
+      console.log('You should probably use afn instead of fn.');
+      throw new Error(message);
+    }
     assert(assigned, 'Result was not assigned. Most likely, your result is delivered asynchronously, but this function is synchronous.');
     return result;
   }

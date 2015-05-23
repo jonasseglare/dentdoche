@@ -407,15 +407,20 @@ describe('evaluateSymbol', function() {
 			       dd.S("fname")]]],
        [dd.map, dd.S("writeRulle"), dd.S('fullnames')],
        [dd.let, ["strings", [dd.map,
+			     // In case we want to make a function
+			     // that doesn't capture local context,
+			     // we can use dd.afn. Otherwise, we should
+			     // use the dd.Afn macro.
 			    [dd.afn, ["fname"], // Forgetting to use afn here instead of fn
-			                       // may cause errors: The return value will
-			                       // both be used, and the async callback will
-			                       // pass it on.
+			                        // may cause errors: The return value will
+			                        // both be used, and the async callback will
+			                        // pass it on.
 			     [fs.readFile, dd.S("fname"), "utf8"]],
 			    dd.S("fullnames")],
 		"singleString", [dd.reduce, dd.S('+'), dd.S('strings')]],
 	dd.S("singleString")]],
       function(err, value) {
+	assert(!err);
 	assert.equal(value, 'Rulle!!!Rulle!!!Rulle!!!');
 	done();
       }
