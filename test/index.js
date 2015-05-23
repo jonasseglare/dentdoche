@@ -613,4 +613,31 @@ describe('evaluateSymbol', function() {
     assert.equal(x[0], 119);
     assert.equal(x[2], 120);
   });
+  
+  it('Multiple elements in body2', function() {
+    var x = [0, 0, 0, 0];
+    var f = dd.afn(
+      ['X'],
+      [dd.set, dd.sym('X'), 0, 119],
+      [dd.set, dd.sym('X'), 2,
+       ['+', [dd.get, dd.sym('X'), 0], 1]]);
+    f(x, function(err, k) {
+      assert.equal(x[0], 119);
+      assert.equal(x[2], 120);
+    });
+  });
+
+  it('Multiple elements in body3', function() {
+    var x = [0, 0, 0, 0];
+    var f = dd.fn(
+      ['Y'],
+      [dd.let, ['f', [dd.Fn, ['X'],
+		     [dd.set, dd.sym('X'), 0, 119],
+		     [dd.set, dd.sym('X'), 2,
+		      ['+', [dd.get, dd.sym('X'), 0], 1]]]],
+       ['f', dd.sym('Y')]]);
+    f(x);
+    assert.equal(x[0], 119);
+    assert.equal(x[2], 120);
+  });
 });
