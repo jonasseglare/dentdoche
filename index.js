@@ -312,14 +312,22 @@ function evaluateNowSub(fun, localVars, form, cb) {
 }
 
 function evaluateNow(localVars, form, cb) {
+  var wf = function(err, f) {
+    if (err) {
+      cb(err);
+    } else {
+      evaluateNowSub(f, localVars, form, cb);
+    }
+  }
+  
   var fun = form[0];
   if (isOperator(fun)) {
-    fun = getOperatorFunction(fun);
+    wf(null, getOperatorFunction(fun));
   } else if (isSymbol(fun) || typeof fun == 'string') {
-    fun = evaluateSymbol(localVars, fun);
+    wf(null, evaluateSymbol(localVars, fun));
+  } else {
+    evaluateForm(localVars, fun, wf);
   }
-
-  evaluateNowSub(fun, localVars, form, cb);
 }
 
 function evaluateSExpr(localVars, form, cb) {
