@@ -12,8 +12,6 @@
     * Syntax for calling constructors
     * Initial macro expansion
     * Syntax for calling methods
-    * Evaluate the first symbol of the S-expr. So that we can
-      construct functions and call directly.
   
   */
 var assert = require('assert');
@@ -254,7 +252,7 @@ function evaluateSpecial(localVars, form, cb) {
     evaluateFn(localVars, form, cb);
   } else if (f == 'if') {
     evaluateIf(localVars, form, cb);
-  } else if (f == "'") {
+  } else if (f == "'" || f == 'quote') {
     evaluateQuote(localVars, form, cb);
   } else {
     cb();
