@@ -525,16 +525,18 @@ describe('evaluateSymbol', function() {
        [dd.Afn, ['state'],
 	[dd.let, ['product', [dd.get, dd.sym('state'), 0],
 		  'x',       [dd.get, dd.sym('state'), 1]],
-	 [console.log, ['+', 'GOT THIS:', dd.sym('product'), ' ', dd.sym('x')]],
+	 [console.log, ['+', 'GOT THIS: ', dd.sym('product'), ' ', dd.sym('x')]],
 	 [dd.if, ['=', dd.sym('x'), 0],
 	  [dd.array, false, dd.sym('product')],
 	  [dd.array, true, [dd.array,
 			    ['*', dd.sym('product'), dd.sym('x')],
 			    ['-', dd.sym('x'), 1]]]]]]]);
+    
     factorial(5, function(err, value) {
       assert(!err);
       assert(value == 5*4*3*2*1);
       done();
     });
+    
   });
 });
