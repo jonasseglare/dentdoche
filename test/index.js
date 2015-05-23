@@ -404,7 +404,6 @@ describe('evaluateSymbol', function() {
 			       [console.log, ["+", "For file ", dd.sym("fname")]],
 			       [fs.writeFile, dd.sym("fname"), "Rulle!!!"],
 			       dd.sym("fname")]]],
-       dd.sym("fullnames"),
        [dd.map, dd.sym("writeRulle"), dd.sym('fullnames')]],
       function(err, value) {
 	console.log('value = %j', value);

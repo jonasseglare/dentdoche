@@ -637,7 +637,6 @@ function mapAsync(fun0) {
   var collCount = colls.length;
   var cb = allArgs[last];
   var n = colls[0].length;
-  console.log('n = %j', n);
   var result = new ResultArray(n, cb);
   for (var i = 0; i < n; i++) {
     var localArgs = new Array(collCount + 1);
