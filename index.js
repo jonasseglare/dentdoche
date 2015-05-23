@@ -523,6 +523,17 @@ function fn(args, body, lvars) {
   }
 } macro(fn);
 
+function publicAfn() {
+  var args = argsToArray(arguments);
+  return afn(args[0], ["do"].concat(args.slice(1)));
+}
+
+function publicFn() {
+  var args = argsToArray(arguments);
+  return fn(args[0], ["do"].concat(args.slice(1)));
+}
+
+
 
 // Marks a function as being a macro.
 function macro(x) {
@@ -784,8 +795,8 @@ module.exports.isAsync = isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.S = sym;
 module.exports.sym = sym;
-module.exports.fn = fn;
-module.exports.afn = afn;
+module.exports.fn = publicFn;
+module.exports.afn = publicAfn;
 module.exports.array = makeArrayFromArgs;
 module.exports.macro = macro;
 module.exports.isMacro = isMacro;

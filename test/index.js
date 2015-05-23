@@ -408,7 +408,7 @@ describe('evaluateSymbol', function() {
       [dd.let, ["basenames", ["quote",
 			     ["a.txt", "b.txt", "c.txt"]],
 	       "fullnames", [dd.map, addTmp, dd.S("basenames")],
-	       "writeRulle", [dd.afn, ["fname"],
+	       "writeRulle", [dd.Afn, ["fname"],
 			      [dd.do,
 			       [console.log, ["+", "For file ", dd.S("fname")]],
 			       [fs.writeFile, dd.S("fname"), "Rulle!!!"],
@@ -419,7 +419,7 @@ describe('evaluateSymbol', function() {
 			     // that doesn't capture local context,
 			     // we can use dd.afn. Otherwise, we should
 			     // use the dd.Afn macro.
-			    [dd.afn, ["fname"], // Forgetting to use afn here instead of fn
+			    [dd.Afn, ["fname"], // Forgetting to use afn here instead of fn
 			                        // may cause errors: The return value will
 			                        // both be used, and the async callback will
 			                        // pass it on.
@@ -438,7 +438,7 @@ describe('evaluateSymbol', function() {
   it('recursion with wrong use.', function(done) {
     dd.evaluateForm(
       null,
-      ['let', ['fak', [dd.afn, ['n'],
+      ['let', ['fak', [dd.Afn, ['n'],
 		       [dd.if, ['==', 0, dd.S('n')],
 			1,
 			['*', dd.S('n'),
