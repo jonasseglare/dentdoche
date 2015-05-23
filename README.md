@@ -8,7 +8,7 @@ Dentdoche follows a different approach to simplify development of asynchronous p
 
 ## Example usage
 Dentdoche makes it easy to write asynchronous code as if it were synchronous code:
-```nodejs
+```node.js
     dd.async(fs.readFile);
     dd.async(fs.writeFile);
 
