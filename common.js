@@ -103,6 +103,60 @@ PromisedValue.prototype.set = function(v) {
   this.value = v;
 }
 
+var opmap = {
+  '=': function(a, b) {return a == b;},
+  '==': function(a, b) {return a == b;},
+  '!=': function(a, b) {return a != b;},
+  '<': function(a, b) {return a < b;},
+  '>': function(a, b) {return a > b;},
+  '<=': function(a, b) {return a <= b;},
+  '>=': function(a, b) {return a >= b;},
+  '+': function(a, b) {return a + b;},
+  '-': function(a, b) {return a - b;},
+  '/': function(a, b) {return a/b;},
+  '*': function(a, b) {return a*b;},
+  '&&': function(a, b) {return a && b;},
+  '||': function(a, b) {return a || b;},
+  '!': function(a) {return !a;}
+};
+
+function getOperatorFunctionSub(x) {
+  return opmap[x];
+}
+
+
+function getOperatorFunction(x) {
+  if (x == '-') {
+    return function() {
+      var args = argsToArray(arguments);
+      if (args.length == 1) {
+	return -args[0];
+      } else if (args.length == 2) {
+	return args[0] - args[1];
+      } else {
+	// ERROR!!!
+	return undefined;
+      }
+    }
+  } else {
+    var op = getOperatorFunctionSub(x);
+    if (op) {
+      var n = (getParamNames(op)).length;
+      if (n == 1) {
+	return op;
+      } else {
+	return function() {
+	  var args = argsToArray(arguments);
+	  var result = args[0];
+	  for (var i = 1; i < args.length; i++) {
+	    result = op(result, args[i]);
+	  }
+	  return result;
+	}
+      }
+    }
+  }
+}
 
 
 module.exports.ResultArray = ResultArray;
@@ -118,3 +172,6 @@ module.exports.bindFunctionArgs = bindFunctionArgs;
 module.exports.getName = getName;
 module.exports.async = async;
 module.exports.PromisedValue = PromisedValue;
+module.exports.opmap = opmap;
+module.exports.getOperatorFunctionSub = getOperatorFunctionSub;
+module.exports.getOperatorFunction = getOperatorFunction;
