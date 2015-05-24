@@ -700,12 +700,13 @@ describe('evaluateSymbol', function() {
 	 [dd.let, ['i', [dd.get, dd.sym('state'), 0],
 		   'a', [dd.get, dd.sym('state'), 1],
 		   'b', [dd.get, dd.sym('state'), 2]],
-	  [dd.set, dd.sym('dst'), dd.sym('i'), dd.sym('b')],
 	  [dd.if, ['=', dd.sym('i'), dd.sym('n')],
 	   [dd.array, false, dd.sym('b')],
-	   [dd.array, true,
-	    [dd.array, ['+', 1, dd.sym('i')],
-	     dd.sym('b'), ['+', dd.sym('a'), dd.sym('b')]]]]]]]]);
+	   [dd.do,
+	    [dd.set, dd.sym('dst'), dd.sym('i'), dd.sym('b')],
+	    [dd.array, true,
+	     [dd.array, ['+', 1, dd.sym('i')],
+	      dd.sym('b'), ['+', dd.sym('a'), dd.sym('b')]]]]]]]]]);
     var dst = new Array(9);
     fib(dst);
     assert(dst[8] == 34);
