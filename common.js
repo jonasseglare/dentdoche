@@ -95,6 +95,15 @@ function async(x) {
   return x;
 }
 
+function PromisedValue() {
+  this.value = undefined;
+}
+
+PromisedValue.prototype.set = function(v) {
+  this.value = v;
+}
+
+
 
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
@@ -108,3 +117,4 @@ module.exports.argsToArray = argsToArray;
 module.exports.bindFunctionArgs = bindFunctionArgs;
 module.exports.getName = getName;
 module.exports.async = async;
+module.exports.PromisedValue = PromisedValue;

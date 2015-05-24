@@ -16,6 +16,7 @@ var isArray = common.isArray;
 var argsToArray = common.argsToArray;
 var getName = common.getName;
 var async = common.async;
+var PromisedValue = common.PromisedValue;
 
 var opmap = {
   '=': function(a, b) {return a == b;},
@@ -133,13 +134,6 @@ function evaluateSymbol(localVars, symbol) {
   }
 }
 
-function PromisedValue() {
-  this.value = undefined;
-}
-
-PromisedValue.prototype.set = function(v) {
-  this.value = v;
-}
 
 function buildLocalVars(localVars, bindings, cb) {
   

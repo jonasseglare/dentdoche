@@ -135,6 +135,25 @@ function getSymbolsAndCompiled(bindings) {
   return [symbols, compiled];
 }
 
+function evaluateAndBindVars(lvars, symbols, compiled, cb) {
+  if (symbols.length == 0) {
+    cb(null, lvars);
+  } else {
+    var sym = getName(symbols[0]);
+    var promisedValue = new PromisedValue(undefined);
+    var c = first(compiled);
+    c(lvars, function(err, result) {
+      if (err) {
+	cb(err);
+      } else {
+	promisedValue.set(result);
+	evaluateAndBindVars(lvars.set(sym, result),
+			    rest(symbols), rest(compiled), cb);
+      }
+    });
+  }
+}
+
 function MakeLet0(args) {
   var bindings = first(args);
   var body = rest(args);
@@ -142,7 +161,15 @@ function MakeLet0(args) {
   var symbolsAndCompiled = getSymbolsAndCompiled(bindings);
   var symbols = symbolsAndCompiled[0];
   var compiled = symbolsAndCompiled[1];
-  
+  return function(lvars0, cb) {
+    evaluateAndBindVars(lvars0, symbols, compiled, function(err, lvars) {
+      if (err) {
+	cb(err);
+      } else {
+	evaluateInSequence(lvars, compileArray(body), undefined, cb);
+      }
+    });
+  };
 }
 
 

@@ -64,4 +64,8 @@ describe('compilers', function() {
       });
     });
   });
+
+  it('let0', function() {
+    var k = c.compile(['let0', ['a', 34], 1]);
+  });
 });
