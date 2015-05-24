@@ -206,10 +206,22 @@ function compileComplex(x) {
       }
       return null;
     }
-  } else if (common.isAsync(f)) {
-    assert(!isMacro(x));
-    return compileAsyncCall(x);
+  } else if (typeof f == 'function') {
+    if (common.isAsync(f)) {
+      assert(!isMacro(x));
+      return compileAsyncCall(x);
+    } else if (isMacro(f)) {
+      return compile(f(args));
+    } else {
+      return compileCall(x);
+    }
   } 
+}
+
+function compileBindingEvaluator(sym) {
+  var key = getName(sym);
+  return async(function(lvars, cb) {
+  });
 }
 
 function compileSub(x) {
@@ -217,6 +229,8 @@ function compileSub(x) {
     if (x.length > 0) {
       return compileComplex(x);
     }
+  } else if (common.isSymbol(x)) {
+    return compileBindingEvaluator(x);
   }
   return x;
 }

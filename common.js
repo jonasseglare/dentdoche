@@ -167,17 +167,21 @@ function isSymbol(x) {
   return x instanceof Symbol;
 }
 
+function getLocalVar(localVars, key) {
+  var v = localVars.get(key);
+  if (v instanceof PromisedValue) {
+    return v.value;
+  }
+  return v;
+}
+
 
 function evaluateSymbol(localVars, symbol) {
   var key = getName(symbol);
   
   if (localVars.constructor.name == 'src_Map__Map') {
     if (localVars.has(key)) {
-      var v = localVars.get(key);
-      if (v instanceof PromisedValue) {
-	return v.value;
-      }
-      return v;
+      return getLocalVar(localVars, key);
     }
   }
   
