@@ -1,10 +1,11 @@
 /*
   
   TODO:
-    * ordered evaluation of arguments
-    * Function bodies can have many forms.
-
-  
+    * Ordered evaluation of arguments.
+    * Try/catch-macro.
+    * Cond-macro.
+    * Let-desctructuring.
+    
   */
 var assert = require('assert');
 var immutable = require('immutable');
