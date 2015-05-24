@@ -45,10 +45,10 @@ describe('compilers', function() {
     assert(c.isCompiled(k));
     console.log('Here we are');
     c.eval(im, k, function(err, value) {
-      console.log('Value is ' + value);
+      //console.log('Value is ' + value);
       console.log('Typeof value is ' + (typeof value));
       assert(typeof value == 'function');
-      console.log('Evaluate it to ' + (value()));
+      //console.log('Evaluate it to ' + (value()));
       //assert(!err);
       //assert(value() == 4);
     });
