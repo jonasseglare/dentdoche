@@ -38,7 +38,6 @@ function compileArray(x) {
 }
 
 function MakeIf(args) {
-  console.log('Make if for %j', args);
   var cArgs = compileArray(args);
   assert(args.length == 2 || args.length == 3);
   return function(lvars, cb) {
@@ -60,11 +59,10 @@ function MakeQuote(args) {
 }
 
 function evaluateInSequence(lvars, compiledForms, result, cb) {
-  console.log('Compiled forms length is %j', compiledForms.length);
   if (compiledForms.length == 0) {
     cb(null, result);
   } else {
-    var a = first(args);
+    var a = first(compiledForms);
     eval(lvars, a, function(err, x) {
       evaluateInSequence(lvars, rest(compiledForms), x, cb);
     });
@@ -98,9 +96,7 @@ function compileComplex(x) {
       
       */
     if (common.contains(specialForms, f)) {
-      console.log('Special form %j', f);
       var v = specialForms[f](args);
-      console.log('Returned '+ v);
       assert(v);
       return v;
     } else {
