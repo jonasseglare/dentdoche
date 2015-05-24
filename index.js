@@ -13,7 +13,8 @@ var util = require('util');
 var common = require('./common.js');
 
 var isArray = common.isArray;
-
+var argsToArray = common.argsToArray;
+var getName = common.getName;
 
 var opmap = {
   '=': function(a, b) {return a == b;},
@@ -71,9 +72,6 @@ function getOperatorFunction(x) {
 }
 
 
-function argsToArray(x) {
-  return Array.prototype.slice.call(x); // see mail.http.js
-}
 
 function makeArrayFromArgs() {
   return argsToArray(arguments);
@@ -98,13 +96,6 @@ function sym(x) {
   return toSymbol(x);
 }
 
-function getName(x) {
-  if (typeof x == 'string') {
-    return x;
-  } else {
-    return x.name;
-  }
-}
 
 
 function cloneShallow(x) {
@@ -409,14 +400,6 @@ function async(x) {
 }
 
 
-function makeLocalVars(lvars, symbols, values) {
-  assert(symbols.length <= values.length);
-  lvars = lvars.set('arguments', values);
-  for (var i = 0; i < symbols.length; i++) {
-    lvars = lvars.set(getName(symbols[i]), values[i]);
-  }
-  return lvars;
-}
 
 
 function initLVars(x) {
@@ -432,7 +415,7 @@ function makeAfnSub(args, body, lvars) {
     var lastIndex = allArgs.length - 1;
     var evaluatedArgs = allArgs.slice(0, lastIndex);
     var cb = allArgs[lastIndex];
-    var localVars = makeLocalVars(initLVars(lvars), args, evaluatedArgs);
+    var localVars = common.bindFunctionArgs(initLVars(lvars), args, evaluatedArgs);
     evaluateFormWithoutMacros(
       localVars.set('this', this),
       expandMacros(body), cb);

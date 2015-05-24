@@ -76,10 +76,23 @@ function MakeDo(args0) {
   }
 }
 
+function MakeFn(args) {
+  var argList = first(args);
+  var compiledBody = compile(rest(args));
+  return function(lvars, cb) {
+    return function() {
+      var evaluatedArgs = common.argsToArray(arguments);
+      
+    }
+  }
+}
+
+
 var specialForms = {
   'if': MakeIf,
   'quote': MakeQuote,
-  'do': MakeDo
+  'do': MakeDo,
+  'fn': MakeFn
 };
 
 

@@ -1,3 +1,5 @@
+var assert = require('assert');
+
 function ResultArray(n, cb) {
   this.dst = new Array(n);
   this.counter = 0;
@@ -64,6 +66,28 @@ function isArray(x) {
   return x instanceof Array;
 }
 
+function argsToArray(x) {
+  return Array.prototype.slice.call(x); // see mail.http.js
+}
+
+function getName(x) {
+  if (typeof x == 'string') {
+    return x;
+  } else {
+    return x.name;
+  }
+}
+
+
+function bindFunctionArgs(lvars, symbols, values) {
+  assert(symbols.length <= values.length);
+  lvars = lvars.set('arguments', values);
+  for (var i = 0; i < symbols.length; i++) {
+    lvars = lvars.set(getName(symbols[i]), values[i]);
+  }
+  return lvars;
+}
+
 
 
 module.exports.ResultArray = ResultArray;
@@ -74,3 +98,6 @@ module.exports.contains = contains;
 module.exports.first = first;
 module.exports.rest = rest;
 module.exports.isArray = isArray;
+module.exports.argsToArray = argsToArray;
+module.exports.bindFunctionArgs = bindFunctionArgs;
+module.exports.getName = getName;
