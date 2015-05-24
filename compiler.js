@@ -36,16 +36,18 @@ function compileArray(x) {
 }
 
 function MakeIf(args) {
+  console.log('Make if for %j', args);
   var cArgs = compileArray(args);
   assert(args.length == 2 || args.length == 3);
   return compiled(function(lvars, cb) {
-    eval(lvars, args[0], function(err, value) {
+    eval(lvars, cArgs[0], function(err, value) {
       if (value) {
-	eval(lvars, args[1], cb);
+	eval(lvars, cArgs[1], cb);
       } else if (args.length == 3) {
-	eval(lvars, args[2], cb);
+	eval(lvars, cArgs[2], cb);
+      } else {
+	cb();
       }
-      cb();
     });
   });
 }
@@ -97,3 +99,4 @@ function compile(x) {
 module.exports.isCompiled = isCompiled;
 module.exports.compile = compile;
 module.exports.compiled = compiled;
+module.exports.eval = eval;
