@@ -9,4 +9,9 @@ describe('compilers', function() {
     assert(!c.isCompiled(function() {}));
     assert(c.isCompiled(c.compiled(function() {})));
   });
+
+  it('Compile', function() {
+    var x = c.compile(['quote', 119]);
+    assert(x == 119);
+  });
 });

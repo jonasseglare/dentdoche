@@ -12,7 +12,7 @@ var immutable = require('immutable');
 var util = require('util');
 var common = require('./common.js');
 
-
+var isArray = common.isArray;
 
 
 var opmap = {
@@ -106,9 +106,6 @@ function getName(x) {
   }
 }
 
-function isArray(x) {
-  return x instanceof Array;
-}
 
 function cloneShallow(x) {
   var y = {};

@@ -1,5 +1,5 @@
 var common = require('./common');
-
+var assert = require('assert');
 var first = common.first;
 var rest = common.rest;
 
@@ -50,13 +50,20 @@ function MakeIf(args) {
   });
 }
 
+function MakeQuote(args) {
+  assert(args.length == 1);
+  return args[0];
+}
+
 var specialForms = {
-  'if': MakeIf
+  'if': MakeIf,
+  'quote': MakeQuote
 };
 
 
 function compileComplex(x) {
-  var f = x[0];
+  var f = first(x);
+  var args = rest(x);
   if (typeof f == 'string') {
     /* Can be
        
@@ -67,9 +74,11 @@ function compileComplex(x) {
       
       */
     if (common.contains(specialForms, f)) {
-      return specialForms();
+      return specialForms[f](args);
+    } else {
+      return null;
     }
-    return null;
+    
   } else if (isAsync(f)) {
     assert(!isMacro(x));
     return compileAsyncCall(x);

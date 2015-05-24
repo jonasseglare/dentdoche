@@ -60,6 +60,11 @@ function rest(x) {
   return x.slice(1);
 }
 
+function isArray(x) {
+  return x instanceof Array;
+}
+
+
 
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
@@ -68,3 +73,4 @@ module.exports.isMacro = isMacro;
 module.exports.contains = contains;
 module.exports.first = first;
 module.exports.rest = rest;
+module.exports.isArray = isArray;
