@@ -67,11 +67,10 @@ describe('compilers', function() {
   });
 
   it('let0', function() {
-    var k = c.compile(['let0', ['a', 34], dd.sym('a')]);
+    var k = c.compile(['let0', ['a', ['if', false, 0, 34]], dd.sym('a')]);
     c.eval(im, k, function(err, result) {
       assert(!err);
-      console.log('err is ' + err);
-      console.log('Result is ' + result);
+      assert(result == 34);
     });
   });
 });

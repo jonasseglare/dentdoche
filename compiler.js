@@ -126,14 +126,12 @@ function getSymbolsAndCompiled(bindings) {
   for (var i = 0; i < n; i++) {
     var offset = 2*i;
     symbols[i] = bindings[offset + 0];
-    compiled[i] = bindings[offset + 1];
+    compiled[i] = compile(bindings[offset + 1]);
   }
   return [symbols, compiled];
 }
 
 function evaluateAndBindVars(lvars, symbols, compiled, cb) {
-  console.log('Bindings: %j', lvars);
-  console.log('At %j to %j', symbols, compiled);
   if (symbols.length == 0) {
     cb(null, lvars);
   } else {
