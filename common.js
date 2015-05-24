@@ -48,8 +48,23 @@ function isMacro(x) {
   return false;
 }
 
+function contains(m, key) {
+  return m.hasOwnProperty(key);
+}
+
+function first(x) {
+  return x[0];
+}
+
+function rest(x) {
+  return x.slice(1);
+}
+
 
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
 module.exports.isAsync = isAsync;
 module.exports.isMacro = isMacro;
+module.exports.contains = contains;
+module.exports.first = first;
+module.exports.rest = rest;

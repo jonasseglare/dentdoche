@@ -1,5 +1,8 @@
 var common = require('./common');
 
+var first = common.first;
+var rest = common.rest;
+
 function isCompiled(x) {
   if (typeof x == 'function') {
     return x.compiled;
@@ -47,6 +50,10 @@ function MakeIf(args) {
   });
 }
 
+var specialForms = {
+  'if': MakeIf
+};
+
 
 function compileComplex(x) {
   var f = x[0];
@@ -59,6 +66,9 @@ function compileComplex(x) {
       - a local variable binding
       
       */
+    if (common.contains(specialForms, f)) {
+      return specialForms();
+    }
     return null;
   } else if (isAsync(f)) {
     assert(!isMacro(x));
