@@ -116,8 +116,7 @@ function compileComplex(x) {
     } else {
       return null;
     }
-    
-  } else if (isAsync(f)) {
+  } else if (common.isAsync(f)) {
     assert(!isMacro(x));
     return compileAsyncCall(x);
   } 

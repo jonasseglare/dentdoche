@@ -37,4 +37,14 @@ describe('compilers', function() {
       assert(value == 5);
     });
   });
+
+  it('MakeFn', function() {
+    var k = c.compile(['fn', [], ['if', false, 3, 4]]);
+    assert(c.isCompiled(k));
+    c.eval(null, k, function(err, value) {
+      assert(!err);
+      assert(typeof value == 'function');
+      assert(value() == 4);
+    });
+  });
 });
