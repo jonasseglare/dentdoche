@@ -28,8 +28,8 @@ describe('compilers', function() {
     var k = c.compile(['do', 1, 2, 3, 4, 5]);
     assert(c.isCompiled(k));
     c.eval(null, k, function(err, value) {
-      console.log('value = %j', value);
-      //assert(value == 5);
+      assert(!err);
+      assert(value == 5);
     });
   });
 });
