@@ -20,6 +20,7 @@ var PromisedValue = common.PromisedValue;
 var opmap = common.opmap;
 var getOperatorFunctionSub = common.getOperatorFunctionSub;
 var getOperatorFunction = common.getOperatorFunction;
+var evaluateSymbol = common.evaluateSymbol;
 
 
 
@@ -56,33 +57,6 @@ function cloneShallow(x) {
   }
   return y;
 }
-
-function evaluateSymbol(localVars, symbol) {
-  var key = getName(symbol);
-  
-  if (localVars.constructor.name == 'src_Map__Map') {
-    if (localVars.has(key)) {
-      var v = localVars.get(key);
-      if (v instanceof PromisedValue) {
-	return v.value;
-      }
-      return v;
-    }
-  }
-  
-  if (localVars.hasOwnProperty(key)) {
-    return localVars[key];
-  } else {
-    var f = getOperatorFunction(getName(symbol));
-    if (f) {
-      return f;
-    } else {
-      throw new Error('ERROR LOOKING UP SYMBOL: The symbol "' + symbol + '" has not been bound. Are you using fn or afn do define a local recursive function? Or did you just refer to a symbol that is not bound?');
-      return null;
-    }
-  }
-}
-
 
 function buildLocalVars(localVars, bindings, cb) {
   
