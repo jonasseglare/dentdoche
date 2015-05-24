@@ -66,7 +66,10 @@ describe('compilers', function() {
   });
 
   it('let0', function() {
-    var k = c.compile(['let0', ['a', 34], 1]);
+    var k = c.compile(['let0', ['a', 34], 'a']);
+    c.eval(im, k, function(err, result) {
+      console.log('Result is ' + result);
+    });
   });
 });
 

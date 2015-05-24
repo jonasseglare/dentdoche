@@ -221,6 +221,11 @@ function compileComplex(x) {
 function compileBindingEvaluator(sym) {
   var key = getName(sym);
   return async(function(lvars, cb) {
+    if (lvars.has(key)) {
+      cb(null, getLocalVars(key));
+    } else {
+      cb(new Error('No such local binding to ' + key));
+    }
   });
 }
 
