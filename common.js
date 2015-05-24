@@ -34,6 +34,22 @@ function getParamNames(func) {
   return result;
 }
 
+function isAsync(x) {
+  if (typeof x == 'function') {
+    return x.async;
+  }
+  return false;
+}
+
+function isMacro(x) {
+  if (typeof x == 'function') {
+    return x.isMacro;
+  }
+  return false;
+}
+
 
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
+module.exports.isAsync = isAsync;
+module.exports.isMacro = isMacro;

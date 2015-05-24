@@ -305,7 +305,7 @@ function evaluateNowSub(fun, localVars, form, cb) {
       if (err) {
 	cb(err);
       } else {
-	if (isAsync(fun)) {
+	if (common.isAsync(fun)) {
 	  fun.apply(null, evaluatedArgs.concat([cb]));
 	} else {
 	  var r = fun.apply(null, evaluatedArgs);
@@ -411,12 +411,6 @@ function async(x) {
   return x;
 }
 
-function isAsync(x) {
-  if (typeof x == 'function') {
-    return x.async;
-  }
-  return false;
-}
 
 function makeLocalVars(lvars, symbols, values) {
   assert(symbols.length <= values.length);
@@ -509,18 +503,12 @@ function macro(x) {
   return x;
 }
 
-function isMacro(x) {
-  if (typeof x == 'function') {
-    return x.isMacro;
-  }
-  return false;
-}
 
 function expandMacros(x) {
   if (isArray(x)) {
     if (1 <= x.length) {
       var f = x[0];
-      if (isMacro(f)) {
+      if (common.isMacro(f)) {
 	return expandMacros(f.apply(null, x.slice(1)));
       } else if (isQuote(f)) {
 	return x;
@@ -570,13 +558,13 @@ function functionalMap() {
 }
 
 function applySync(fun, args) {
-  assert(!isAsync(fun));
+  assert(!common.isAsync(fun));
   return fun.apply(null, args);
 }
 
 function convertToAsync(f) {
   assert(typeof f == 'function');
-  if (isAsync(f)) {
+  if (common.isAsync(f)) {
     return f;
   } else {
     return async(function() {
@@ -752,7 +740,7 @@ function loopSync(fun, initialState, cb) {
 
 function loop(initialState, fun, cb) {
   if (typeof fun == 'function') {
-    if (isAsync(fun)) {
+    if (common.isAsync(fun)) {
       loopAsync(fun, initialState, cb);
     } else {
       loopSync(fun, initialState, cb);
@@ -768,7 +756,7 @@ module.exports.Symbol = Symbol;
 module.exports.evaluateForm = evaluateForm;
 module.exports.evaluateNow = evaluateNow;
 module.exports.async = async;
-module.exports.isAsync = isAsync;
+module.exports.isAsync = common.isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.S = sym;
 module.exports.sym = sym;
@@ -776,7 +764,7 @@ module.exports.fn = publicFn;
 module.exports.afn = publicAfn;
 module.exports.array = makeArrayFromArgs;
 module.exports.macro = macro;
-module.exports.isMacro = isMacro;
+module.exports.isMacro = common.isMacro;
 module.exports.argsToArray = argsToArray;
 module.exports.set = jsSet;
 module.exports.get = jsGet;
