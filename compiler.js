@@ -186,7 +186,7 @@ var specialForms = {
 function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
-  if (typeof f == 'string' || isSymbol(f)) {
+  if (typeof f == 'string' || common.isSymbol(f)) {
     /* Can be
        
       - special form

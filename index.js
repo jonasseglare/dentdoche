@@ -21,21 +21,15 @@ var opmap = common.opmap;
 var getOperatorFunctionSub = common.getOperatorFunctionSub;
 var getOperatorFunction = common.getOperatorFunction;
 var evaluateSymbol = common.evaluateSymbol;
-
-
+var isSymbol = common.isSymbol;
+var Symbol = common.Symbol;
 
 
 function makeArrayFromArgs() {
   return argsToArray(arguments);
 }
 
-function Symbol(x) {
-  this.name = x;
-}
 
-function isSymbol(x) {
-  return x instanceof Symbol;
-}
 
 function toSymbol(x) {
   if (isSymbol(x)) {

@@ -158,6 +158,16 @@ function getOperatorFunction(x) {
   }
 }
 
+function Symbol(x) {
+  this.name = x;
+}
+
+
+function isSymbol(x) {
+  return x instanceof Symbol;
+}
+
+
 function evaluateSymbol(localVars, symbol) {
   var key = getName(symbol);
   
@@ -202,3 +212,5 @@ module.exports.opmap = opmap;
 module.exports.getOperatorFunctionSub = getOperatorFunctionSub;
 module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.evaluateSymbol = evaluateSymbol;
+module.exports.isSymbol = isSymbol;
+module.exports.Symbol = Symbol;
