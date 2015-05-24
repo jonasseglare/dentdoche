@@ -11,7 +11,9 @@ function isCompiled(x) {
 }
 
 function compiled(x) {
-  x.compiled = true;
+  if (typeof x == 'object' || typeof x == 'function') {
+    x.compiled = true;
+  }
   return x;
 }
 
@@ -39,7 +41,7 @@ function MakeIf(args) {
   console.log('Make if for %j', args);
   var cArgs = compileArray(args);
   assert(args.length == 2 || args.length == 3);
-  return compiled(function(lvars, cb) {
+  return function(lvars, cb) {
     eval(lvars, cArgs[0], function(err, value) {
       if (value) {
 	eval(lvars, cArgs[1], cb);
@@ -49,7 +51,7 @@ function MakeIf(args) {
 	cb();
       }
     });
-  });
+  }
 }
 
 function MakeQuote(args) {
@@ -58,7 +60,8 @@ function MakeQuote(args) {
 }
 
 function evaluateInSequence(lvars, compiledForms, result, cb) {
-  if (compiledForms == 0) {
+  console.log('Compiled forms length is %j', compiledForms.length);
+  if (compiledForms.length == 0) {
     cb(null, result);
   } else {
     var a = first(args);
@@ -72,13 +75,13 @@ function MakeDo(args0) {
   var args = compileArray(args0);
   return function(lvars, cb) {
     evaluateInSequence(lvars, args, undefined, cb);
-  };
+  }
 }
 
 var specialForms = {
   'if': MakeIf,
   'quote': MakeQuote,
-  'doe': MakeDo,
+  'do': MakeDo
 };
 
 
@@ -95,7 +98,11 @@ function compileComplex(x) {
       
       */
     if (common.contains(specialForms, f)) {
-      return specialForms[f](args);
+      console.log('Special form %j', f);
+      var v = specialForms[f](args);
+      console.log('Returned '+ v);
+      assert(v);
+      return v;
     } else {
       return null;
     }
@@ -106,13 +113,17 @@ function compileComplex(x) {
   } 
 }
 
-function compile(x) {
+function compileSub(x) {
   if (common.isArray(x)) {
     if (x.length > 0) {
       return compileComplex(x);
     }
   }
   return x;
+}
+
+function compile(x) {
+  return compiled(compileSub(x));
 }
 
 module.exports.isCompiled = isCompiled;

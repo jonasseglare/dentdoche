@@ -19,17 +19,17 @@ describe('compilers', function() {
 
     var y = c.compile(['if', false, 3, 4]);
     c.eval(null, y, function(err, value) {
-      console.log('Err = %j', err);
       assert(!err);
       assert.equal(value, 4);
     });
   });
 
   it('Do', function() {
-    var x = c.compile(['do', 1, 2, 3, 4, 5]);
-    c.eval(null, x, function(err, value) {
+    var k = c.compile(['do', 1, 2, 3, 4, 5]);
+    assert(c.isCompiled(k));
+    c.eval(null, k, function(err, value) {
       console.log('value = %j', value);
-      assert(value == 5);
+      //assert(value == 5);
     });
   });
 });
