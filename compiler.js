@@ -18,19 +18,15 @@ function compiled(x) {
 }
 
 function eval(lvars, x, cb) {
-//  try {
-    console.log('Inside eval');
-    if (isCompiled(x)) {
-      console.log('It is compiled, evaluate it');
+  if (isCompiled(x)) {
+    try {
       var ret = x(lvars, cb);
-    } else {
-      console.log('Pass it on: '+ x);
-      cb(null, x);
+    } catch (e) {
+      cb(e);
     }
-/*  } catch (e) {
-    console.log('The error is '+ e);
-    cb(e);
-  }*/
+  } else {
+    cb(null, x);
+  }
 }
 
 function compileArray(x) {
@@ -127,13 +123,36 @@ function MakeAfn(args) {
   }
 }
 
+function getSymbolsAndCompiled(bindings) {
+  var n = bindings.length/2;
+  var symbols = new Array(n);
+  var compiled = new Array(n);
+  for (var i = 0; i < n; i++) {
+    var offset = 2*i;
+    symbols[i] = bindings[offset + 0];
+    compiled[i] = bindings[offset + 1];
+  }
+  return [symbols, compiled];
+}
+
+function MakeLet0(args) {
+  var bindings = first(args);
+  var body = rest(args);
+  assert(bindings.length % 2 == 0);
+  var symbolsAndCompiled = getSymbolsAndCompiled(bindings);
+  var symbols = symbolsAndCompiled[0];
+  var compiled = symbolsAndCompiled[1];
+  
+}
+
 
 var specialForms = {
   'if': MakeIf,
   'quote': MakeQuote,
   'do': MakeDo,
   'fn': MakeFn,
-  'afn': MakeAfn
+  'afn': MakeAfn,
+  'let0': MakeLet0
 };
 
 

@@ -44,7 +44,6 @@ describe('compilers', function() {
   it('MakeFn', function() {
     var k = c.compile(['fn', [], ['if', false, 3, 4]]);
     assert(c.isCompiled(k));
-    console.log('Here we are');
     c.eval(im, k, function(err, value) {
       assert(typeof value == 'function');
       assert(!err);
@@ -55,7 +54,6 @@ describe('compilers', function() {
   it('MakeAfn', function() {
     var k = c.compile(['afn', [], ['if', false, 3, 119]]);
     assert(c.isCompiled(k));
-    console.log('Here we are');
     c.eval(im, k, function(err, value) {
       assert(typeof value == 'function');
       assert(!err);
