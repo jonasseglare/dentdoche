@@ -90,13 +90,14 @@ function MakeFn(args) {
   console.log(' ---> args         = %j', args);
   console.log(' ---> compiledBody = ' + compiledBody);  
   return function(lvars0, cb) {
-    cb(null, function() {
+    cb(null, 124);
+    /*cb(null, function() {
       var evaluatedArgs = common.argsToArray(arguments);
       lvars = common.bindFunctionArgs(lvars0, argList, evaluatedArgs);
       console.log(' ---> lvars = ' + lvars);
       console.log(' ---> compiledBody = ' + compiledBody);
       evaluateInSequence(lvars, compiledBody, undefined, cb);
-    });
+    });*/
   }
 }
 
