@@ -57,9 +57,28 @@ function MakeQuote(args) {
   return args[0];
 }
 
+function evaluateInSequence(lvars, compiledForms, result, cb) {
+  if (compiledForms == 0) {
+    cb(null, result);
+  } else {
+    var a = first(args);
+    eval(lvars, a, function(err, x) {
+      evaluateInSequence(lvars, rest(compiledForms), x, cb);
+    });
+  }
+}
+
+function MakeDo(args0) {
+  var args = compileArray(args0);
+  return function(lvars, cb) {
+    evaluateInSequence(lvars, args, undefined, cb);
+  };
+}
+
 var specialForms = {
   'if': MakeIf,
-  'quote': MakeQuote
+  'quote': MakeQuote,
+  'doe': MakeDo,
 };
 
 

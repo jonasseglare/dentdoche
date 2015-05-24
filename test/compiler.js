@@ -24,4 +24,12 @@ describe('compilers', function() {
       assert.equal(value, 4);
     });
   });
+
+  it('Do', function() {
+    var x = c.compile(['do', 1, 2, 3, 4, 5]);
+    c.eval(null, x, function(err, value) {
+      console.log('value = %j', value);
+      assert(value == 5);
+    });
+  });
 });
