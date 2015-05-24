@@ -708,6 +708,7 @@ describe('evaluateSymbol', function() {
 	     dd.sym('b'), ['+', dd.sym('a'), dd.sym('b')]]]]]]]]);
     var dst = new Array(9);
     fib(dst);
+    assert(dst[8] == 34);
     console.log('dst = %j', dst);
   });
 });
