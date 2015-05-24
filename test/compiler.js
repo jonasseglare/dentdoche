@@ -22,6 +22,11 @@ describe('compilers', function() {
       assert(!err);
       assert.equal(value, 4);
     });
+    var z = c.compile(['if', true, 3, 4]);
+    c.eval(null, z, function(err, value) {
+      assert(!err);
+      assert.equal(value, 3);
+    });
   });
 
   it('Do', function() {
