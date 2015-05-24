@@ -79,10 +79,11 @@ function MakeDo(args0) {
 function MakeFn(args) {
   var argList = first(args);
   var compiledBody = compile(rest(args));
-  return function(lvars, cb) {
+  return function(lvars0, cb) {
     return function() {
       var evaluatedArgs = common.argsToArray(arguments);
-      
+      lvars = bindFunctionArgs(lvars0, argList, evaluatedArgs);
+      evaluateInSequence(lvars, compiledBody, undefined, cb);
     }
   }
 }
