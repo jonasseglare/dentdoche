@@ -186,7 +186,7 @@ var specialForms = {
 function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
-  if (typeof f == 'string') {
+  if (typeof f == 'string' || isSymbol(f)) {
     /* Can be
        
       - special form
@@ -200,6 +200,10 @@ function compileComplex(x) {
       assert(v);
       return v;
     } else {
+      var opfun = common.getOperatorFunction(x);
+      if (opfun) {
+	return compileComplex([opfun].concat(args));
+      }
       return null;
     }
   } else if (common.isAsync(f)) {
