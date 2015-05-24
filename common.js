@@ -88,6 +88,12 @@ function bindFunctionArgs(lvars, symbols, values) {
   return lvars;
 }
 
+// Mark a function as async.
+function async(x) {
+  assert(typeof x == 'function');
+  x.async = true;
+  return x;
+}
 
 
 module.exports.ResultArray = ResultArray;
@@ -101,3 +107,4 @@ module.exports.isArray = isArray;
 module.exports.argsToArray = argsToArray;
 module.exports.bindFunctionArgs = bindFunctionArgs;
 module.exports.getName = getName;
+module.exports.async = async;

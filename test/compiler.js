@@ -49,6 +49,19 @@ describe('compilers', function() {
       assert(!err);
       assert(value() == 4);
     });
-    console.log('Done');
+  });
+  
+  it('MakeAfn', function() {
+    var k = c.compile(['afn', [], ['if', false, 3, 119]]);
+    assert(c.isCompiled(k));
+    console.log('Here we are');
+    c.eval(im, k, function(err, value) {
+      assert(typeof value == 'function');
+      assert(!err);
+      value(function(err, result) {
+	assert(!err);
+	assert(result == 119);
+      });
+    });
   });
 });

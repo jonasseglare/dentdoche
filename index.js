@@ -15,6 +15,7 @@ var common = require('./common.js');
 var isArray = common.isArray;
 var argsToArray = common.argsToArray;
 var getName = common.getName;
+var async = common.async;
 
 var opmap = {
   '=': function(a, b) {return a == b;},
@@ -392,12 +393,6 @@ function evaluateFormWithoutMacros(localVars, form, cb) {
 }
 
 
-// Mark a function as async.
-function async(x) {
-  assert(typeof x == 'function');
-  x.async = true;
-  return x;
-}
 
 
 

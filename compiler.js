@@ -81,18 +81,13 @@ function MakeDo(args0) {
 }
 
 function MakeFn(args) {
-  
   var argList = first(args);
   var compiledBody = compileArray(rest(args));
-  console.log(' ---> args         = %j', args);
-  console.log(' ---> compiledBody = ' + compiledBody);  
   return function(lvars0, cb) {
     //cb(null, 124);
     cb(null, function() {
       var evaluatedArgs = common.argsToArray(arguments);
       lvars = common.bindFunctionArgs(lvars0, argList, evaluatedArgs);
-      console.log(' ---> lvars = ' + lvars);
-      console.log(' ---> compiledBody = ' + compiledBody);
       var assigned = false;
       var result = undefined;
       var err = undefined;
@@ -111,12 +106,34 @@ function MakeFn(args) {
   }
 }
 
+function MakeAfn(args) {
+  var argList = first(args);
+  var compiledBody = compileArray(rest(args));
+  return function(lvars0, cb) {
+    //cb(null, 124);
+    cb(null, common.async(function() {
+      var allArgs = common.argsToArray(arguments);
+      var last = allArgs.length - 1;
+      var evaluatedArgs = allArgs.slice(last);
+      var resultCb = evaluatedArgs[last];
+      lvars = common.bindFunctionArgs(lvars0, argList, evaluatedArgs);
+      var assigned = false;
+      var result = undefined;
+      var err = undefined;
+      evaluateInSequence(
+	lvars,
+	compiledBody, undefined, resultCb);
+    }));
+  }
+}
+
 
 var specialForms = {
   'if': MakeIf,
   'quote': MakeQuote,
   'do': MakeDo,
-  'fn': MakeFn
+  'fn': MakeFn,
+  'afn': MakeAfn
 };
 
 
