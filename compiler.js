@@ -18,15 +18,19 @@ function compiled(x) {
 }
 
 function eval(lvars, x, cb) {
-  try {
+//  try {
+    console.log('Inside eval');
     if (isCompiled(x)) {
-      x(lvars, cb);
+      console.log('It is compiled, evaluate it');
+      var ret = x(lvars, cb);
     } else {
+      console.log('Pass it on: '+ x);
       cb(null, x);
     }
-  } catch (e) {
+/*  } catch (e) {
+    console.log('The error is '+ e);
     cb(e);
-  }
+  }*/
 }
 
 function compileArray(x) {
@@ -59,6 +63,9 @@ function MakeQuote(args) {
 }
 
 function evaluateInSequence(lvars, compiledForms, result, cb) {
+  console.log('compiled forms = ' + compiledForms);
+  console.log('result         = ' + result);
+  
   if (compiledForms.length == 0) {
     cb(null, result);
   } else {
@@ -77,14 +84,19 @@ function MakeDo(args0) {
 }
 
 function MakeFn(args) {
+  
   var argList = first(args);
-  var compiledBody = compile(rest(args));
+  var compiledBody = compileArray(rest(args));
+  console.log(' ---> args         = %j', args);
+  console.log(' ---> compiledBody = ' + compiledBody);  
   return function(lvars0, cb) {
-    return function() {
+    cb(null, function() {
       var evaluatedArgs = common.argsToArray(arguments);
-      lvars = bindFunctionArgs(lvars0, argList, evaluatedArgs);
+      lvars = common.bindFunctionArgs(lvars0, argList, evaluatedArgs);
+      console.log(' ---> lvars = ' + lvars);
+      console.log(' ---> compiledBody = ' + compiledBody);
       evaluateInSequence(lvars, compiledBody, undefined, cb);
-    }
+    });
   }
 }
 
