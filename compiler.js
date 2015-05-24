@@ -74,3 +74,7 @@ function compile(x) {
   }
   return x;
 }
+
+module.exports.isCompiled = isCompiled;
+module.exports.compile = compile;
+module.exports.compiled = compiled;
