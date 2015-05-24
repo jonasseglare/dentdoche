@@ -30,7 +30,7 @@ describe('compilers', function() {
   });
 
   it('Do', function() {
-    var k = c.compile(['do', 1, 2, 3, 4, 5]);
+    var k = c.compile(['do', 1, 2, 3, 4, ['if', false, 3, 5]]);
     assert(c.isCompiled(k));
     c.eval(null, k, function(err, value) {
       assert(!err);
