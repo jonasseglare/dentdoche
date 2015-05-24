@@ -218,3 +218,4 @@ module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.isSymbol = isSymbol;
 module.exports.Symbol = Symbol;
+module.exports.getLocalVar = getLocalVar;

@@ -19,11 +19,7 @@ function compiled(x) {
 
 function eval(lvars, x, cb) {
   if (isCompiled(x)) {
-    try {
-      var ret = x(lvars, cb);
-    } catch (e) {
-      cb(e);
-    }
+    var ret = x(lvars, cb);
   } else {
     cb(null, x);
   }
@@ -136,13 +132,15 @@ function getSymbolsAndCompiled(bindings) {
 }
 
 function evaluateAndBindVars(lvars, symbols, compiled, cb) {
+  console.log('Bindings: %j', lvars);
+  console.log('At %j to %j', symbols, compiled);
   if (symbols.length == 0) {
     cb(null, lvars);
   } else {
-    var sym = getName(symbols[0]);
-    var promisedValue = new PromisedValue(undefined);
+    var sym = common.getName(symbols[0]);
+    var promisedValue = new common.PromisedValue(undefined);
     var c = first(compiled);
-    c(lvars, function(err, result) {
+    eval(lvars, c, function(err, result) {
       if (err) {
 	cb(err);
       } else {
@@ -219,14 +217,14 @@ function compileComplex(x) {
 }
 
 function compileBindingEvaluator(sym) {
-  var key = getName(sym);
-  return async(function(lvars, cb) {
+  var key = common.getName(sym);
+  return function(lvars, cb) {
     if (lvars.has(key)) {
-      cb(null, getLocalVars(key));
+      cb(null, common.getLocalVar(lvars, key));
     } else {
       cb(new Error('No such local binding to ' + key));
     }
-  });
+  };
 }
 
 function compileSub(x) {

@@ -3,6 +3,7 @@ var immutable = require('immutable');
 var fs = require('fs');
 var c = require('../compiler.js');
 var common = require('../common.js');
+var dd = require('../index.js');
 
 var im = immutable.Map({});
 
@@ -66,8 +67,10 @@ describe('compilers', function() {
   });
 
   it('let0', function() {
-    var k = c.compile(['let0', ['a', 34], 'a']);
+    var k = c.compile(['let0', ['a', 34], dd.sym('a')]);
     c.eval(im, k, function(err, result) {
+      assert(!err);
+      console.log('err is ' + err);
       console.log('Result is ' + result);
     });
   });
