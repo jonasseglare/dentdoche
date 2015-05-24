@@ -2,6 +2,7 @@ var assert = require('assert');
 var immutable = require('immutable');
 var fs = require('fs');
 var c = require('../compiler.js');
+var common = require('../common.js');
 
 var im = immutable.Map({});
 
@@ -58,6 +59,7 @@ describe('compilers', function() {
     c.eval(im, k, function(err, value) {
       assert(typeof value == 'function');
       assert(!err);
+      assert(common.isAsync(value));
       value(function(err, result) {
 	assert(!err);
 	assert(result == 119);
