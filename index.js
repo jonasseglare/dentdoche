@@ -154,58 +154,7 @@ function evaluateArgs(localVars, args, cb) {
   }
 }
 
-function evaluateNowSub(fun, localVars, form, cb) {
-  var isFunction = (typeof fun) == 'function';
-  if (!isFunction) {
-    cb(new Error('Not a function: ' + fun));
-  } else {
-    evaluateArgs(localVars, form.slice(1), function(err, evaluatedArgs) {
-      if (err) {
-	cb(err);
-      } else {
-	if (common.isAsync(fun)) {
-	  fun.apply(null, evaluatedArgs.concat([cb]));
-	} else {
-	  var r = fun.apply(null, evaluatedArgs);
-	  cb(null, r);
-	}
-      }
-    });
-  }
-}
 
-function resolveFunction(localVars, fun, wf) {
-  try {
-    if (isOperator(fun)) {
-      wf(null, getOperatorFunction(fun));
-    } else if (typeof fun == 'string') {
-      if (fun[0] == '.') {
-	if (fun[1] == '-') {
-	  var f = fun.slice(2);
-	  wf(null, function(obj) {return obj[f];});
-	} else {
-	  var f = fun.slice(1);
-	  wf(null, function() {
-	    var allArgs = argsToArray(arguments);
-	    var args = allArgs;
-	    var obj = args[0];
-	    var method = obj[f];
-	    return method.apply(obj, args.slice(1));
-	  });
-	}
-      } else {
-	wf(null, evaluateSymbol(localVars, fun));
-      }
-    } else if (isSymbol(fun)) {
-      wf(null, evaluateSymbol(localVars, fun));
-    } else {
-      // E.g. [["fn", ..], ...]
-      evaluateFormWithoutMacros(localVars, fun, wf);
-    }
-  } catch (e) {
-    wf(e);
-  }
-}
 
 
 // Marks a function as being a macro.
