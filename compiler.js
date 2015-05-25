@@ -115,6 +115,7 @@ function MakeQuote(args) {
 function evaluateInSequence(lvars, compiledForms, result, cb) {
   assert(typeof cb == 'function');
   if (compiledForms.length == 0) {
+    console.log('REACHED END OF SEQ WITH RESULT: %j', result);
     cb(null, result);
   } else {
     var a = first(compiledForms);
@@ -225,10 +226,13 @@ function MakeLet(args) {
   var symbols = symbolsAndCompiled[0];
   var compiled = symbolsAndCompiled[1];
   return function(lvars0, cb) {
+    console.log('EVALUATE THE BINDINGS');
     evaluateAndBindVars(lvars0, symbols, compiled, function(err, lvars) {
+      console.log('DONE WITH BINDINGS');
       if (err) {
 	cb(err);
       } else {
+	console.log('EVALUATING THE BODY');
 	evaluateInSequence(lvars, compileArray(body), undefined, cb);
       }
     });

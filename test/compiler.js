@@ -234,7 +234,9 @@ describe('compilers', function() {
 		      ['let',
 		       [['a', 'b'], [fun]],
 		       ['*', dd.sym('a'), dd.sym('b')]]);
+    console.log('############ EVALUATE!!!');
     assert.equal(f2(), 12);
+    done();
   });
 
   
