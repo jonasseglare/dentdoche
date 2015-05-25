@@ -27,6 +27,8 @@ var first = common.first;
 var rest = common.rest;
 var jsGet = common.jsGet;
 var jsSet = common.jsSet;
+var sym = common.sym;
+var toSymbol = common.toSymbol;
 
 function makeArrayFromArgs() {
   return argsToArray(arguments);
@@ -34,16 +36,7 @@ function makeArrayFromArgs() {
 
 
 
-function toSymbol(x) {
-  if (isSymbol(x)) {
-    return x;
-  }
-  return new Symbol(x);
-}
 
-function sym(x) {
-  return toSymbol(x);
-}
 
 
 

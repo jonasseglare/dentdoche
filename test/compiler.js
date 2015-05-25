@@ -231,23 +231,11 @@ describe('compilers', function() {
     console.log('DESTRUCTURE IN LETDESTRUCTURE IN LETDESTRUCTURE IN LET');
     var fun = function() {return [3, 4];}
     var f2 = c.makeFn([],
-		      [dd.let,
+		      ['let',
 		       [['a', 'b'], [fun]],
 		       ['*', dd.sym('a'), dd.sym('b')]]);
-    var k = c.compile([fun]);
-/*    var f3 = c.makeFn([], [dd.let, ['temp', [fun]], //,'a', [dd.get, ], 'b', 4],
-			   dd.sym('temp')]);
-//			   ['*', dd.sym('a'), dd.sym('b')]]);*/
-    console.log(f2() == 12);
-    console.log('NOW EVALUATE K!!!');
-    c.eval(im, k, function(err, v) {
-      console.log('vvvvv:');
-      console.log(v);
-      done();
-    });
-    //console.log(f3())
+    assert.equal(f2(), 12);
   });
-
 
   
   /*it('eval string', function() {

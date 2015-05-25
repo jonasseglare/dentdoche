@@ -227,6 +227,17 @@ function jsSet(obj, key, newValue) {
   obj[key] = newValue;
 }
 
+function sym(x) {
+  return toSymbol(x);
+}
+
+function toSymbol(x) {
+  if (isSymbol(x)) {
+    return x;
+  }
+  return new Symbol(x);
+}
+
 
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
@@ -247,7 +258,9 @@ module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.isSymbol = isSymbol;
 module.exports.Symbol = Symbol;
+module.exports.sym = sym;
 module.exports.getLocalVar = getLocalVar;
 module.exports.gensym = gensym;
 module.exports.jsGet = jsGet;
 module.exports.jsSet = jsSet;
+module.exports.toSymbol = toSymbol;

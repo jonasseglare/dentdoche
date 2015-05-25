@@ -30,7 +30,7 @@ function destructureBinding(x) {
     for (var i = 0; i < n; i++) {
       var offset = 2*(i + 1);
       dst[offset + 0] = vars[i];
-      dst[offset + 1] = [common.jsGet, temp, i];
+      dst[offset + 1] = [common.jsGet, common.sym(temp), i];
     }
     return dst;
   }
@@ -217,6 +217,8 @@ function evaluateAndBindVars(lvars, symbols, compiled, cb) {
 
 function MakeLet(args) {
   var bindings = destructureBindings(first(args));
+  console.log('BINDINGS');
+  console.log(bindings);
   var body = rest(args);
   assert(bindings.length % 2 == 0);
   var symbolsAndCompiled = getSymbolsAndCompiled(bindings);
