@@ -133,7 +133,14 @@ function MakeDo(args0) {
 
 function MakeFn(args) {
   var argList = first(args);
-  var compiledBody = compileArray(rest(args));
+  var body = rest(args);
+
+  console.log('args:');
+  console.log(args);
+  console.log('body: ');
+  console.log(body);
+  var compiledBody = compileArray(body);
+  
   return function(lvars0, cb) {
     //cb(null, 124);
     cb(null, function() {
@@ -143,6 +150,9 @@ function MakeFn(args) {
       var result = undefined;
       var err = undefined;
       evaluateInSequence(lvars, compiledBody, undefined, function(err0, value) {
+	
+	console.log('GOT VALUE: %j', value);
+	
 	assigned = true;
 	result = value;
 	err = err0;
