@@ -501,7 +501,7 @@ describe('evaluateSymbol', function() {
   			      0,
 			      ['later',
 			       ['+', dd.sym('m'), [dd.sym('inner'),
-							    ['-', dd.sym('m'), 1]]]]]]]],
+						   ['-', dd.sym('m'), 1]]]]]]]],
 		  [dd.sym('inner'), dd.sym('n')]]);
     var n = 10;
     fun(n, function(err, sum) {

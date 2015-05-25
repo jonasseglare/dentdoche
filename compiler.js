@@ -432,6 +432,7 @@ function compilePropertyAccess(x) {
 }
 
 function compileStringForm(x, f, args) {
+  f = common.getName(f);
   /* Can be
      
      - special form
@@ -445,6 +446,7 @@ function compileStringForm(x, f, args) {
     assert(v);
     return v;
   } else {
+    console.log('RESOLVE: %j', f);
     var opfun = common.getOperatorFunction(f);
     if (opfun) {
       return compileComplex([opfun].concat(args));
