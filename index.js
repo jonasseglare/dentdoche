@@ -657,7 +657,7 @@ function throwFun(x, cb) {
 
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
-module.exports.evaluateForm = evaluateForm;
+module.exports.evaluateForm = compiler.evaluateForm;
 module.exports.evaluateNow = evaluateNow;
 module.exports.async = async;
 module.exports.isAsync = common.isAsync;

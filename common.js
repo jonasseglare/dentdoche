@@ -1,4 +1,5 @@
 var assert = require('assert');
+var immutable = require('immutable');
 
 var gsCounter = 0;
 function gensym(x) {
@@ -247,6 +248,16 @@ function tagged(cb, str) {
   }
 }
 
+function makeImmutableMap(x) {
+  if (x) {
+    if (x instanceof immutable.Map) {
+      return x;
+    }
+    return new immutable.Map(x);
+  }
+  return makeImmutableMap({});
+}
+
 
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
@@ -274,3 +285,4 @@ module.exports.jsGet = jsGet;
 module.exports.jsSet = jsSet;
 module.exports.toSymbol = toSymbol;
 module.exports.tagged = tagged;
+module.exports.makeImmutableMap = makeImmutableMap;

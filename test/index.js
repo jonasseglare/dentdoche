@@ -288,10 +288,11 @@ describe('evaluateSymbol', function() {
     );
   });
 
-  it('should map', function() {
-    dd.evaluateForm(null, [dd.map, dd.S("+"),
-			           ["quote", [1, 2, 3]],
-			           ["quote", [100, 200, 300]]],
+  it('shouldmap', function() {
+    dd.evaluateForm(null, [dd.map,
+			   dd.S("+"),
+			   ["quote", [1, 2, 3]],
+			   ["quote", [100, 200, 300]]],
 		    function(err, result) {
 		      assert.equal(result.length, 3);
 		      assert.equal(result[0], 101);

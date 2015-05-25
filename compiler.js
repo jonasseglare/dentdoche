@@ -467,6 +467,34 @@ function compileStringForm(x, f, args) {
   }
 }
 
+function compileGeneratedFunctionCall(x) {
+  var allArgs = compileArray(x);
+  var f = first(allArgs);
+  var args = rest(allArgs);
+  return function(lvars, cb) {
+    eval(lvars, f, function(err, fun) {
+      if (err) {
+	cb(err);
+      } else if (!(typeof fun == 'function')) {
+	console.log('THIS FORM IS NOT A FUNCTION');
+	console.log(first(x));
+	cb(new Error('Not a function return from form'));
+      } else {
+	evaluateArrayElements(lvars, args, function(err, evaluatedArgs) {
+	  try {
+	    if (common.isAsync(fun)) {
+	      fun.apply(null, evaluatedArgs.concat([cb]));
+	    } else {
+	      cb(null, fun.apply(null, evaluatedArgs));
+	    }
+	  } catch (e) {
+	    cb(e);
+	  }
+	});
+      }
+    });
+  };
+}
 
 function compileComplex(x) {
   var f = first(x);
@@ -482,7 +510,9 @@ function compileComplex(x) {
     } else {
       return compileCall(x);
     }
-  } 
+  } else if (common.isArray(f)) {
+    return compileGeneratedFunctionCall(x);
+  }
 }
 
 function compileBindingEvaluator(sym) {
@@ -491,7 +521,12 @@ function compileBindingEvaluator(sym) {
     if (lvars.has(key)) {
       cb(null, common.getLocalVar(lvars, key));
     } else {
-      cb(new Error('No such local binding to ' + key));
+      var fun = common.getOperatorFunction(key);
+      if (fun) {
+	return fun;
+      } else {
+	cb(new Error('No such local binding to ' + key));
+      }
     }
   };
 }
@@ -525,6 +560,12 @@ function makeAfn() {
   return makeAnyFun(MakeAfn, common.argsToArray(arguments));
 }
 
+
+
+function evaluateForm(lvars, frm, cb) {
+  eval(common.makeImmutableMap(lvars), compile(frm), cb);
+}
+
 // http://stackoverflow.com/questions/10465423/how-can-i-list-all-the-functions-in-my-node-js-script
 // http://stackoverflow.com/questions/8403108/calling-eval-in-particular-context
 // http://stackoverflow.com/questions/5447771/node-js-global-variables
@@ -537,3 +578,4 @@ module.exports.eval = eval;
 module.exports.makeAfn = makeAfn;
 module.exports.makeFn = makeFn;
 module.exports.destructureBindings = destructureBindings;
+module.exports.evaluateForm = evaluateForm;
