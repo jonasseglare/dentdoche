@@ -32,28 +32,6 @@ var toSymbol = common.toSymbol;
 var tagged = common.tagged;
 
 
-function buildLocalVars(localVars, bindings, cb) {
-  
-  if (!(bindings.length % 2 == 0)) {
-    cb(new Error('Odd number of bindings'));
-  } else {
-    if (bindings.length == 0) {
-      cb(null, localVars);
-    } else {
-      var sym = getName(bindings[0]);
-      var promisedValue = new PromisedValue(undefined);
-      evaluateFormWithoutMacros(localVars.set(sym, promisedValue), // To support recursion
-				bindings[1], function(err, result) {
-	if (err) {
-	  cb(err);
-	} else {
-	  promisedValue.set(result);
-	  buildLocalVars(localVars.set(sym, result), bindings.slice(2), cb);
-	}
-      });
-    }
-  }
-}
 
 function evaluateLet(localVars, form, cb) {
   assert(isArray(form));
