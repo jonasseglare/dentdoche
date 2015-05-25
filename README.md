@@ -60,6 +60,19 @@ var filecatMany = dd.makeAfn([],
 ## Documentation
 Not yet written. Look at the test cases in the ```test/``` subdirectory for examples of how to use it.
 
+### Macros
+Macros are regular Javascript functions that transform programs. Here is a macro that defines ```or``` in a lazy way:
+```js
+function or() {
+  var args = argsToArray(arguments);
+  if (args.length == 0) {
+    return false;
+  } else {
+    return ['if', first(args), true, or.apply(null, rest(args))];
+  }
+} macro(or);
+```
+
 ## Common pitfalls
 
   * Forgetting comma between array elements.
