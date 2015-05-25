@@ -739,4 +739,15 @@ describe('evaluateSymbol', function() {
 			      assert(value == 8);
 			    });
   });
+
+  it('cond', function() {
+    var digitToWord = dd.makeFn(
+      ['x'],
+      [dd.cond,
+       ['=', dd.sym('x'), 1], 'one',
+       ['=', dd.sym('x'), 2], 'two',
+       ['=', dd.sym('x'), 3], 'three',
+       ['+', 'unknown digit: ', dd.sym('x')]]);
+    assert.equal(digitToWord(1), 'one');
+  });
 });

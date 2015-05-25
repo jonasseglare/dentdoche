@@ -295,6 +295,17 @@ function eval(lvars, frm, cb) {
   compiler.eval(lvars, compiler.compile(frm), cb);
 } async(eval); common.withLVars(eval);
 
+function cond() {
+  var args = common.argsToArray(arguments);
+  if (args.length == 0) {
+    return undefined;
+  } else if (args.length == 1) {
+    return args[0];
+  } else {
+    return ['if', args[0], args[1], cond(args.slice(2))];
+  }
+} macro(cond);
+
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.evaluateForm = compiler.evaluateForm;
@@ -338,3 +349,4 @@ module.exports.throw = throwFun;
 module.exports.last = last;
 module.exports.butLast = butLast;
 module.exports.eval = eval;
+module.exports.cond = cond;
