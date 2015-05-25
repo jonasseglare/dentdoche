@@ -41,13 +41,6 @@ function makeArrayFromArgs() {
 
 
 
-function cloneShallow(x) {
-  var y = {};
-  for (var key in x) {
-    y[key] = x[key];
-  }
-  return y;
-}
 
 function buildLocalVars(localVars, bindings, cb) {
   
