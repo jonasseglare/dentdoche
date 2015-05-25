@@ -224,7 +224,6 @@ describe('compilers', function() {
   
   it('Nested Destructure', function() {
     var x = c.destructureBindings([[['a', 'b'], 'c'], [dd.array, [dd.array, 3, 4], 5]]);
-    console.log(x);
   });
 
   it('Destructure in let', function(done) {
