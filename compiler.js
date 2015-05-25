@@ -287,28 +287,19 @@ function evaluateArrayElements(lvars, array, cb) {
 }
 
 function compileAsyncCall(x) {
-  console.log('Typeof first arg: %j', typeof first(rest(x)));
-  console.log('rest(x) = %j', rest(x));
-  console.log(x);
   var f = first(x);
   var args = compileArray(rest(x));
-  console.log('COMPILED:');
-  console.log(args);
   var n = args.length;
   return function(lvars, cb) {
-    console.log('EVALUATING ASYNC CALL!!!');
-    console.log('n = %j', n);
     var result = new common.ResultArray(n, function(err, evaluatedArgs) {
-      console.log('Evaluated args: %j', evaluatedArgs);
       if (err) {
 	cb(err);
       } else {
-	//try {
-	  console.log('Now call f:');
+	try {
 	  var x = f.apply(null, evaluatedArgs.concat([cb]));
-	//} catch(e) {
-	//  cb(e);
-	//}
+	} catch(e) {
+	  cb(e);
+	}
       }
     });
     for (var i = 0; i < n; i++) {
@@ -405,8 +396,6 @@ function compileMethodAccess(x) {
     evaluateArrayElements(lvars, args0, function(err, evaluated) {
       var obj = first(evaluated);
       var args = rest(evaluated);
-      console.log('obj: %j', obj);
-      console.log('args: %j', args);
       var fun = obj[f];
       try {
 	if (common.isAsync(fun)) {
