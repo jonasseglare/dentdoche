@@ -145,11 +145,11 @@ function MakeFn(args) {
       var assigned = false;
       var result = undefined;
       var err = undefined;
-      evaluateInSequence(lvars, compiledBody, undefined, tagged(function(err0, value) {
+      evaluateInSequence(lvars, compiledBody, undefined, function(err0, value) {
 	assigned = true;
 	result = value;
 	err = err0;
-      }, 'MakeFn'));
+      });
       
       if (!assigned) {
 	throw new Error('Result not assigned in function ' + args);
@@ -305,7 +305,7 @@ function compileAsyncCall(x) {
       } else {
 	//try {
 	  console.log('Now call f:');
-	  var x = f.apply(null, evaluatedArgs.concat([tagged(cb, 'compileAsyncCall')]));
+	  var x = f.apply(null, evaluatedArgs.concat([cb]));
 	//} catch(e) {
 	//  cb(e);
 	//}

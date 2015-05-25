@@ -560,7 +560,7 @@ function reduceAsync(fun0, coll, cb) {
 function filterAsync(fun0, coll, cb) {
   console.log('------------> filterAsync');
   var fun = convertToAsync(fun0);
-  mapAsync(fun, coll, tagged(function(err, mask) {
+  mapAsync(fun, coll, function(err, mask) {
     if (err) {
       cb(err);
     } else {
@@ -574,7 +574,7 @@ function filterAsync(fun0, coll, cb) {
       }
       cb(null, dst.slice(0, counter));
     }
-  }, 'filterAsync'));
+  });
 } async(filterAsync);
 
 function makeSpecialFormMacro(keyword) {
