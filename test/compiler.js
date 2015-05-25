@@ -227,6 +227,14 @@ describe('compilers', function() {
     console.log(x);
   });
 
+  it('Destructure in let', function() {
+    var fun = function() {return [3, 4];}
+    var f2 = c.makeFn([], [dd.let, [['a', 'b'], [fun]],
+			   ['*', dd.sym('a'), dd.sym('b')]]);
+    assert(f2() == 12);
+  });
+
+
   
   /*it('eval string', function() {
     var d = 119;
