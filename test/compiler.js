@@ -235,7 +235,11 @@ describe('compilers', function() {
 		       ['*', dd.sym('a'), dd.sym('b')]]);*/
     var f2 = c.makeFn([], [dd.let, ['a', 3, 'b', 4],
 			   ['*', dd.sym('a'), dd.sym('b')]]);
+    var f3 = c.makeFn([], [dd.let, ['temp', [fun]], //,'a', [dd.get, ], 'b', 4],
+			   dd.sym('temp')]);
+//			   ['*', dd.sym('a'), dd.sym('b')]]);
     console.log(f2() == 12);
+    console.log(f3())
   });
 
 

@@ -150,13 +150,12 @@ function MakeFn(args) {
       var result = undefined;
       var err = undefined;
       evaluateInSequence(lvars, compiledBody, undefined, function(err0, value) {
-	
 	console.log('GOT VALUE: %j', value);
-	
 	assigned = true;
 	result = value;
 	err = err0;
       });
+      
       if (!assigned) {
 	throw new Error('Result not assigned in function ' + args);
       } else if (err) {
