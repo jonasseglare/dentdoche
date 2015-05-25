@@ -645,6 +645,24 @@ function and(args) {
   }
 } macro(and);
 
+function not(args) {
+  assert(args.length == 1);
+  return ['if', first(args), false, true];
+} macro(not);
+
+function echo(x) {
+  console.log(x);
+  return x;
+}
+
+function or(args) {
+  if (args.length == 0) {
+    return false;
+  } else {
+    return ['if', first(args), true, or(rest(args))];
+  }
+} macro(or);
+
 
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
@@ -685,3 +703,5 @@ module.exports.later = makeSpecialFormMacro("later");
 module.exports.loop = loop;
 module.exports.convertToAsync = convertToAsync;
 module.exports.and = and;
+module.exports.or = or;
+module.exports.not = not;

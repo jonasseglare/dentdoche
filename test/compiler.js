@@ -110,5 +110,19 @@ describe('compilers', function() {
       }
     });
   });
+
+  it('or macro', function() {
+    var k = c.compile([dd.array,
+		       [dd.or, false],
+		       [dd.or, true],
+		       [dd.or, true, false]]);
+    var expected = [false, true, true];
+    c.eval(im, k, function(err, result) {
+      assert(!err);
+      for (var i = 0; i < expected.length; i++) {
+	assert.equal(expected[i], result[i]);
+      }
+    });
+  })
 });
 
