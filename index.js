@@ -645,10 +645,9 @@ function and(args) {
   }
 } macro(and);
 
-function not(args) {
-  assert(args.length == 1);
-  return ['if', first(args), false, true];
-} macro(not);
+function not(x) {
+  return !x;
+}
 
 function echo(x) {
   console.log(x);
