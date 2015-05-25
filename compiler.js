@@ -299,6 +299,24 @@ function compile(x) {
   return compiled(compileSub(x));
 }
 
+function makeAnyFun(builder, args) {
+  var fnBuilder = builder(args);
+  var fun = undefined;
+  fnBuilder(immutable.Map({}), function(err, compiledFun) {
+    fun = compiledFun;
+  });
+  assert(fun);
+  return fun;
+}
+
+function makeFn() {
+  return makeAnyFun(MakeFn, argsToArray(arguments));
+}
+
+function makeAfn() {
+  return makeAnyFun(MakeAfn, argsToArray(arguments));
+}
+
 module.exports.isCompiled = isCompiled;
 module.exports.compile = compile;
 module.exports.compiled = compiled;
