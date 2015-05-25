@@ -4,6 +4,55 @@ var assert = require('assert');
 var first = common.first;
 var rest = common.rest;
 
+function splitBindings(bindings) {
+  var n = bindings.length/2;
+  var dst = new Array(n);
+  for (var i = 0; i < n; i++) {
+    var offset = 2*i;
+    dst[i] = bindings.slice(offset, offset + 2);
+  }
+  return dst;
+}
+
+function mergeSplits(splits) {
+  return Array.prototype.concat.apply([], splits);
+}
+
+function destructureBinding(x) {
+  assert(x.length == 2);
+  if (isArray(x[0])) {
+    var vars = x[0];
+    var n = vars.length;
+    var dst = new Array(2, 2*n);
+    var temp = gensym();
+    dst[0] = temp;
+    dst[1] = x[1];
+    for (var i = 0; i < n; i++) {
+      var offset = 2*(i + 1);
+      dst[offset + 0] = vars[i];
+      dst[offset + 1] = [common.jsGet, temp, i];
+    }
+  }
+  return null;
+}
+
+function destructureBindings(bindings) {
+  assert(bindings.length % 2 == 0);
+  var splits = splitBindings(bindings);
+  var wasDestructured = false;
+  for (var i = 0; i < splits.length; i++) {
+    var destructured = destructureBinding(splits[i]);
+    if (destructured) {
+      wasDestructured = true;
+      splits[i] = destructured;
+    }
+  }
+  if (wasDestructured) {
+    return destructureBindings(mergeSplits(splits));
+  }
+  return bindings;
+}
+
 function echo(x) {
   console.log('  Echo: %j', x);
   return x;

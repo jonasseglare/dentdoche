@@ -1,5 +1,17 @@
 var assert = require('assert');
 
+var gsCounter = 0;
+function gensym(x) {
+  if (x) {
+    var i = gsCounter;
+    gsCounter++;
+    return x + i;
+  } else {
+    return gensym('gensym');
+  }
+}
+
+
 function ResultArray(n, cb) {
   this.dst = new Array(n);
   this.counter = 0;
@@ -219,3 +231,4 @@ module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.isSymbol = isSymbol;
 module.exports.Symbol = Symbol;
 module.exports.getLocalVar = getLocalVar;
+module.exports.gensym = gensym;
