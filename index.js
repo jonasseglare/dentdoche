@@ -515,7 +515,6 @@ function mapAsync(fun0) {
 } async(mapAsync);
 
 function reduceAsync(fun0, coll, cb) {
-  console.log('INPUT TO REDUCE: ');
   console.log(typeof fun0);
   console.log(coll);
   if (coll.length == undefined) {

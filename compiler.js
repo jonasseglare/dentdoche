@@ -301,13 +301,15 @@ function compileAsyncCall(x) {
       console.log('Evaluated args: %j', evaluatedArgs);
       var cb0 = function(err, y) {
 	console.log('Async function returned this: %j', y);
+	cb(err, y);
       }
       if (err) {
 	cb(err);
       } else {
 	try {
 	  console.log('Now call f:');
-	  f.apply(null, evaluatedArgs.concat([cb]));
+	  var x = f.apply(null, evaluatedArgs.concat([cb0]));
+	  console.log('It returned %j', x);
 	} catch(e) {
 	  cb(e);
 	}
