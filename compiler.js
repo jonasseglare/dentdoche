@@ -5,6 +5,18 @@ var first = common.first;
 var rest = common.rest;
 var tagged = common.tagged;
 
+function applyFunction(lvars, fun, args, cb) {
+  try {
+    if (common.isAsync(fun)) {
+      fun.apply(null, args.concat([cb]));
+    } else {
+      cb(null, fun.apply(null, args));
+    }
+  } catch (e) {
+    cb(e);
+  }
+}
+
 function splitBindings(bindings) {
   var n = bindings.length/2;
   var dst = new Array(n);
@@ -273,12 +285,7 @@ function compileCall(x) {
       if (err) {
 	cb(err);
       } else {
-	try {
-	  var out = f.apply(null, evaluatedArgs)
-	  cb(null, out);
-	} catch(e) {
-	  cb(e);
-	}
+	applyFunction(lvars, f, evaluatedArgs, cb);
       }
     });
     for (var i = 0; i < n; i++) {
