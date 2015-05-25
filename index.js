@@ -59,47 +59,6 @@ function evaluateAfn(localVars, form, cb) {
   }
 }
 
-function evaluateFn(localVars, form, cb) {
-  if (form.length != 3) {
-    cb(new Error('Bad length of form of Fn'));
-  } else {
-    args = form[1];
-    body = form[2];
-    cb(null, fn(args, body, localVars));
-  }
-}
-
-function evaluateIf(localVars, form, cb) {
-  if (form.length == 4 || form.length == 3) {
-    evaluateFormWithoutMacros(localVars, form[1], function(err, p) {
-      if (err) {
-	cb(err);
-      } else {
-	if (p) {
-	  evaluateFormWithoutMacros(localVars, form[2], cb);
-	} else {
-	  if (form.length == 4) {
-	    evaluateFormWithoutMacros(localVars, form[3], cb);
-	  } else {
-	    cb();
-	  }
-	}
-      }
-    });
-  } else {
-    cb(new Error('Malformed if statement'));
-  }
-}
-
-function evaluateQuote(localVars, form, cb) {
-  if (form.length == 2) {
-    cb(null, form[1]);
-  } else {
-    cb(new Error('Quote takes one argument'));
-  }
-}
-
-
 
 
 
