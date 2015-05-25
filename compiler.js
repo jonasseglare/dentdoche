@@ -3,6 +3,11 @@ var assert = require('assert');
 var first = common.first;
 var rest = common.rest;
 
+function echo(x) {
+  console.log('  Echo: %j', x);
+  return x;
+}
+
 function isCompiled(x) {
   if (typeof x == 'function') {
     return x.compiled;
@@ -51,7 +56,7 @@ function MakeIf(args) {
 
 function MakeQuote(args) {
   assert(args.length == 1);
-  return args[0];
+  return echo(args[0]);
 }
 
 function evaluateInSequence(lvars, compiledForms, result, cb) {
@@ -251,7 +256,7 @@ function compileComplex(x) {
       assert(!common.isMacro(x));
       return compileAsyncCall(x);
     } else if (common.isMacro(f)) {
-      return compile(f(args));
+      return compile(f.apply(null, args));
     } else {
       return compileCall(x);
     }

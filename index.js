@@ -575,7 +575,9 @@ function filterAsync(fun0, coll, cb) {
 function makeSpecialFormMacro(keyword) {
   return macro(function() {
     var args = argsToArray(arguments);
-    return [keyword].concat(args);
+    console.log('Args to quote: ');
+    echo(args);
+    return echo([keyword].concat(args));
   });
 }
 
@@ -637,11 +639,12 @@ function loop(initialState, fun, cb) {
   }
 } async(loop);
 
-function and(args) {
+function and() {
+  var args = argsToArray(arguments);
   if (args.length == 0) {
     return true;
   } else {
-    return ['if', first(args), and(rest(args))];
+    return ['if', first(args), and.apply(null, rest(args))];
   }
 } macro(and);
 
@@ -654,11 +657,12 @@ function echo(x) {
   return x;
 }
 
-function or(args) {
+function or() {
+  var args = argsToArray(arguments);
   if (args.length == 0) {
     return false;
   } else {
-    return ['if', first(args), true, or(rest(args))];
+    return ['if', first(args), true, or.apply(null, rest(args))];
   }
 } macro(or);
 

@@ -123,7 +123,7 @@ describe('compilers', function() {
 	assert.equal(expected[i], result[i]);
       }
     });
-  })
+  });
 
   it('not macro', function() {
     var k = c.compile([dd.array,
@@ -134,6 +134,19 @@ describe('compilers', function() {
       assert(result[0]);
       assert(!result[1]);
     });
-  })
+  });
+
+  it('no macro expansion beyond quote', function() {
+    console.log('Macro expansion beyond...');
+    var k = c.compile([dd.quote, 9]); //[dd.and, false, true]]);
+    console.log('k = %j', k);
+    c.eval(im, k, function(err, result) {
+      assert(!err);
+      console.log('result = %j', result);
+      // assert(common.isMacro(result[0]));
+      // assert(!result[1]);
+      // assert(result[2]);
+    });
+  });
 });
 
