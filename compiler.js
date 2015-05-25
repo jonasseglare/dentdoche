@@ -310,15 +310,7 @@ function compileBoundFunction(args0) {
     evaluateArrayElements(lvars, args, function(err, evaluated) {
       var f = common.getLocalVar(lvars, key);
       if (typeof f == 'function') {
-	try {
-	  if (common.isAsync(f)) {
-	    f.apply(null, evaluated.concat([cb]));
-	  } else {
-	    cb(null, f.apply(null, evaluated));
-	  }
-	} catch (e) {
-	  cb(e);
-	}
+	applyFunction(lvars, f, evaluated, cb);
       } else {
 	console.log('THE LVARS ARE: ');
 	console.log(lvars);
