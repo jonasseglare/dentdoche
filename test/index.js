@@ -730,4 +730,13 @@ describe('evaluateSymbol', function() {
     fib(dst);
     assert(dst[7] == 21);
   });
+
+  it('eval', function() {
+    dd.evaluateForm(null, [dd.eval,
+			   [dd.quote,
+			    ['+', 3, 5]]], function(err, value) {
+			      assert(!err);
+			      assert(value == 8);
+			    });
+  });
 });

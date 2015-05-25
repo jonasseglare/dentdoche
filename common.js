@@ -308,3 +308,4 @@ module.exports.toSymbol = toSymbol;
 module.exports.tagged = tagged;
 module.exports.makeImmutableMap = makeImmutableMap;
 module.exports.isWithLVars = isWithLVars;
+module.exports.withLVars = withLVars;

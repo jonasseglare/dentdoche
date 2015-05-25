@@ -292,6 +292,10 @@ function throwFun(x, cb) {
   cb(x);
 } async(throwFun)
 
+function eval(lvars, frm, cb) {
+  compiler.eval(lvars, compiler.compile(frm), cb);
+} async(eval); common.withLVars(eval);
+
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.evaluateForm = compiler.evaluateForm;
@@ -334,3 +338,4 @@ module.exports.not = not;
 module.exports.throw = throwFun;
 module.exports.last = last;
 module.exports.butLast = butLast;
+module.exports.eval = eval;
