@@ -127,7 +127,7 @@ PromisedValue.prototype.set = function(v) {
 }
 
 var opmap = {
-  '=': function(a, b) {return a == b;},
+  '=': function(a, b) {return deepEqualIdent(a, b);},
   '==': function(a, b) {return a == b;},
   '!=': function(a, b) {return a != b;},
   '<': function(a, b) {return a < b;},
