@@ -68,8 +68,6 @@ function evaluateInSequence(lvars, compiledForms, result, cb) {
     cb(null, result);
   } else {
     var a = first(compiledForms);
-    console.log('a is ');
-    console.log(a);
     eval(lvars, a, function(err, x) {
       evaluateInSequence(lvars, rest(compiledForms), x, cb);
     });
@@ -121,11 +119,6 @@ function MakeAfn(args) {
       var evaluatedArgs = allArgs.slice(0, last);
       var resultCb = allArgs[last];
       assert(typeof resultCb == 'function');
-      console.log('all args');
-      console.log(allArgs);
-      console.log('the compile afn function was passed');
-      console.log(argList);
-      console.log(evaluatedArgs);
       lvars = common.bindFunctionArgs(lvars0, argList, evaluatedArgs);
       var assigned = false;
       var result = undefined;
@@ -272,8 +265,6 @@ function compileComplex(x) {
       if (opfun) {
 	return compileComplex([opfun].concat(args));
       }
-      console.log('Failed to compile:');
-      console.log(x);
       throw new Error('Failed to compile');
       return null;
     }
