@@ -254,5 +254,15 @@ describe('compilers', function() {
       assert(!value);
     });
   });
+
+  it('Throwing errors and catching them', function() {
+    var k = c.compile(['errAndVal',
+		       [dd.throw, 3]]);
+    c.eval(im, k, function(err, value) {
+      assert(!err);
+      assert(value.length == 2);
+      assert(value[0] == 3);
+    });
+  });
 });
 
