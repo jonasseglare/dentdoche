@@ -221,6 +221,11 @@ describe('compilers', function() {
     assert(x[2] == 'a');
     assert(x[4] == 'b');
   });
+  
+  it('Nested Destructure', function() {
+    var x = c.destructureBindings([[['a', 'b'], 'c'], [dd.array, [dd.array, 3, 4], 5]]);
+    console.log(x);
+  });
 
   
   /*it('eval string', function() {
