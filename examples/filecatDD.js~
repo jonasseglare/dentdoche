@@ -1,0 +1,2 @@
+var fs = require('fs');
+var dd = require('../dentdoche.js');
