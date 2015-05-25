@@ -275,8 +275,7 @@ describe('compilers', function() {
     var f = c.makeFn(['a'], 
 		     [dd.set, dd.sym('a'), 0, 33],
 		     [dd.set, dd.sym('a'), 1, 44]);
-    console.log(f(out));
-    console.log(out);
+    f(out);
     assert(out[0] == 33);
     assert(out[1] == 44);
   });
