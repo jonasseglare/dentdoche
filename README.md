@@ -9,9 +9,10 @@ Some characteristics:
 
 ## Example usage
 
- 
-## To do
- * Try-catch macro.
+## Common pitfalls
+
+  * Forgetting comma between array elements.
+  * Using ```fn``` instead of ```afn```, or ```makeFn``` instead of ```makeAfn```.
  
 ## Licence
 Copyright Jonas Östlund 2015.
