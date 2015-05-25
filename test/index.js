@@ -14,7 +14,7 @@ function factorial() {
   return fsub.apply(this, dd.argsToArray(arguments));
 }
 
-var fsubAsync = dd.afn(
+var fsubAsync = dd.makeAfn(
   ['n'],
   [dd.if, ["=", dd.sym('n'), 0], 1,
    ['*', dd.sym('n'),
@@ -101,7 +101,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('afn', function(done) {
-    var f = dd.afn(['a', 'b', 'c'],
+    var f = dd.makeAfn(['a', 'b', 'c'],
 		   ['+', ['-', dd.S('a'), dd.S('b')],
 		    dd.S('c')]);
     assert(typeof f == 'function');
@@ -112,9 +112,9 @@ describe('evaluateSymbol', function() {
   });
 
   it('myAdd', function(done) {
-    var myAdd = dd.afn(['a', 'b'],
+    var myAdd = dd.makeAfn(['a', 'b'],
 		      ['+', dd.S('a'), dd.S('b')]);
-    var add3 = dd.afn(['a', 'b', 'c'],
+    var add3 = dd.makeAfn(['a', 'b', 'c'],
 		      [myAdd, dd.S('a'),
 		       [myAdd, dd.S('b'),
 			dd.S('c')]]);
@@ -397,7 +397,7 @@ describe('evaluateSymbol', function() {
 	[dd.filter, odd,
 	 dd.S("arguments")]]]);
 
-    var f2 = dd.afn(
+    var f2 = dd.makeAfn(
       [],
       ["do",
        [console.log, ["+", "You provided ",
@@ -439,8 +439,8 @@ describe('evaluateSymbol', function() {
        [dd.let, ["strings", [dd.map,
 			     // In case we want to make a function
 			     // that doesn't capture local context,
-			     // we can use dd.afn. Otherwise, we should
-			     // use the dd.Afn macro.
+			     // we can use dd.makeAfn. Otherwise, we should
+			     // use the dd.makeAfn macro.
 			    [dd.Afn, ["fname"], // Forgetting to use afn here instead of fn
 			                        // may cause errors: The return value will
 			                        // both be used, and the async callback will
@@ -474,7 +474,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('Try later', function(done) {
-    var fun = dd.afn(['n'],
+    var fun = dd.makeAfn(['n'],
 		     ["later", 1199]);
     
     fun(9, function(err, value) {
@@ -486,7 +486,7 @@ describe('evaluateSymbol', function() {
   it('recursion with later', function(done) {
     setTimeout(done, 40000);
     var fun = 'undefined-fun';
-    fun = dd.afn(["n"],
+    fun = dd.makeAfn(["n"],
 		 [dd.let, ['inner',
 			   ['afn', ['m'],
 			    ['do',
@@ -548,7 +548,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('looping', function(done) {
-    var factorial = dd.afn(
+    var factorial = dd.makeAfn(
       ['n'],
       [dd.iterate,
        [dd.array, 1, dd.sym('n')],
@@ -584,7 +584,7 @@ describe('evaluateSymbol', function() {
        '/tmp/',
        dd.sym('fname')]); // <-- Refer to the input parameter.
 
-    var makeSomeFiles = dd.afn(
+    var makeSomeFiles = dd.makeAfn(
       [],
       [dd.map,
        [dd.Afn, ['filename'],
@@ -594,7 +594,7 @@ describe('evaluateSymbol', function() {
 	 ['+', '[Contents of file ', dd.sym('filename'), ']']]],
        dd.sym('arguments')]);
 
-    var readAndConcatFiles = dd.afn(
+    var readAndConcatFiles = dd.makeAfn(
       [], // <-- No named parameters
       [dd.let, ['file-fmt', 'utf8'], // <-- A local variable bound to a string.
        [dd.reduce,
@@ -609,7 +609,7 @@ describe('evaluateSymbol', function() {
 	   dd.sym('file-fmt')]], // <-- The captured format parameter.
 	 dd.sym('arguments')]]]);// <-- An array of all parameters.
     
-    var writeAndConcat = dd.afn(
+    var writeAndConcat = dd.makeAfn(
       [], // <-- No named parameters
       [dd.let, ['files', [dd.quote, // <-- Special form to prevent evaluation
 			  ['aa.txt', 'bb.txt', 'cc.txt']]], // <-- An array of data.
@@ -638,7 +638,7 @@ describe('evaluateSymbol', function() {
   
   it('Multiple elements in body2', function() {
     var x = [0, 0, 0, 0];
-    var f = dd.afn(
+    var f = dd.makeAfn(
       ['X'],
       [dd.set, dd.sym('X'), 0, 119],
       [dd.set, dd.sym('X'), 2,
@@ -665,7 +665,7 @@ describe('evaluateSymbol', function() {
 
   it('Multiple elements in body4', function() {
     var x = [0, 0, 0, 0];
-    var f = dd.afn(
+    var f = dd.makeAfn(
       ['Y'],
       [dd.let, ['f', [dd.Afn, ['X'],
 		     [dd.set, dd.sym('X'), 0, 119],
