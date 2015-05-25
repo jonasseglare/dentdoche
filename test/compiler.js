@@ -124,5 +124,16 @@ describe('compilers', function() {
       }
     });
   })
+
+  it('not macro', function() {
+    var k = c.compile([dd.array,
+		       [dd.not, false],
+		       [dd.not, true]]);
+    c.eval(im, k, function(err, result) {
+      assert(!err);
+      assert(result[0]);
+      assert(!result[1]);
+    });
+  })
 });
 
