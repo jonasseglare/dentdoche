@@ -465,15 +465,7 @@ function compileGeneratedFunctionCall(x) {
 	cb(new Error('Not a function return from form'));
       } else {
 	evaluateArrayElements(lvars, args, function(err, evaluatedArgs) {
-	  try {
-	    if (common.isAsync(fun)) {
-	      fun.apply(null, evaluatedArgs.concat([cb]));
-	    } else {
-	      cb(null, fun.apply(null, evaluatedArgs));
-	    }
-	  } catch (e) {
-	    cb(e);
-	  }
+	  applyFunction(lvars, fun, evaluatedArgs, cb);
 	});
       }
     });
