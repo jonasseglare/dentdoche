@@ -707,7 +707,7 @@ describe('evaluateSymbol', function() {
 		   'b', [dd.get, dd.sym('state'), 2]],
 	  [dd.if, ['=', dd.sym('i'), dd.sym('n')],
 	   [dd.array, false, dd.sym('b')],
-	   [dd.do,
+	   [dd.do, // For: 0, 1, 2, 3, 4, 5, 6, 7
 	    [dd.set, dd.sym('dst'), dd.sym('i'), dd.sym('b')],
 	    [dd.array, true,
 	     [dd.array, ['+', 1, dd.sym('i')],
