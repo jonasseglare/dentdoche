@@ -303,24 +303,6 @@ function evaluateArrayElements(lvars, array, cb) {
   }
 }
 
-function compileAsyncCall(x) {
-  var f = first(x);
-  var args = compileArray(rest(x));
-  var n = args.length;
-  return function(lvars, cb) {
-    var result = new common.ResultArray(n, function(err, evaluatedArgs) {
-      if (err) {
-	cb(err);
-      } else {
-	applyFunction(lvars, f, evaluatedArgs, cb);
-      }
-    });
-    for (var i = 0; i < n; i++) {
-      eval(lvars, args[i], result.makeSetter(i));
-    }
-  }
-}
-
 function compileBoundFunction(args0) {
   var key = common.getName(first(args0))
   var args = compileArray(rest(args0));
@@ -504,10 +486,7 @@ function compileComplex(x) {
   if (typeof f == 'string' || common.isSymbol(f)) {
     return compiled(compileStringForm(x, f, args));
   } else if (typeof f == 'function') {
-    if (common.isAsync(f)) {
-      assert(!common.isMacro(x));
-      return compileAsyncCall(x);
-    } else if (common.isMacro(f)) {
+     if (common.isMacro(f)) {
       return compile(f.apply(null, args));
     } else {
       return compileCall(x);
