@@ -301,12 +301,7 @@ function compileAsyncCall(x) {
   var args = compileArray(rest(x));
   var n = args.length;
   return function(lvars, cb) {
-    console.log('Evaluate an async call');
-    console.log('Args:');
-    console.log(args);
     var result = new common.ResultArray(n, function(err, evaluatedArgs) {
-      console.log(' evaled args:');
-      console.log(evaluatedArgs);
       if (err) {
 	cb(err);
       } else {
@@ -439,7 +434,6 @@ function compilePropertyAccess(x) {
 }
 
 function compileStringForm(x, f, args) {
-  console.log('Compile string form');
   // Treat strings and symbols the same when
   // they appear in the beginning of an S-expr.
   f = common.getName(f);
@@ -453,12 +447,10 @@ function compileStringForm(x, f, args) {
      
   */
   if (common.contains(specialForms, f)) {
-    console.log('Special form');
     var v = specialForms[f](args);
     assert(v);
     return v;
   } else {
-    console.log(' other form ' + f);
     var opfun = common.getOperatorFunction(f);
     if (opfun) {
       return compileComplex([opfun].concat(args));
@@ -545,7 +537,6 @@ function compile(x) {
       return compiled(compileComplex(x));
     }
   } else if (common.isSymbol(x)) {
-    console.log('Compile symbol ' + common.getName(x));
     var fun = common.getOperatorFunction(common.getName(x));
     if (fun) {
       return fun;
@@ -577,9 +568,7 @@ function makeAfn() {
 
 
 function evaluateForm(lvars, frm, cb) {
-  console.log('Compile form');
   var c = compile(frm);
-  console.log('Now evaluate it');
   eval(common.makeImmutableMap(lvars), c, cb);
 }
 
