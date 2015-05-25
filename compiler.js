@@ -6,6 +6,9 @@ var rest = common.rest;
 var tagged = common.tagged;
 
 function applyFunction(lvars, fun, args, cb) {
+  if (common.isWithLVars(fun)) {
+    args = [lvars].concat(args);
+  }
   try {
     if (common.isAsync(fun)) {
       fun.apply(null, args.concat([cb]));
