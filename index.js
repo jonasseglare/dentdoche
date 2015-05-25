@@ -274,17 +274,6 @@ function initLVars(x) {
   }
 }
 
-function makeAfnSub(args, body, lvars) {
-  return function(allArgs) {
-    var lastIndex = allArgs.length - 1;
-    var evaluatedArgs = allArgs.slice(0, lastIndex);
-    var cb = allArgs[lastIndex];
-    var localVars = common.bindFunctionArgs(initLVars(lvars), args, evaluatedArgs);
-    evaluateFormWithoutMacros(
-      localVars.set('this', this),
-      expandMacros(body), cb);
-  }
-}
 
 
 
