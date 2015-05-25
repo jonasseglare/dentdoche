@@ -361,23 +361,6 @@ function makeAfn() {
 // http://stackoverflow.com/questions/10465423/how-can-i-list-all-the-functions-in-my-node-js-script
 // http://stackoverflow.com/questions/8403108/calling-eval-in-particular-context
 // http://stackoverflow.com/questions/5447771/node-js-global-variables
-/*function evalString(x) {
-  return eval(x);
-}*/
-
-var x = 'rulle';
-
-/*console.log('THIS:');
-console.log(this);
-console.log('What is this? ');
-console.log(typeof this);
-console.log('What is x?');
-console.log(this.x);
-console.log('GLOBAL:');
-console.log(global);
-console.log('module');
-console.log(module);
-console.log('GLOBAL:');*/
 
 
 module.exports.isCompiled = isCompiled;
@@ -386,4 +369,3 @@ module.exports.compiled = compiled;
 module.exports.eval = eval;
 module.exports.makeAfn = makeAfn;
 module.exports.makeFn = makeFn;
-module.exports.evalString = evalString;
