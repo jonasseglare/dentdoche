@@ -492,7 +492,6 @@ function callConstructorWithArgs(Constructor) {
 }
 
 function mapAsync(fun0) {
-  console.log('------------> mapAsync');
   var fun = convertToAsync(fun0);
   var allArgs = argsToArray(arguments);
   var last = allArgs.length - 1;
@@ -501,14 +500,12 @@ function mapAsync(fun0) {
   var cb = allArgs[last];
   var n = colls[0].length;
   var result = new common.ResultArray(n, function(err, v) {
-    console.log('RESULT OF MAPPING: %j', v);
     cb(err, v);
   });
   for (var i = 0; i < n; i++) {
     var localArgs = new Array(collCount + 1);
     localArgs[collCount] = result.makeSetter(i);
     for (var j = 0; j < collCount; j++) {
-      console.log('Map async for %j', j);
       localArgs[j] = (colls[j])[i];
     }
     fun.apply(null, localArgs);
@@ -516,8 +513,6 @@ function mapAsync(fun0) {
 } async(mapAsync);
 
 function reduceAsync(fun0, coll, cb) {
-  console.log(typeof fun0);
-  console.log(coll);
   if (coll.length == undefined) {
     cb(null, undefined);
   } else if (coll.length == 1) {
@@ -534,8 +529,6 @@ function reduceAsync(fun0, coll, cb) {
       } else {
 	counter++;
 	if (counter == 2) {
-	  console.log('Got %j and %j for collection', a, b);
-	  console.log(coll);
 	  fun(a, b, cb);
 	}
       }
@@ -543,14 +536,10 @@ function reduceAsync(fun0, coll, cb) {
     var left = coll.slice(0, middle);
     var right = coll.slice(middle);
     reduceAsync(fun, left, function(err, value) {
-      console.log('Received value for slice');
-      console.log(left);
       a = value;
       gotValue(err);
     });
     reduceAsync(fun, right, function(err, value) {
-      console.log('Received value for slice');
-      console.log(right);
       b = value;
       gotValue(err);
     });
@@ -558,7 +547,6 @@ function reduceAsync(fun0, coll, cb) {
 } async(reduceAsync);
 
 function filterAsync(fun0, coll, cb) {
-  console.log('------------> filterAsync');
   var fun = convertToAsync(fun0);
   mapAsync(fun, coll, function(err, mask) {
     if (err) {
