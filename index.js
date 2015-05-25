@@ -109,40 +109,6 @@ function evaluateLater(localVars, form, cb) {
   }, 1);
 }
 
-var specialMap = {
-  'let': evaluateLet,
-  'do': evaluateDo,  
-  'afn': evaluateAfn,
-  'fn': evaluateFn,
-  'if': evaluateIf,
-  "'": evaluateQuote,
-  "quote": evaluateQuote,
-  "later": evaluateLater
-};
-
-function isQuote(x) {
-  return x == "'" || x == "quote";
-}
-
-function isSpecial(x) {
-  return specialMap[x];
-}
-
-
-function evaluateSpecial(localVars, form, cb) {
-  var f = form[0];
-  specialMap[f](localVars, form, cb);
-}
-
-
-function isOperator(x) {
-  return opmap[x];
-}
-
-function plus(a, b) {
-  return a + b;
-}
-
 
 
 
