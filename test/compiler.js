@@ -163,5 +163,14 @@ describe('compilers', function() {
       assert(!value);
     });
   });
+
+  it('error and value', function() {
+    var k = c.compile(['errAndVal', [assert, false]]);
+    c.eval(im, k, function(err, value) {
+      assert(!err);
+      assert(value.length == 2);
+      assert(value[0]);
+    });
+  });
 });
 

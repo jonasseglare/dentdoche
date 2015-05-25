@@ -173,6 +173,15 @@ function MakeLet0(args) {
   };
 }
 
+function MakeErrAndVal(args) {
+  assert(args.length == 1);
+  var c = compile(args[0]);
+  return function(lvars, cb) {
+    eval(lvars, c, function(err, value) {
+      cb(null, [err, value]);
+    });
+  }
+}
 
 var specialForms = {
   'if': MakeIf,
@@ -180,7 +189,8 @@ var specialForms = {
   'do': MakeDo,
   'fn': MakeFn,
   'afn': MakeAfn,
-  'let0': MakeLet0
+  'let0': MakeLet0,
+  'errAndVal': MakeErrAndVal
 };
 
 
