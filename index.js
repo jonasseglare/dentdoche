@@ -99,16 +99,6 @@ function evaluateQuote(localVars, form, cb) {
   }
 }
 
-function evaluateDo(localVars, form, cb) {
-  evaluateFormsWithoutMacros(localVars, form.slice(1), cb);
-}
-
-function evaluateLater(localVars, form, cb) {
-  setTimeout(function() {
-    evaluateFormsWithoutMacros(localVars, form.slice(1), cb);
-  }, 1);
-}
-
 
 
 
