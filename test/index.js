@@ -357,6 +357,23 @@ describe('evaluateSymbol', function() {
 		    });
   });
 
+  it('shouldreduce2', function(done) {
+    dd.evaluateForm(null,
+		    [dd.let,
+		     ['plus', [dd.fn, ['a', 'b'],
+			       ['+', dd.sym('a'),
+				dd.sym('b')]]],
+		     [dd.reduce,
+		      dd.sym('plus'),
+		      ["quote",
+		       [1, 2, 3, 4]]]],
+		    function(err, value) {
+		      assert(!err);
+		      assert(value);
+		      done();
+		    });
+  });
+
   it('Should filter out odd numbers', function(done) {
     var odd = function(x) {
       return x % 2 == 1;
