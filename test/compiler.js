@@ -228,13 +228,11 @@ describe('compilers', function() {
   });
 
   it('Destructure in let', function(done) {
-    console.log('DESTRUCTURE IN LETDESTRUCTURE IN LETDESTRUCTURE IN LET');
     var fun = function() {return [3, 4];}
     var f2 = c.makeFn([],
 		      ['let',
 		       [['a', 'b'], [fun]],
 		       ['*', dd.sym('a'), dd.sym('b')]]);
-    console.log('############ EVALUATE!!!');
     assert.equal(f2(), 12);
     done();
   });
