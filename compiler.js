@@ -245,8 +245,6 @@ function MakeErrAndVal(args) {
 
 function MakeLater(args0) {
   var args = compileArray(args0);
-  console.log('ARGS:');
-  console.log(args);
   return function(lvars, cb) {
     setTimeout(function() {
       evaluateInSequence(lvars, args, undefined, cb);
