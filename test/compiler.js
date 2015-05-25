@@ -230,17 +230,15 @@ describe('compilers', function() {
   it('Destructure in let', function(done) {
     console.log('DESTRUCTURE IN LETDESTRUCTURE IN LETDESTRUCTURE IN LET');
     var fun = function() {return [3, 4];}
-/*    var f2 = c.makeFn([],
+    var f2 = c.makeFn([],
 		      [dd.let,
 		       [['a', 'b'], [fun]],
-		       ['*', dd.sym('a'), dd.sym('b')]]);*/
-    //var f2 = c.makeFn([], [dd.let, ['a', 3, 'b', 4],
-    //			   ['*', dd.sym('a'), dd.sym('b')]]);
+		       ['*', dd.sym('a'), dd.sym('b')]]);
     var k = c.compile([fun]);
 /*    var f3 = c.makeFn([], [dd.let, ['temp', [fun]], //,'a', [dd.get, ], 'b', 4],
 			   dd.sym('temp')]);
 //			   ['*', dd.sym('a'), dd.sym('b')]]);*/
-    //console.log(f2() == 12);
+    console.log(f2() == 12);
     console.log('NOW EVALUATE K!!!');
     c.eval(im, k, function(err, v) {
       console.log('vvvvv:');
