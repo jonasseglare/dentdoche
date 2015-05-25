@@ -398,8 +398,9 @@ describe('evaluateSymbol', function() {
       [],
       //[dd.reduce, plus,
        //[dd.map, square,
-	[myFilter, odd,
-	 dd.S("arguments")]);
+	//[dd.filter, odd,
+      [dd.map, odd,
+       dd.S("arguments")]); //]);
 
     /*var f2 = dd.makeAfn(
       [],

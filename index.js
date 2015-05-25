@@ -499,7 +499,10 @@ function mapAsync(fun0) {
   var collCount = colls.length;
   var cb = allArgs[last];
   var n = colls[0].length;
-  var result = new common.ResultArray(n, cb);
+  var result = new common.ResultArray(n, function(err, v) {
+    console.log('RESULT OF MAPPING: %j', v);
+    cb(err, v);
+  });
   for (var i = 0; i < n; i++) {
     var localArgs = new Array(collCount + 1);
     localArgs[collCount] = result.makeSetter(i);
