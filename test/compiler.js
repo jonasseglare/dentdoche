@@ -201,6 +201,16 @@ describe('compilers', function() {
       assert(result == 12);
     });
   });
+  
+  it('Compile local function async', function() {
+    var k = c.compile(['let0', ['f', ['afn', ['a', 'b'],
+				      ['*', dd.sym('a'), dd.sym('b')]]],
+		       ['f', 3, 4]]);
+    c.eval(im, k, function(err, result) {
+      assert(!err);
+      assert(result == 12);
+    });
+  });
 
   
   /*it('eval string', function() {
