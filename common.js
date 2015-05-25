@@ -14,15 +14,21 @@ function gensym(x) {
 }
 
 
-function ResultArray(n, cb) {
+function ResultArray(n, cb, vb) {
   this.dst = new Array(n);
   this.counter = 0;
   this.cb = cb;
+  this.verbose = vb;
   this.tryToDeliver();
 }
 
 ResultArray.prototype.tryToDeliver = function() {
   if (this.counter == this.dst.length) {
+    if (this.verbose) {
+      console.log('OK we are ready to deliver.');
+      console.log('counter = ', this.counter);
+      console.log('length  = ', this.dst.length);
+    }
     this.cb(null, this.dst);
     this.cb = undefined;
   }
@@ -32,7 +38,10 @@ ResultArray.prototype.makeSetter = function(index) {
   var self = this;
   return function(err, value) {
     if (err) {
-      self.cb(err);
+      if (self.cb) {
+	self.cb(err);
+      }
+      self.cb = undefined;
     } else {
       if (self.counter >= self.dst.length) {
 	throw new Error('MULTIPLE DELIVERY OF RESULT!!! THIS IS A PROGRAMMING ERROR');
