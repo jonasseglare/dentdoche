@@ -172,5 +172,17 @@ describe('compilers', function() {
       assert(value[0]);
     });
   });
+
+  it('Function', function() {
+    var f = c.makeFn(['a', 'b'], ['+', dd.sym('a'), dd.sym('a')]);
+
+/*		     ['+', dd.sym('a'),
+				  ['*', dd.sym('b'), dd.sym('b')]]);*/
+    assert(typeof f == 'function');
+    //assert(f(2, 3) == 2 + 3*3);
+    console.log('f(2, 3) = ', f(2, 3));
+  });
+
+  
 });
 

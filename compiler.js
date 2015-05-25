@@ -1,3 +1,4 @@
+var immutable = require('immutable');
 var common = require('./common');
 var assert = require('assert');
 var first = common.first;
@@ -17,7 +18,9 @@ function isCompiled(x) {
 
 function compiled(x) {
   if (typeof x == 'object' || typeof x == 'function') {
-    x.compiled = true;
+    if (x) {
+      x.compiled = true;
+    }
   }
   return x;
 }
@@ -255,10 +258,13 @@ function compileComplex(x) {
       assert(v);
       return v;
     } else {
-      var opfun = common.getOperatorFunction(x);
+      var opfun = common.getOperatorFunction(f);
       if (opfun) {
 	return compileComplex([opfun].concat(args));
       }
+      console.log('Failed to compile:');
+      console.log(x);
+      throw new Error('Failed to compile');
       return null;
     }
   } else if (typeof f == 'function') {
@@ -310,14 +316,16 @@ function makeAnyFun(builder, args) {
 }
 
 function makeFn() {
-  return makeAnyFun(MakeFn, argsToArray(arguments));
+  return makeAnyFun(MakeFn, common.argsToArray(arguments));
 }
 
 function makeAfn() {
-  return makeAnyFun(MakeAfn, argsToArray(arguments));
+  return makeAnyFun(MakeAfn, common.argsToArray(arguments));
 }
 
 module.exports.isCompiled = isCompiled;
 module.exports.compile = compile;
 module.exports.compiled = compiled;
 module.exports.eval = eval;
+module.exports.makeAfn = makeAfn;
+module.exports.makeFn = makeFn;
