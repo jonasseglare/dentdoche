@@ -156,7 +156,12 @@ Special facilities:
  * ```loop```: A special looping function. It takes an initial state and a function. The function returns a pair of elements. The first element is a boolean value that should be true whenever we should continue looping. The second element is the next state.
  * ```new```: Used to call Javascript constructor.
 
- 
+## Pitfalls
+Here are some common errors to look for when debugging.
+
+  * Forgetting commas in between array elements.
+  * Using ```makeFn``` or ```fn``` for functions that depend on asynchronous computations. Use ```makeAfn``` and ```afn``` respectively, instead.
+
  
 ## To do
  * Try-catch macro.
