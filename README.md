@@ -46,7 +46,17 @@ var filecat = dd.makeAfn(['srcA', 'srcB', 'dst'],
 			    dd.sym('srcB'), 'utf8']]]);
 ```
 which may not be that much shorter. The structure, however, is a lot simpler. All the callbacks and error forwarding code is gone. Also, generalizing the function for more files is simple.
-
+```js
+var filecatMany = dd.makeAfn([],
+			     [fs.writeFile,
+			      [dd.last, dd.sym('arguments')],
+			      [dd.reduce,
+			       dd.sym('+'),
+			       [dd.map,
+				[dd.afn, ['fname'], 
+				 [fs.readFile, dd.sym('fname'), 'utf8']],
+				[dd.butLast, dd.sym('arguments')]]]]);
+```
 ## Common pitfalls
 
   * Forgetting comma between array elements.

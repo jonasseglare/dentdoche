@@ -267,6 +267,14 @@ function or() {
 } macro(or);
 
 
+function last(x) {
+  return x[x.length - 1];
+}
+
+function butLast(x) {
+  return x.slice(0, x.length-1);
+}
+
 function throwFun(x, cb) {
   cb(x);
 } async(throwFun)
@@ -311,3 +319,5 @@ module.exports.and = and;
 module.exports.or = or;
 module.exports.not = not;
 module.exports.throw = throwFun;
+module.exports.last = last;
+module.exports.butLast = butLast;
