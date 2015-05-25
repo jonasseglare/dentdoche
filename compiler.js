@@ -155,6 +155,7 @@ function MakeFn(args) {
       } else if (err) {
 	throw err;
       }
+      console.log('Return the result');
       return result;
     });
   }
@@ -263,7 +264,11 @@ function compileCall(x) {
 	cb(err);
       } else {
 	try {
-	  cb(null, f.apply(null, evaluatedArgs));
+	  console.log('Calling the function');
+	  var out = f.apply(null, evaluatedArgs)
+	  console.log('GOT VALUE: %j', out);
+	  cb(null, out);
+	  console.log('Done calling');
 	} catch(e) {
 	  cb(e);
 	}
@@ -273,6 +278,7 @@ function compileCall(x) {
       eval(lvars, args[i], result.makeSetter(i));
     }
   };
+  console.log('Compiled function call.');
 }
 
 function evaluateArrayElements(lvars, array, cb) {
@@ -332,6 +338,8 @@ function compileBoundFunction(args0) {
 function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
+  console.log('--> Compile complex:');
+  console.log(x);
   if (typeof f == 'string' || common.isSymbol(f)) {
     /* Can be
        
@@ -358,12 +366,16 @@ function compileComplex(x) {
       return null;
     }
   } else if (typeof f == 'function') {
+    console.log('COMPILE FUNCTION');
     if (common.isAsync(f)) {
+      console.log('COMPILE ASYNC');
       assert(!common.isMacro(x));
       return compileAsyncCall(x);
     } else if (common.isMacro(f)) {
+      console.log('COMPILE MACRO');
       return compile(f.apply(null, args));
     } else {
+      console.log('COMPILE CALL');
       return compileCall(x);
     }
   } 
@@ -392,6 +404,7 @@ function compileSub(x) {
 }
 
 function compile(x) {
+  console.log('--> Compile');
   return compiled(compileSub(x));
 }
 
