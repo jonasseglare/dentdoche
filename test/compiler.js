@@ -267,10 +267,15 @@ describe('compilers', function() {
 
   it('Multiple forms in body', function() {
     var out = [0, 0];
-    var f = c.makeFn([],
-		     [dd.set, out, 0, 33],
-		     [dd.set, out, 1, 44]);
-    f();
+
+    var rulle = function(a, b, c) {
+      return [a, b, c];
+    }
+    
+    var f = c.makeFn(['a'], 
+		     [dd.set, dd.sym('a'), 0, 33],
+		     [dd.set, dd.sym('a'), 1, 44]);
+    console.log(f(out));
     console.log(out);
     assert(out[0] == 33);
     assert(out[1] == 44);
