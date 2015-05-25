@@ -312,11 +312,7 @@ function compileAsyncCall(x) {
       if (err) {
 	cb(err);
       } else {
-	//try {
-	  var x = f.apply(null, evaluatedArgs.concat([cb]));
-	//} catch(e) {
-	  //cb(e);
-	//}
+	applyFunction(lvars, f, evaluatedArgs, cb);
       }
     });
     for (var i = 0; i < n; i++) {
