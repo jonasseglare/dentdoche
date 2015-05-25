@@ -712,9 +712,9 @@ describe('evaluateSymbol', function() {
 	    [dd.array, true,
 	     [dd.array, ['+', 1, dd.sym('i')],
 	      dd.sym('b'), ['+', dd.sym('a'), dd.sym('b')]]]]]]]]]);
-    var dst = new Array(9);
+    var dst = new Array(8);
     fib(dst);
-    assert(dst[8] == 34);
     console.log('dst = %j', dst);
+    assert(dst[7] == 21);
   });
 });
