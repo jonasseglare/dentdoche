@@ -46,35 +46,35 @@ describe('evaluateSymbol', function() {
   });
 
   it('evaluateForm2', function(done) {
-    dd.evaluateNow(null, ["+", 2, 3], function(err, value) {
+    dd.evaluateForm(null, ["+", 2, 3], function(err, value) {
       assert(value == 5);
       done();
     })
   });
   
   it('evaluateForm nested', function(done) {
-    dd.evaluateNow(null, ["-", ["+", 2, 3], 14], function(err, value) {
+    dd.evaluateForm(null, ["-", ["+", 2, 3], 14], function(err, value) {
       assert(value == -9);
       done();
     })
   });
   
   it('evaluateForm many args', function(done) {
-    dd.evaluateNow(null, ["+", 1, 2, 3, 4], function(err, value) {
+    dd.evaluateForm(null, ["+", 1, 2, 3, 4], function(err, value) {
       assert(value == 10);
       done();
     })
   });
 
   it('evaluateForm negate', function(done) {
-    dd.evaluateNow(null, ["-", 119], function(err, value) {
+    dd.evaluateForm(null, ["-", 119], function(err, value) {
       assert(value == -119);
       done();
     })
   });
 
   it('evaluateForm local var', function(done) {
-    dd.evaluateNow({k: 3}, ["+", 119, dd.S('k')], function(err, value) {
+    dd.evaluateForm({k: 3}, ["+", 119, dd.S('k')], function(err, value) {
       assert(value == 122);
       done();
     })

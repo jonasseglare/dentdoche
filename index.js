@@ -242,24 +242,6 @@ function evaluateFormsWithoutMacros(localVars, forms, cb) {
   }
 }
 
-function evaluateFormWithoutMacros(localVars, form, cb) {
-  try {
-    if (isArray(form)) {
-      if (form.length == 0) {
-	cb(null, undefined);
-      } else {
-	assert(form.length >= 0);
-	evaluateSExpr(localVars, form, cb);
-      }
-    } else if (isSymbol(form)) {
-      cb(null, evaluateSymbol(localVars, form));
-    } else {
-      cb(null, form);
-    }
-  } catch (e) {
-    cb(e);
-  }
-}
 
 
 
