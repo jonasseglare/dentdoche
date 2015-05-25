@@ -3,7 +3,7 @@ var assert = require('assert');
 var immutable = require('immutable');
 var fs = require('fs');
 
-var fsub = dd.fn(
+var fsub = dd.makeFn(
   ['n'],
   [dd.if, ["=", dd.sym('n'), 0], 1,
    ['*', dd.sym('n'),
@@ -93,7 +93,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('fn', function() {
-    var f = dd.fn(['a', 'b', 'c'],
+    var f = dd.makeFn(['a', 'b', 'c'],
 		   ['+', ['-', dd.S('a'), dd.S('b')],
 		    dd.S('c')]);
     assert(typeof f == 'function');
@@ -245,7 +245,7 @@ describe('evaluateSymbol', function() {
       }
     });
 
-    var myAnd3 = dd.fn(
+    var myAnd3 = dd.makeFn(
       ['a', 'b', 'c'],
       [myAnd, dd.sym('a'), dd.sym('b'), dd.sym('c')]
     );
@@ -253,7 +253,7 @@ describe('evaluateSymbol', function() {
     console.log('False and true and false is %j', myAnd3(false, true, false));
     console.log('True and true true is %j', myAnd3(true, true, true));
 
-    var myFun = dd.fn([], ["let", ["a", [myAnd, true, true, true],
+    var myFun = dd.makeFn([], ["let", ["a", [myAnd, true, true, true],
 			           "b", [myAnd, true, true, false]],
 			   [dd.array, dd.S("a"), dd.S("b")]]);
     var result = myFun();
@@ -302,7 +302,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('Should get all arguments', function() {
-    var f = dd.fn([], dd.S("arguments"));
+    var f = dd.makeFn([], dd.S("arguments"));
     var result = f(1, 2, 3);
     console.log('result = %j', result);
     assert(result.length == 3);
@@ -390,7 +390,7 @@ describe('evaluateSymbol', function() {
     // A function that takes all its arguments,
     // keeps the odd ones, squares them, and sums them
     // up.
-    var f = dd.fn(
+    var f = dd.makeFn(
       [],
       [dd.reduce, plus,
        [dd.map, square,
@@ -578,7 +578,7 @@ describe('evaluateSymbol', function() {
     dd.async(fs.readFile);
     dd.async(fs.writeFile);
 
-    var appendBasePath = dd.fn( // <--  A regular synchronous function
+    var appendBasePath = dd.makeFn( // <--  A regular synchronous function
       ['fname'], // <-- Accepting a single argument
       ['+', // <-- The + operator of JS.
        '/tmp/',
@@ -626,7 +626,7 @@ describe('evaluateSymbol', function() {
 
   it('Multiple elements in body', function() {
     var x = [0, 0, 0, 0];
-    var f = dd.fn(
+    var f = dd.makeFn(
       ['X'],
       [dd.set, dd.sym('X'), 0, 119],
       [dd.set, dd.sym('X'), 2,
@@ -651,7 +651,7 @@ describe('evaluateSymbol', function() {
 
   it('Multiple elements in body3', function() {
     var x = [0, 0, 0, 0];
-    var f = dd.fn(
+    var f = dd.makeFn(
       ['Y'],
       [dd.let, ['f', [dd.Fn, ['X'],
 		     [dd.set, dd.sym('X'), 0, 119],
@@ -690,7 +690,7 @@ describe('evaluateSymbol', function() {
   });
 
   it('fibonacci', function() {
-    var fib = dd.fn(
+    var fib = dd.makeFn(
       ['dst'],
       [dd.let, ['n', ['.-length', dd.sym('dst')]],
        [dd.iterate,

@@ -11,7 +11,7 @@ var assert = require('assert');
 var immutable = require('immutable');
 var util = require('util');
 var common = require('./common.js');
-
+var compiler = require('./compiler.js');
 var isArray = common.isArray;
 var argsToArray = common.argsToArray;
 var getName = common.getName;
@@ -666,7 +666,7 @@ module.exports.isAsync = common.isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.S = sym;
 module.exports.sym = sym;
-module.exports.fn = publicFn;
+module.exports.makeFn = publicFn;
 module.exports.afn = publicAfn;
 module.exports.array = makeArrayFromArgs;
 module.exports.macro = macro;
