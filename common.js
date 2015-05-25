@@ -238,6 +238,15 @@ function toSymbol(x) {
   return new Symbol(x);
 }
 
+function tagged(cb, str) {
+  return function(err, value) {
+    console.log('Callback with tag %j received err and value:', str);
+    console.log(err);
+    console.log(value);
+    cb(err, value);
+  }
+}
+
 
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
@@ -264,3 +273,4 @@ module.exports.gensym = gensym;
 module.exports.jsGet = jsGet;
 module.exports.jsSet = jsSet;
 module.exports.toSymbol = toSymbol;
+module.exports.tagged = tagged;

@@ -414,6 +414,7 @@ describe('evaluateSymbol', function() {
     
     var result = f(1, 2, 3, 4, 5, 6, 7, 8, 9);
     assert.equal(result, 165);
+    done();
     /*f2(1, 2, 3, 4, 5, 6, 7, 8, 9, function(err, value) {
       assert(!err);
       assert(value == 165);

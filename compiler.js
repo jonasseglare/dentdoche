@@ -3,6 +3,7 @@ var common = require('./common');
 var assert = require('assert');
 var first = common.first;
 var rest = common.rest;
+var tagged = common.tagged;
 
 function splitBindings(bindings) {
   var n = bindings.length/2;
@@ -144,11 +145,11 @@ function MakeFn(args) {
       var assigned = false;
       var result = undefined;
       var err = undefined;
-      evaluateInSequence(lvars, compiledBody, undefined, function(err0, value) {
+      evaluateInSequence(lvars, compiledBody, undefined, tagged(function(err0, value) {
 	assigned = true;
 	result = value;
 	err = err0;
-      });
+      }, 'MakeFn'));
       
       if (!assigned) {
 	throw new Error('Result not assigned in function ' + args);
@@ -299,18 +300,12 @@ function compileAsyncCall(x) {
     console.log('n = %j', n);
     var result = new common.ResultArray(n, function(err, evaluatedArgs) {
       console.log('Evaluated args: %j', evaluatedArgs);
-      var cb0 = function(err, y) {
-	console.log('Async function returned this: %j', y);
-	assert(false);
-	cb(err, y);
-      }
       if (err) {
 	cb(err);
       } else {
 	//try {
 	  console.log('Now call f:');
-	  var x = f.apply(null, evaluatedArgs.concat([cb0]));
-	  console.log('It returned %j', x);
+	  var x = f.apply(null, evaluatedArgs.concat([tagged(cb, 'compileAsyncCall')]));
 	//} catch(e) {
 	//  cb(e);
 	//}
