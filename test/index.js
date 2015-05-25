@@ -476,7 +476,7 @@ describe('evaluateSymbol', function() {
     );
   });
 
-  it('Try later', function(done) {
+  it('later0', function(done) {
     var fun = dd.makeAfn(['n'],
 		     ["later", 1199]);
     
@@ -486,7 +486,7 @@ describe('evaluateSymbol', function() {
     });
   });
   
-  it('recursion with later', function(done) {
+  it('later1', function(done) {
     setTimeout(done, 40000);
     var fun = 'undefined-fun';
     fun = dd.makeAfn(["n"],
