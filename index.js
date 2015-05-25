@@ -329,15 +329,7 @@ function fn(args, body, lvars) {
   }
 } macro(fn);
 
-function publicAfn() {
-  var args = argsToArray(arguments);
-  return afn(args[0], ["do"].concat(args.slice(1)));
-}
 
-function publicFn() {
-  var args = argsToArray(arguments);
-  return fn(args[0], ["do"].concat(args.slice(1)));
-}
 
 
 
@@ -346,28 +338,6 @@ function macro(x) {
   x.isMacro = true;
   return x;
 }
-
-
-function expandMacros(x) {
-  if (isArray(x)) {
-    if (1 <= x.length) {
-      var f = x[0];
-      if (common.isMacro(f)) {
-	return expandMacros(f.apply(null, x.slice(1)));
-      } else if (isQuote(f)) {
-	return x;
-      } else {
-	var y = new Array(x.length);
-	for (var i = 0; i < x.length; i++) {
-	  y[i] = expandMacros(x[i]);
-	}
-	return y;
-      }
-    }
-  }
-  return x;
-}
-
 
 
 function applySync(fun, args) {
