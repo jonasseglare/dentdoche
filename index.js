@@ -1,10 +1,23 @@
 /*
   
   TODO:
-    * Ordered evaluation of arguments.
+    * Ordered evaluation of arguments (through macro)
     * Try/catch-macro.
     * Cond-macro.
-    * Let-desctructuring.
+    * Loop macro:
+    [dd.loop, [['a', 'b'], dd.sym('c'),
+               'd', 0],
+	       ....
+	       [dd.next, ....],
+	       ...
+	       [dd.return, ...]]
+
+	       that is rewritten into something with iterate.
+	       
+     * Eval-function (mark it as withLVars so that it can access local context).
+     * More thorough validation of async method calls, as well as sync ones.
+
+
     
   */
 var assert = require('assert');
