@@ -310,7 +310,7 @@ describe('compilers', function() {
     assert(y[3] == 6);
   });
 
-  it('Method access', function() {
+  it('Method access', function(done) {
     var x = new Adder(100000);
     var f = c.makeFn('x', ['.add', dd.sym('x'), 119]);
     assert(f(x) == 100119);
@@ -318,6 +318,7 @@ describe('compilers', function() {
     f2(new Adder(1000), function(err, value) {
       assert(!err);
       assert(value == 1119);
+      done();
     });
   });
 
