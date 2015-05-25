@@ -16,6 +16,14 @@ function ResultArray(n, cb) {
   this.dst = new Array(n);
   this.counter = 0;
   this.cb = cb;
+  this.tryToDeliver();
+}
+
+ResultArray.prototype.tryToDeliver = function() {
+  if (this.counter == this.dst.length) {
+    this.cb(null, this.dst);
+    this.cb = undefined;
+  }
 }
 
 ResultArray.prototype.makeSetter = function(index) {
@@ -24,11 +32,12 @@ ResultArray.prototype.makeSetter = function(index) {
     if (err) {
       self.cb(err);
     } else {
+      if (self.counter >= self.dst.length) {
+	throw new Error('MULTIPLE DELIVERY OF RESULT!!! THIS IS A PROGRAMMING ERROR');
+      }
       self.dst[index] = value;
       self.counter++;
-      if (self.counter == self.dst.length) {
-	self.cb(null, self.dst);
-      }
+      self.tryToDeliver();
     }
   };
 }

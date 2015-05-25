@@ -255,10 +255,13 @@ var specialForms = {
 
 
 function compileCall(x) {
+  console.log('Compile call for');
+  console.log(x);
   var f = first(x);
   var args = compileArray(rest(x));
   var n = args.length;
   return function(lvars, cb) {
+    console.log('Evaluating compileCall.');
     var result = new common.ResultArray(n, function(err, evaluatedArgs) {
       if (err) {
 	cb(err);

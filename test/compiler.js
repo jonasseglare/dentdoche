@@ -242,7 +242,7 @@ describe('compilers', function() {
 //			   ['*', dd.sym('a'), dd.sym('b')]]);*/
     //console.log(f2() == 12);
     console.log('NOW EVALUATE K!!!');
-    eval(im, k, function(err, v) {
+    c.eval(im, k, function(err, v) {
       console.log('vvvvv:');
       console.log(v);
       done();
