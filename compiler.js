@@ -203,7 +203,7 @@ function evaluateAndBindVars(lvars, symbols, compiled, cb) {
     var sym = common.getName(symbols[0]);
     var promisedValue = new common.PromisedValue(undefined);
     var c = first(compiled);
-    eval(lvars, c, function(err, result) {
+    eval(lvars.set(sym, promisedValue), c, function(err, result) {
       if (err) {
 	cb(err);
       } else {
