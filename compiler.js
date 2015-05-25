@@ -135,7 +135,11 @@ function evaluateInSequence(lvars, compiledForms, result, cb) {
   } else {
     var a = first(compiledForms);
     eval(lvars, a, function(err, x) {
-      evaluateInSequence(lvars, rest(compiledForms), x, cb);
+      if (err) {
+	cb(err);
+      } else {
+	evaluateInSequence(lvars, rest(compiledForms), x, cb);
+      }
     });
   }
 }
@@ -189,9 +193,6 @@ function MakeAfn(args) {
       var resultCb = allArgs[last];
       assert(typeof resultCb == 'function');
       lvars = common.bindFunctionArgs(lvars0, argList, evaluatedArgs);
-      var assigned = false;
-      var result = undefined;
-      var err = undefined;
       evaluateInSequence(
 	lvars,
 	compiledBody, undefined, resultCb);
