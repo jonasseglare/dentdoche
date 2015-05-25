@@ -286,11 +286,17 @@ function evaluateArrayElements(lvars, array, cb) {
 }
 
 function compileAsyncCall(x) {
+  console.log('Typeof first arg: %j', typeof first(rest(x)));
+  console.log('rest(x) = %j', rest(x));
   var f = first(x);
   var args = compileArray(rest(x));
   var n = args.length;
   return function(lvars, cb) {
+    console.log('EVALUATING ASYNC CALL!!!');
+    console.log('n = %j', n);
+    console.log('args = %j', args);
     var result = new common.ResultArray(n, function(err, evaluatedArgs) {
+      console.log('Evaluated args: %j', evaluatedArgs);
       if (err) {
 	cb(err);
       } else {
@@ -422,36 +428,41 @@ function compilePropertyAccess(x) {
   }
 }
 
+function compileStringForm(x, f, args) {
+  /* Can be
+     
+     - special form
+     - operator
+     - method or property access
+     - a local variable binding
+     
+  */
+  if (common.contains(specialForms, f)) {
+    var v = specialForms[f](args);
+    assert(v);
+    return v;
+  } else {
+    var opfun = common.getOperatorFunction(f);
+    if (opfun) {
+      return compileComplex([opfun].concat(args));
+    } else if (isPropertyAccess(f)) {
+      return compilePropertyAccess(x);
+    } else {
+      return compileBoundFunction(x);
+    }
+    console.log('Failed to compile:');
+    console.log(x);
+    throw new Error('Failed to compile');
+    return null;
+  }
+}
+
+
 function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
   if (typeof f == 'string' || common.isSymbol(f)) {
-    /* Can be
-       
-      - special form
-      - operator
-      - method or property access
-      - a local variable binding
-      
-      */
-    if (common.contains(specialForms, f)) {
-      var v = specialForms[f](args);
-      assert(v);
-      return v;
-    } else {
-      var opfun = common.getOperatorFunction(f);
-      if (opfun) {
-	return compileComplex([opfun].concat(args));
-      } else if (isPropertyAccess(f)) {
-	return compilePropertyAccess(x);
-      } else {
-	return compileBoundFunction(x);
-      }
-      console.log('Failed to compile:');
-      console.log(x);
-      throw new Error('Failed to compile');
-      return null;
-    }
+    return compiled(compileStringForm(x, f, args));
   } else if (typeof f == 'function') {
     if (common.isAsync(f)) {
       assert(!common.isMacro(x));
@@ -475,19 +486,15 @@ function compileBindingEvaluator(sym) {
   };
 }
 
-function compileSub(x) {
+function compile(x) {
   if (common.isArray(x)) {
     if (x.length > 0) {
-      return compileComplex(x);
+      return compiled(compileComplex(x));
     }
   } else if (common.isSymbol(x)) {
-    return compileBindingEvaluator(x);
+    return compiled(compileBindingEvaluator(x));
   }
   return x;
-}
-
-function compile(x) {
-  return compiled(compileSub(x));
 }
 
 function makeAnyFun(builder, args) {

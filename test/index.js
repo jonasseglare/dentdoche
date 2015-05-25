@@ -375,7 +375,7 @@ describe('evaluateSymbol', function() {
       });
   });
 
-  it('Composed of filter, map, reduce', function(done) {
+  it('higher', function(done) {
     var plus = function(a, b) {
       return a + b;
     }
@@ -387,15 +387,19 @@ describe('evaluateSymbol', function() {
       return x*x;
     }
 
+    var myFilter = dd.async(function(a, b, cb) {
+      cb(null, 'So you want to filter ' + b);
+    });
+
     // A function that takes all its arguments,
     // keeps the odd ones, squares them, and sums them
     // up.
     var f = dd.makeFn(
       [],
-      [dd.reduce, plus,
-       [dd.map, square,
-	[dd.filter, odd,
-	 dd.S("arguments")]]]);
+      //[dd.reduce, plus,
+       //[dd.map, square,
+	[myFilter, odd,
+	 dd.S("arguments")]);
 
     /*var f2 = dd.makeAfn(
       [],

@@ -491,6 +491,7 @@ function callConstructorWithArgs(Constructor) {
 }
 
 function mapAsync(fun0) {
+  console.log('------------> mapAsync');
   var fun = convertToAsync(fun0);
   var allArgs = argsToArray(arguments);
   var last = allArgs.length - 1;
@@ -503,6 +504,7 @@ function mapAsync(fun0) {
     var localArgs = new Array(collCount + 1);
     localArgs[collCount] = result.makeSetter(i);
     for (var j = 0; j < collCount; j++) {
+      console.log('Map async for %j', j);
       localArgs[j] = (colls[j])[i];
     }
     fun.apply(null, localArgs);
@@ -542,6 +544,8 @@ function reduceAsync(fun0, coll, cb) {
 } async(reduceAsync);
 
 function filterAsync(fun0, coll, cb) {
+  cb(null, 165); return;
+  console.log('------------> filterAsync');
   var fun = convertToAsync(fun0);
   mapAsync(fun, coll, function(err, mask) {
     if (err) {
