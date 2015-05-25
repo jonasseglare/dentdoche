@@ -548,10 +548,8 @@ function compile(x) {
     console.log('Compile symbol ' + common.getName(x));
     var fun = common.getOperatorFunction(common.getName(x));
     if (fun) {
-      console.log('It has a function');
       return fun;
     } else {
-      console.log('Its binding is resolved later');
       return compiled(compileBindingEvaluator(x));
     }
   }
