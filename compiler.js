@@ -222,6 +222,15 @@ function compileCall(x) {
   };
 }
 
+function evaluateArrayElements(lvars, array, cb) {
+  var n = array.length;
+  var result = new common.ResultArray(n, cb);
+  for (var i = 0; i < n; i++) {
+    var x = array[i];
+    eval(lvars, x, result.makeSetter(i));
+  }
+}
+
 function compileAsyncCall(x) {
   var f = first(x);
   var args = compileArray(rest(x));
@@ -241,6 +250,27 @@ function compileAsyncCall(x) {
     for (var i = 0; i < n; i++) {
       eval(lvars, args[i], result.makeSetter(i));
     }
+  }
+}
+
+function compileBoundFunction(args0) {
+  var allArgs = compileArray(args0);
+  return function(lvars, cb) {
+    evaluateArrayElements(lvars, allArgs, function(err, evaluated) {
+      console.log('Evaluated args:');
+      console.log(evaluated);
+      var f = first(evaluated);
+      var args = rest(evaluated);
+      try {
+	if (common.isAsync(f)) {
+	  f.apply(null, args.concat([cb]));
+	} else {
+	  cb(null, f.apply(null, args));
+	}
+      } catch (e) {
+	cb(e);
+      }
+    });
   }
 }
 
@@ -264,7 +294,11 @@ function compileComplex(x) {
       var opfun = common.getOperatorFunction(f);
       if (opfun) {
 	return compileComplex([opfun].concat(args));
+      } else {
+	return compileBoundFunction(x);
       }
+      console.log('Failed to compile:');
+      console.log(x);
       throw new Error('Failed to compile');
       return null;
     }
@@ -324,9 +358,32 @@ function makeAfn() {
   return makeAnyFun(MakeAfn, common.argsToArray(arguments));
 }
 
+// http://stackoverflow.com/questions/10465423/how-can-i-list-all-the-functions-in-my-node-js-script
+// http://stackoverflow.com/questions/8403108/calling-eval-in-particular-context
+// http://stackoverflow.com/questions/5447771/node-js-global-variables
+/*function evalString(x) {
+  return eval(x);
+}*/
+
+var x = 'rulle';
+
+/*console.log('THIS:');
+console.log(this);
+console.log('What is this? ');
+console.log(typeof this);
+console.log('What is x?');
+console.log(this.x);
+console.log('GLOBAL:');
+console.log(global);
+console.log('module');
+console.log(module);
+console.log('GLOBAL:');*/
+
+
 module.exports.isCompiled = isCompiled;
 module.exports.compile = compile;
 module.exports.compiled = compiled;
 module.exports.eval = eval;
 module.exports.makeAfn = makeAfn;
 module.exports.makeFn = makeFn;
+module.exports.evalString = evalString;

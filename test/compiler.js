@@ -191,7 +191,24 @@ describe('compilers', function() {
       assert(result == 11);
     });
   });
+  
+  it('Compile local function', function() {
+    var k = c.compile(['let0', ['f', ['fn', ['a', 'b'],
+				      ['*', dd.sym('a'), dd.sym('b')]]],
+		       ['f', 3, 4]]);
+    c.eval(im, k, function(err, result) {
+      assert(!err);
+      console.log('Result = %j', result);
+      assert(result == 12);
+    });
+  });
 
   
+  /*it('eval string', function() {
+    var d = 119;
+    var evaled = c.evalString('d');
+    console.log('Evaled:');
+    console.log(evaled);
+  })*/
 });
 
