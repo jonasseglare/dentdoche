@@ -588,7 +588,7 @@ function makeFn(keyword) {
   });
 }
 
-function loopAsync(fun, initialState, cb) {
+function iterateAsync(fun, initialState, cb) {
   var state = initialState;
   var iterate = function() {
     fun(state, function(err, value) {
@@ -608,7 +608,7 @@ function loopAsync(fun, initialState, cb) {
   iterate();
 }
 
-function loopSync(fun, initialState, cb) {
+function iterateSync(fun, initialState, cb) {
   try {
     var state = initialState;
     while (state) {
@@ -625,17 +625,17 @@ function loopSync(fun, initialState, cb) {
   }
 }
 
-function loop(initialState, fun, cb) {
+function iterate(initialState, fun, cb) {
   if (typeof fun == 'function') {
     if (common.isAsync(fun)) {
-      loopAsync(fun, initialState, cb);
+      iterateAsync(fun, initialState, cb);
     } else {
-      loopSync(fun, initialState, cb);
+      iterateSync(fun, initialState, cb);
     }
   } else {
     cb(new Error(util.format('This is not a function: %j', fun)));
   }
-} async(loop);
+} async(iterate);
 
 function and() {
   var args = argsToArray(arguments);
@@ -701,7 +701,7 @@ module.exports.Fn = makeFn("fn");
 module.exports.Afn = makeFn("afn");
 module.exports.if = makeSpecialFormMacro("if");
 module.exports.later = makeSpecialFormMacro("later");
-module.exports.loop = loop;
+module.exports.iterate = iterate;
 module.exports.convertToAsync = convertToAsync;
 module.exports.and = and;
 module.exports.or = or;
