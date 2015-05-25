@@ -9,6 +9,7 @@
   "author": "Jonas Östlund",
   "license": "EPL (Eclipse public licence)",
   "dependencies": {
+    "deep-equal-ident": "^1.0.0",
     "immutable": "^3.7.3"
   }
 }

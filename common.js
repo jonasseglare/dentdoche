@@ -1,5 +1,6 @@
 var assert = require('assert');
 var immutable = require('immutable');
+var deepEqualIdent = require('deep-equal-ident');
 
 var gsCounter = 0;
 function gensym(x) {
