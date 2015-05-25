@@ -82,5 +82,16 @@ describe('compilers', function() {
       assert.equal(result, 5);
     });
   });
+
+  it('async funcall', function() {
+    var norm = dd.async(function(a, b, cb) {
+      cb(null, Math.sqrt(a*a + b*b));
+    });
+    var k = c.compile([norm, 3, 4]);
+    c.eval(im, k, function(err, result) {
+      assert(!err);
+      assert.equal(result, 5);
+    });
+  });
 });
 

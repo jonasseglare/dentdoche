@@ -188,13 +188,39 @@ function compileCall(x) {
       if (err) {
 	cb(err);
       } else {
-	cb(null, f.apply(null, evaluatedArgs));
+	try {
+	  cb(null, f.apply(null, evaluatedArgs));
+	} catch(e) {
+	  cb(e);
+	}
       }
     });
     for (var i = 0; i < n; i++) {
       eval(lvars, args[i], result.makeSetter(i));
     }
   };
+}
+
+function compileAsyncCall(x) {
+  var f = first(x);
+  var args = compileArray(rest(x));
+  var n = args.length;
+  return function(lvars, cb) {
+    var result = new common.ResultArray(n, function(err, evaluatedArgs) {
+      if (err) {
+	cb(err);
+      } else {
+	try {
+	  f.apply(null, evaluatedArgs.concat([cb]));
+	} catch(e) {
+	  cb(e);
+	}
+      }
+    });
+    for (var i = 0; i < n; i++) {
+      eval(lvars, args[i], result.makeSetter(i));
+    }
+  }
 }
 
 function compileComplex(x) {
