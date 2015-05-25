@@ -335,6 +335,8 @@ function compileBoundFunction(args0) {
 	  cb(e);
 	}
       } else {
+	console.log('THE LVARS ARE: ');
+	console.log(lvars);
 	console.log(new Error('Unbound function ' + key));
       }
     });
@@ -450,7 +452,6 @@ function compileStringForm(x, f, args) {
     assert(v);
     return v;
   } else {
-    console.log('RESOLVE: %j', f);
     var opfun = common.getOperatorFunction(f);
     if (opfun) {
       return compileComplex([opfun].concat(args));
