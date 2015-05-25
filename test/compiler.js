@@ -93,5 +93,22 @@ describe('compilers', function() {
       assert.equal(result, 5);
     });
   });
+
+  it('and function', function() {
+    var k = c.compile([dd.array, 
+		       [dd.and, false, true],
+		       [dd.and, true],
+		       [dd.and, true, false],
+		       [dd.and, true, true],
+		       [dd.and, true, true, true],
+		       [dd.and, true, true, false]]);
+    var expected = [null, true, null, true, true, null];
+    c.eval(im, k, function(err, result) {
+      assert(!err);
+      for (var i = 0; i < expected.length; i++) {
+	assert.equal(expected[i], result[i]);
+      }
+    });
+  });
 });
 

@@ -23,7 +23,8 @@ var getOperatorFunction = common.getOperatorFunction;
 var evaluateSymbol = common.evaluateSymbol;
 var isSymbol = common.isSymbol;
 var Symbol = common.Symbol;
-
+var first = common.first;
+var rest = common.rest;
 
 function makeArrayFromArgs() {
   return argsToArray(arguments);
@@ -636,6 +637,14 @@ function loop(initialState, fun, cb) {
   }
 } async(loop);
 
+function and(args) {
+  if (args.length == 0) {
+    return true;
+  } else {
+    return ['if', first(args), and(rest(args))];
+  }
+} macro(and);
+
 
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
@@ -675,3 +684,4 @@ module.exports.if = makeSpecialFormMacro("if");
 module.exports.later = makeSpecialFormMacro("later");
 module.exports.loop = loop;
 module.exports.convertToAsync = convertToAsync;
+module.exports.and = and;
