@@ -432,7 +432,11 @@ function compilePropertyAccess(x) {
 }
 
 function compileStringForm(x, f, args) {
+
+  // Treat strings and symbols the same when
+  // they appear in the beginning of an S-expr.
   f = common.getName(f);
+  
   /* Can be
      
      - special form
