@@ -211,8 +211,8 @@ function evaluateAndBindVars(lvars, symbols, compiled, cb) {
   }
 }
 
-function MakeLet0(args) {
-  var bindings = first(args);
+function MakeLet(args) {
+  var bindings = destructureBindings(first(args));
   var body = rest(args);
   assert(bindings.length % 2 == 0);
   var symbolsAndCompiled = getSymbolsAndCompiled(bindings);
@@ -245,7 +245,7 @@ var specialForms = {
   'do': MakeDo,
   'fn': MakeFn,
   'afn': MakeAfn,
-  'let0': MakeLet0,
+  'let': MakeLet,
   'errAndVal': MakeErrAndVal
 };
 

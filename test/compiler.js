@@ -66,8 +66,8 @@ describe('compilers', function() {
     });
   });
 
-  it('let0', function() {
-    var k = c.compile(['let0', ['a', ['if', false, 0, 34]], dd.sym('a')]);
+  it('let', function() {
+    var k = c.compile(['let', ['a', ['if', false, 0, 34]], dd.sym('a')]);
     c.eval(im, k, function(err, result) {
       assert(!err);
       assert(result == 34);
@@ -193,7 +193,7 @@ describe('compilers', function() {
   });
   
   it('Compile local function', function() {
-    var k = c.compile(['let0', ['f', ['fn', ['a', 'b'],
+    var k = c.compile(['let', ['f', ['fn', ['a', 'b'],
 				      ['*', dd.sym('a'), dd.sym('b')]]],
 		       ['f', 3, 4]]);
     c.eval(im, k, function(err, result) {
@@ -203,7 +203,7 @@ describe('compilers', function() {
   });
   
   it('Compile local function async', function() {
-    var k = c.compile(['let0', ['f', ['afn', ['a', 'b'],
+    var k = c.compile(['let', ['f', ['afn', ['a', 'b'],
 				      ['*', dd.sym('a'), dd.sym('b')]]],
 		       ['f', 3, 4]]);
     c.eval(im, k, function(err, result) {
