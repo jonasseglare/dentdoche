@@ -7,6 +7,15 @@ var dd = require('../index.js');
 
 var im = immutable.Map({});
 
+function Adder(secret) {
+  this.secret = secret;
+}
+
+Adder.prototype.add = function(x) {
+  return this.secret + x;
+}
+
+
 describe('compilers', function() {
   it('Test isCompiled', function() {
     assert(!c.isCompiled(1));
@@ -286,6 +295,21 @@ describe('compilers', function() {
       assert(!err);
       assert(value == 3);
     });
+  });
+
+  it('Arguments passed to a function', function() {
+    var f = c.makeFn([], dd.sym('arguments'));
+    var y = f(3, 4, 5, 6);
+    assert(y[0] == 3);
+    assert(y[1] == 4);
+    assert(y[2] == 5);
+    assert(y[3] == 6);
+  });
+
+  it('Method access', function() {
+    var x = new Adder(100000);
+    var f = c.makeFn('x', ['.add', dd.sym('x'), 119]);
+    assert(f(x) == 100119);
   });
 
 

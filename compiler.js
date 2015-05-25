@@ -388,6 +388,29 @@ function compileFieldAccess(x) {
   }
 }
 
+function compileMethodAccess(x) {
+  var f = first(x).slice(1);
+  var args0 = compileArray(rest(x));
+  return function(lvars, cb) {
+    evaluateArrayElements(lvars, args0, function(err, evaluated) {
+      var obj = first(evaluated);
+      var args = rest(evaluated);
+      console.log('obj: %j', obj);
+      console.log('args: %j', args);
+      var fun = obj[f];
+      try {
+	if (common.isAsync(fun)) {
+	  fun.apply(obj, args.concat([cb]));
+	} else {
+	  cb(null, fun.apply(obj, args));
+	}
+      } catch (e) {
+	cb(e);
+      }
+    });
+  };
+}
+
 function compilePropertyAccess(x) {
   var f = first(x);
   if (f.length >= 2) {
