@@ -15,6 +15,10 @@ Adder.prototype.add = function(x) {
   return this.secret + x;
 }
 
+Adder.prototype.add2 = common.async(function(x, cb) {
+  cb(null, this.secret + x);
+});
+
 
 describe('compilers', function() {
   it('Test isCompiled', function() {
@@ -310,6 +314,11 @@ describe('compilers', function() {
     var x = new Adder(100000);
     var f = c.makeFn('x', ['.add', dd.sym('x'), 119]);
     assert(f(x) == 100119);
+    var f2 = c.makeAfn('x', ['.add2', dd.sym('x'), 119]);
+    f2(new Adder(1000), function(err, value) {
+      assert(!err);
+      assert(value == 1119);
+    });
   });
 
 
