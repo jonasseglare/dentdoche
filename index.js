@@ -220,33 +220,6 @@ function evaluateNow(localVars, form, cb) {
   resolveFunction(localVars, fun, wf);
 }
 
-function evaluateSExpr(localVars, form, cb) {
-  assert(form.length > 0);
-  var f = form[0];
-  if (isSpecial(f)) {
-    evaluateSpecial(localVars, form, cb);
-  } else {
-    evaluateNow(localVars, form, cb);
-  }
-}
-
-function evaluateFormsWithoutMacros(localVars, forms, cb) {
-  if (forms.length == 0) {
-    cb();
-  } else if (forms.length == 1) {
-    evaluateFormWithoutMacros(localVars, forms[0], cb);
-  } else {
-    evaluateFormWithoutMacros(localVars, forms[0], function(err, result) {
-      evaluateFormsWithoutMacros(localVars, forms.slice(1), cb);
-    });
-  }
-}
-
-
-
-
-
-
 
 
 // Marks a function as being a macro.
