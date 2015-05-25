@@ -547,7 +547,6 @@ function reduceAsync(fun0, coll, cb) {
 } async(reduceAsync);
 
 function filterAsync(fun0, coll, cb) {
-  cb(null, 165); return;
   console.log('------------> filterAsync');
   var fun = convertToAsync(fun0);
   mapAsync(fun, coll, function(err, mask) {
