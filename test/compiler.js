@@ -264,5 +264,16 @@ describe('compilers', function() {
       assert(value[0] == 3);
     });
   });
+
+  it('Multiple forms in body', function() {
+    var out = [0, 0];
+    var f = c.makeFn([],
+		     [dd.set, out, 0, 33],
+		     [dd.set, out, 1, 44]);
+    f();
+    console.log(out);
+    assert(out[0] == 33);
+    assert(out[1] == 44);
+  });
 });
 
