@@ -198,7 +198,6 @@ describe('compilers', function() {
 		       ['f', 3, 4]]);
     c.eval(im, k, function(err, result) {
       assert(!err);
-      console.log('Result = %j', result);
       assert(result == 12);
     });
   });

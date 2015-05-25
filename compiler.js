@@ -254,21 +254,23 @@ function compileAsyncCall(x) {
 }
 
 function compileBoundFunction(args0) {
-  var allArgs = compileArray(args0);
+  var key = common.getName(first(args0))
+  var args = compileArray(rest(args0));
   return function(lvars, cb) {
-    evaluateArrayElements(lvars, allArgs, function(err, evaluated) {
-      console.log('Evaluated args:');
-      console.log(evaluated);
-      var f = first(evaluated);
-      var args = rest(evaluated);
-      try {
-	if (common.isAsync(f)) {
-	  f.apply(null, args.concat([cb]));
-	} else {
-	  cb(null, f.apply(null, args));
+    evaluateArrayElements(lvars, args, function(err, evaluated) {
+      var f = common.getLocalVar(lvars, key);
+      if (typeof f == 'function') {
+	try {
+	  if (common.isAsync(f)) {
+	    f.apply(null, evaluated.concat([cb]));
+	  } else {
+	    cb(null, f.apply(null, evaluated));
+	  }
+	} catch (e) {
+	  cb(e);
 	}
-      } catch (e) {
-	cb(e);
+      } else {
+	console.log(new Error('Unbound function ' + key));
       }
     });
   }
