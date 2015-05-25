@@ -504,7 +504,6 @@ describe('evaluateSymbol', function() {
 						   ['-', dd.sym('m'), 1]]]]]]]],
 		  [dd.sym('inner'), dd.sym('n')]]);
     var n = 10;
-    console.log('EVALUATE IT NOW!!!!!!');
     fun(n, function(err, sum) {
       assert(!err);
       assert.equal((n*(n + 1))/2, sum);
