@@ -238,13 +238,21 @@ describe('compilers', function() {
 
   it('More destructuring', function() {
     var f = c.makeFn([],
-		     ['let', [[[['a'], 'b'], 'c'],
+		     [dd.let, [[[['a'], 'b'], 'c'],
 			      [dd.quote, [[[3], 4], 5]]],
 		      ['*',
 		       dd.sym('a'),
 		       dd.sym('b'),
 		       dd.sym('c')]]);
     assert(f() == 3*4*5);
+  });
+
+  it('Throwing errors', function() {
+    var k = c.compile([dd.throw, 3]);
+    c.eval(im, k, function(err, value) {
+      assert(err == 3);
+      assert(!value);
+    });
   });
 });
 

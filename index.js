@@ -653,6 +653,10 @@ function or() {
 } macro(or);
 
 
+function throwFun(x, cb) {
+  cb(x);
+} async(throwFun)
+
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.evaluateForm = evaluateForm;
@@ -694,3 +698,4 @@ module.exports.convertToAsync = convertToAsync;
 module.exports.and = and;
 module.exports.or = or;
 module.exports.not = not;
+module.exports.throw = throwFun;
