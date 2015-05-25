@@ -407,24 +407,6 @@ function evaluateForm(localVars, form, cb) {
 }
 
 
-function functionalMap() {
-  var args = argsToArray(arguments);
-  var f = args[0];
-  var colls = args.slice(1);
-  var n = colls[0].length;
-  for (var i = 1; i < colls.length; i++) {
-    assert(n == colls[i].length);
-  }
-  var localArgs = new Array(colls.length);
-  var result = new Array(n);
-  for (var i = 0; i < n; i++) {
-    for (var j = 0; j < colls.length; j++) {
-      localArgs[j] = (colls[j])[i];
-    }
-    result[i] = f.apply(null, localArgs);
-  }
-  return result;
-}
 
 function applySync(fun, args) {
   assert(!common.isAsync(fun));
@@ -672,7 +654,6 @@ module.exports.isMacro = common.isMacro;
 module.exports.argsToArray = argsToArray;
 module.exports.set = jsSet;
 module.exports.get = jsGet;
-module.exports.map = functionalMap;
 module.exports.applySync = applySync;
 module.exports.applyAsync = applyAsync;
 module.exports.apply = applyAsync;
