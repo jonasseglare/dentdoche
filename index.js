@@ -575,9 +575,7 @@ function filterAsync(fun0, coll, cb) {
 function makeSpecialFormMacro(keyword) {
   return macro(function() {
     var args = argsToArray(arguments);
-    console.log('Args to quote: ');
-    echo(args);
-    return echo([keyword].concat(args));
+    return [keyword].concat(args);
   });
 }
 

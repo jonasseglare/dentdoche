@@ -138,14 +138,12 @@ describe('compilers', function() {
 
   it('no macro expansion beyond quote', function() {
     console.log('Macro expansion beyond...');
-    var k = c.compile([dd.quote, 9]); //[dd.and, false, true]]);
-    console.log('k = %j', k);
+    var k = c.compile([dd.quote, [dd.and, false, true]]);
     c.eval(im, k, function(err, result) {
       assert(!err);
-      console.log('result = %j', result);
-      // assert(common.isMacro(result[0]));
-      // assert(!result[1]);
-      // assert(result[2]);
+      assert(common.isMacro(result[0]));
+      assert(!result[1]);
+      assert(result[2]);
     });
   });
 });

@@ -56,7 +56,7 @@ function MakeIf(args) {
 
 function MakeQuote(args) {
   assert(args.length == 1);
-  return echo(args[0]);
+  return args[0];
 }
 
 function evaluateInSequence(lvars, compiledForms, result, cb) {
