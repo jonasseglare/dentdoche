@@ -8,6 +8,44 @@ Some characteristics:
   * **No promises**: Dentdoche functions compile to either regular ones that deliver their result through return values or callback-style ones, that call a callback with the result.
 
 ## Example usage
+Consider this Javascript function that concatenates files:
+```js
+var fs = require('fs');
+
+function filecat(srcA, srcB, dst, cb) {
+  fs.readFile(srcA, 'utf8', function(err, aData) {
+    if (err) {
+      cb(err);
+    } else {
+      fs.readFile(srcB, 'utf8', function(err, bData) {
+	if (err) {
+	  cb(err);
+	} else {
+	  fs.writeFile(dst, srcA + srcB, cb);
+	}
+      });
+    }
+  });
+}
+```
+In Dentdoche, you would write
+```js
+var fs = require('fs');
+var dd = require('dentdoche');
+
+dd.async(fs.readFile);
+dd.async(fs.writeFile);
+
+var filecat = dd.makeAfn(['srcA', 'srcB', 'dst'],
+			 [fs.writeFile,
+			  dd.sym('dst'),
+			  ['+',
+			   [fs.readFile,
+			    dd.sym('srcA'), 'utf8'],
+			   [fs.readFile,
+			    dd.sym('srcB'), 'utf8']]]);
+```
+which may not be that much shorter. The structure, however, is a lot simpler. All the callbacks and error forwarding code is gone. Also, generalizing the function for more files is simple.
 
 ## Common pitfalls
 
