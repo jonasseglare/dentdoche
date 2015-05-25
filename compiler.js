@@ -487,7 +487,8 @@ function compileComplex(x) {
     return compiled(compileStringForm(x, f, args));
   } else if (typeof f == 'function') {
      if (common.isMacro(f)) {
-      return compile(f.apply(null, args));
+       assert(!common.isAsync(f));
+       return compile(f.apply(null, args));
     } else {
       return compileCall(x);
     }
