@@ -396,10 +396,10 @@ describe('evaluateSymbol', function() {
     // up.
     var f = dd.makeFn(
       [],
-      //[dd.reduce, plus,
-       //[dd.map, square,
-      [dd.filter, odd,
-       dd.S("arguments")]); //]);
+      [dd.reduce, plus,
+       [dd.map, square,
+	[dd.filter, odd,
+	 dd.S("arguments")]]]); //]);
 
     /*var f2 = dd.makeAfn(
       [],

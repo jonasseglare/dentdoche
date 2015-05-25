@@ -515,6 +515,9 @@ function mapAsync(fun0) {
 } async(mapAsync);
 
 function reduceAsync(fun0, coll, cb) {
+  console.log('INPUT TO REDUCE: ');
+  console.log(typeof fun0);
+  console.log(coll);
   if (coll.length == undefined) {
     cb(null, undefined);
   } else if (coll.length == 1) {
@@ -531,15 +534,23 @@ function reduceAsync(fun0, coll, cb) {
       } else {
 	counter++;
 	if (counter == 2) {
+	  console.log('Got %j and %j for collection', a, b);
+	  console.log(coll);
 	  fun(a, b, cb);
 	}
       }
     }
-    reduceAsync(fun, coll.slice(0, middle), function(err, value) {
+    var left = coll.slice(0, middle);
+    var right = coll.slice(middle);
+    reduceAsync(fun, left, function(err, value) {
+      console.log('Received value for slice');
+      console.log(left);
       a = value;
       gotValue(err);
     });
-    reduceAsync(fun, coll.slice(middle), function(err, value) {
+    reduceAsync(fun, right, function(err, value) {
+      console.log('Received value for slice');
+      console.log(right);
       b = value;
       gotValue(err);
     });
