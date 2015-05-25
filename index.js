@@ -32,36 +32,6 @@ var toSymbol = common.toSymbol;
 var tagged = common.tagged;
 
 
-
-function evaluateLet(localVars, form, cb) {
-  assert(isArray(form));
-  assert(form.length >= 2);
-  var bindings = form[1];
-  var body = form.slice(2);
-  buildLocalVars(
-    localVars,
-    bindings, function(err, nextLocalVars) {
-    if (err) {
-      cb(err);
-    } else {
-      evaluateFormsWithoutMacros(nextLocalVars, body, cb);
-    }
-  });
-}
-
-function evaluateAfn(localVars, form, cb) {
-  if (form.length != 3) {
-    cb(new Error('Bad length of form of Afn'));
-  } else {
-    args = form[1];
-    body = form[2];
-    cb(null, afn(args, body, localVars));
-  }
-}
-
-
-
-
 // Marks a function as being a macro.
 function macro(x) {
   x.isMacro = true;
