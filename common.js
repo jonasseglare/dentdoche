@@ -259,6 +259,19 @@ function makeImmutableMap(x) {
   return makeImmutableMap({});
 }
 
+function withLVars(x) {
+  assert(typeof x == 'function');
+  x.withLVars = true;
+  return x;
+}
+
+function isWithLVars(x) {
+  if (typeof x == 'function') {
+    return x.withLVars;
+  }
+  return false;
+}
+
 
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
@@ -287,3 +300,4 @@ module.exports.jsSet = jsSet;
 module.exports.toSymbol = toSymbol;
 module.exports.tagged = tagged;
 module.exports.makeImmutableMap = makeImmutableMap;
+module.exports.isWithLVars = isWithLVars;
