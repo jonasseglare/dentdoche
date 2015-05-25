@@ -266,17 +266,6 @@ function evaluateFormWithoutMacros(localVars, form, cb) {
 
 
 
-function initLVars(x) {
-  if (x == undefined) {
-    return immutable.Map({});
-  } else {
-    return x;
-  }
-}
-
-
-
-
 
 // Marks a function as being a macro.
 function macro(x) {
