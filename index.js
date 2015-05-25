@@ -506,6 +506,11 @@ function mapAsync(fun0) {
 } async(mapAsync);
 
 function reduceAsync(fun0, coll, cb) {
+  console.log('fun0 = ');
+  console.log(fun0);
+  console.log('coll = ');
+  console.log(coll);
+  
   if (coll.length == undefined) {
     cb(null, undefined);
   } else if (coll.length == 1) {

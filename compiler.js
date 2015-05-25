@@ -301,15 +301,20 @@ function compileAsyncCall(x) {
   var args = compileArray(rest(x));
   var n = args.length;
   return function(lvars, cb) {
+    console.log('Evaluate an async call');
+    console.log('Args:');
+    console.log(args);
     var result = new common.ResultArray(n, function(err, evaluatedArgs) {
+      console.log(' evaled args:');
+      console.log(evaluatedArgs);
       if (err) {
 	cb(err);
       } else {
-	try {
+	//try {
 	  var x = f.apply(null, evaluatedArgs.concat([cb]));
-	} catch(e) {
-	  cb(e);
-	}
+	//} catch(e) {
+	  //cb(e);
+	//}
       }
     });
     for (var i = 0; i < n; i++) {
@@ -434,7 +439,7 @@ function compilePropertyAccess(x) {
 }
 
 function compileStringForm(x, f, args) {
-
+  console.log('Compile string form');
   // Treat strings and symbols the same when
   // they appear in the beginning of an S-expr.
   f = common.getName(f);
@@ -448,10 +453,12 @@ function compileStringForm(x, f, args) {
      
   */
   if (common.contains(specialForms, f)) {
+    console.log('Special form');
     var v = specialForms[f](args);
     assert(v);
     return v;
   } else {
+    console.log(' other form ' + f);
     var opfun = common.getOperatorFunction(f);
     if (opfun) {
       return compileComplex([opfun].concat(args));
@@ -525,6 +532,7 @@ function compileBindingEvaluator(sym) {
       if (fun) {
 	return fun;
       } else {
+	console.log('Failed to resolve binding to ' + key);
 	cb(new Error('No such local binding to ' + key));
       }
     }
@@ -537,7 +545,15 @@ function compile(x) {
       return compiled(compileComplex(x));
     }
   } else if (common.isSymbol(x)) {
-    return compiled(compileBindingEvaluator(x));
+    console.log('Compile symbol ' + common.getName(x));
+    var fun = common.getOperatorFunction(common.getName(x));
+    if (fun) {
+      console.log('It has a function');
+      return fun;
+    } else {
+      console.log('Its binding is resolved later');
+      return compiled(compileBindingEvaluator(x));
+    }
   }
   return x;
 }
@@ -563,7 +579,10 @@ function makeAfn() {
 
 
 function evaluateForm(lvars, frm, cb) {
-  eval(common.makeImmutableMap(lvars), compile(frm), cb);
+  console.log('Compile form');
+  var c = compile(frm);
+  console.log('Now evaluate it');
+  eval(common.makeImmutableMap(lvars), c, cb);
 }
 
 // http://stackoverflow.com/questions/10465423/how-can-i-list-all-the-functions-in-my-node-js-script

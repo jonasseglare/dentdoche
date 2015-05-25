@@ -345,9 +345,9 @@ describe('evaluateSymbol', function() {
     });
   });
 
-  it('Should reduce asynchronously', function(done) {
+  it('shouldreduce', function(done) {
     dd.evaluateForm(null, [dd.reduce,
-			   dd.S('+'),
+			   dd.sym('+'),
 			   ["quote",
 			    [1, 2, 3, 4]]],
 		    function(err, value) {
