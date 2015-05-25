@@ -286,14 +286,6 @@ function makeAfnSub(args, body, lvars) {
   }
 }
 
-// Define an asynchronous function
-function afn(args, body, lvars) {
-  var f = makeAfnSub(args, body, lvars);
-  return async(function() {
-    var allArgs = argsToArray(arguments);
-    return f(allArgs);
-  });
-} macro(afn);
 
 
 
