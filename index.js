@@ -689,8 +689,8 @@ module.exports.do = makeSpecialFormMacro("do");
 
 // Use for local functions, instead of fn and afn:
 // Those function will not capture local variables.
-module.exports.Fn = makeFn("fn");
-module.exports.Afn = makeFn("afn");
+module.exports.fn = makeFn("fn");
+module.exports.afn = makeFn("afn");
 module.exports.if = makeSpecialFormMacro("if");
 module.exports.later = makeSpecialFormMacro("later");
 module.exports.iterate = iterate;

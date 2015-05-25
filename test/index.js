@@ -430,7 +430,7 @@ describe('evaluateSymbol', function() {
       [dd.let, ["basenames", ["quote",
 			     ["a.txt", "b.txt", "c.txt"]],
 	       "fullnames", [dd.map, addTmp, dd.S("basenames")],
-	       "writeRulle", [dd.Afn, ["fname"],
+	       "writeRulle", [dd.afn, ["fname"],
 			      [dd.do,
 			       [console.log, ["+", "For file ", dd.S("fname")]],
 			       [fs.writeFile, dd.S("fname"), "Rulle!!!"],
@@ -441,7 +441,7 @@ describe('evaluateSymbol', function() {
 			     // that doesn't capture local context,
 			     // we can use dd.makeAfn. Otherwise, we should
 			     // use the dd.makeAfn macro.
-			    [dd.Afn, ["fname"], // Forgetting to use afn here instead of fn
+			    [dd.afn, ["fname"], // Forgetting to use afn here instead of fn
 			                        // may cause errors: The return value will
 			                        // both be used, and the async callback will
 			                        // pass it on.
@@ -460,7 +460,7 @@ describe('evaluateSymbol', function() {
   it('Try something here', function(done) {
     dd.evaluateForm(
       null,
-      ['let', ['fak', [dd.Afn, ['n'],
+      ['let', ['fak', [dd.afn, ['n'],
 		       [dd.if, ['==', 0, dd.S('n')],
 			1,
 			['*', dd.S('n'),
@@ -552,7 +552,7 @@ describe('evaluateSymbol', function() {
       ['n'],
       [dd.iterate,
        [dd.array, 1, dd.sym('n')],
-       [dd.Afn, ['state'],
+       [dd.afn, ['state'],
 	[dd.let, ['product', [dd.get, dd.sym('state'), 0],
 		  'x',       [dd.get, dd.sym('state'), 1]],
 	 [console.log, ['+', 'GOT THIS: ', dd.sym('product'), ' ', dd.sym('x')]],
@@ -587,7 +587,7 @@ describe('evaluateSymbol', function() {
     var makeSomeFiles = dd.makeAfn(
       [],
       [dd.map,
-       [dd.Afn, ['filename'],
+       [dd.afn, ['filename'],
 	[fs.writeFile,
 	 [appendBasePath,
 	  dd.sym('filename')],
@@ -600,7 +600,7 @@ describe('evaluateSymbol', function() {
        [dd.reduce,
 	dd.sym('+'),                    
 	[dd.map,                 // <-- Create a new array with the function applied to all
-	 [dd.Afn, ["filename"],  // <-- Construct an anonymous, asynchronous, function.
+	 [dd.afn, ["filename"],  // <-- Construct an anonymous, asynchronous, function.
 	  //     Capital A in Afn instead of afn means that
 	  //     local variables will be captured (in this case file-fmt).
 	  [fs.readFile,          // <-- Call to a function marked as *asynchronous*
@@ -653,7 +653,7 @@ describe('evaluateSymbol', function() {
     var x = [0, 0, 0, 0];
     var f = dd.makeFn(
       ['Y'],
-      [dd.let, ['f', [dd.Fn, ['X'],
+      [dd.let, ['f', [dd.fn, ['X'],
 		     [dd.set, dd.sym('X'), 0, 119],
 		     [dd.set, dd.sym('X'), 2,
 		      ['+', [dd.get, dd.sym('X'), 0], 1]]]],
@@ -667,7 +667,7 @@ describe('evaluateSymbol', function() {
     var x = [0, 0, 0, 0];
     var f = dd.makeAfn(
       ['Y'],
-      [dd.let, ['f', [dd.Afn, ['X'],
+      [dd.let, ['f', [dd.afn, ['X'],
 		     [dd.set, dd.sym('X'), 0, 119],
 		     [dd.set, dd.sym('X'), 2,
 		      ['+', [dd.get, dd.sym('X'), 0], 1]]]],
@@ -695,7 +695,7 @@ describe('evaluateSymbol', function() {
       [dd.let, ['n', ['.-length', dd.sym('dst')]],
        [dd.iterate,
 	[dd.quote, [0, 0, 1]],
-	[dd.Fn,
+	[dd.fn,
 	 ['state'],
 	 [dd.let, ['i', [dd.get, dd.sym('state'), 0],
 		   'a', [dd.get, dd.sym('state'), 1],
