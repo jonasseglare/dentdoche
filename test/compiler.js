@@ -73,5 +73,14 @@ describe('compilers', function() {
       assert(result == 34);
     });
   });
+
+  it('funcall syn', function() {
+    var norm = function(a, b) {return Math.sqrt(a*a + b*b);};
+    var k = c.compile([norm, 3, 4]);
+    c.eval(im, k, function(err, result) {
+      assert(!err);
+      assert.equal(result, 5);
+    });
+  });
 });
 

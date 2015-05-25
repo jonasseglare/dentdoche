@@ -179,6 +179,24 @@ var specialForms = {
 };
 
 
+function compileCall(x) {
+  var f = first(x);
+  var args = compileArray(rest(x));
+  var n = args.length;
+  return function(lvars, cb) {
+    var result = new common.ResultArray(n, function(err, evaluatedArgs) {
+      if (err) {
+	cb(err);
+      } else {
+	cb(null, f.apply(null, evaluatedArgs));
+      }
+    });
+    for (var i = 0; i < n; i++) {
+      eval(lvars, args[i], result.makeSetter(i));
+    }
+  };
+}
+
 function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
@@ -204,9 +222,9 @@ function compileComplex(x) {
     }
   } else if (typeof f == 'function') {
     if (common.isAsync(f)) {
-      assert(!isMacro(x));
+      assert(!common.isMacro(x));
       return compileAsyncCall(x);
-    } else if (isMacro(f)) {
+    } else if (common.isMacro(f)) {
       return compile(f(args));
     } else {
       return compileCall(x);
