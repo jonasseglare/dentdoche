@@ -272,7 +272,11 @@ function isWithLVars(x) {
   return false;
 }
 
+function makeArrayFromArgs() {
+  return argsToArray(arguments);
+}
 
+module.exports.array = makeArrayFromArgs;
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
 module.exports.isAsync = isAsync;

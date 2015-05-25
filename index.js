@@ -31,16 +31,6 @@ var sym = common.sym;
 var toSymbol = common.toSymbol;
 var tagged = common.tagged;
 
-function makeArrayFromArgs() {
-  return argsToArray(arguments);
-}
-
-
-
-
-
-
-
 
 function buildLocalVars(localVars, bindings, cb) {
   
@@ -648,7 +638,7 @@ module.exports.S = sym;
 module.exports.sym = sym;
 module.exports.makeFn = compiler.makeFn; //publicFn;
 module.exports.makeAfn = compiler.makeAfn;
-module.exports.array = makeArrayFromArgs;
+module.exports.array = common.array;
 module.exports.macro = macro;
 module.exports.isMacro = common.isMacro;
 module.exports.argsToArray = argsToArray;
