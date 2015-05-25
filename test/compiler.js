@@ -137,7 +137,6 @@ describe('compilers', function() {
   });
 
   it('no macro expansion beyond quote', function() {
-    console.log('Macro expansion beyond...');
     var k = c.compile([dd.quote, [dd.and, false, true]]);
     c.eval(im, k, function(err, result) {
       assert(!err);
