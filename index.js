@@ -295,42 +295,6 @@ function afn(args, body, lvars) {
   });
 } macro(afn);
 
-// Create a synchronous function
-function fn(args, body, lvars) {
-  var f = makeAfnSub(args, body, lvars);
-  return function() {
-    var allArgs = argsToArray(arguments);
-    var assigned = false;
-    var result = undefined;
-    var cb = function(err, value) {
-      assigned = true;
-      if (err) {
-	throw err;
-      } else {
-	result = value;
-      }
-    }
-    f(allArgs.concat([cb]));
-    if (!assigned) {
-      var message = util.format(
-	'RESULT NOT DELIVERED IN FUNCTION DEFINED FROM ARGS %j AND BODY %j',
-	args, body
-      );
-      console.log(message);
-      console.log('You should probably use afn instead of fn.');
-      throw new Error(message);
-    }
-    assert(
-      assigned,
-      'Result was not assigned. Most likely, your result is delivered'
-      + 'asynchronously, but this function is synchronous.'
-    );
-    return result;
-  }
-} macro(fn);
-
-
-
 
 
 // Marks a function as being a macro.
