@@ -749,5 +749,8 @@ describe('evaluateSymbol', function() {
        ['=', dd.sym('x'), 3], 'three',
        ['+', 'unknown digit: ', dd.sym('x')]]);
     assert.equal(digitToWord(1), 'one');
+    assert.equal(digitToWord(2), 'two');
+    assert.equal(digitToWord(3), 'three');
+    assert.equal(digitToWord(0), 'unknown digit: 0');    
   });
 });

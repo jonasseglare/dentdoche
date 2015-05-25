@@ -302,7 +302,7 @@ function cond() {
   } else if (args.length == 1) {
     return args[0];
   } else {
-    return ['if', args[0], args[1], cond(args.slice(2))];
+    return ['if', args[0], args[1], cond.apply(null, args.slice(2))];
   }
 } macro(cond);
 
