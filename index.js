@@ -144,16 +144,6 @@ function plus(a, b) {
 }
 
 
-function evaluateArgs(localVars, args, cb) {
-  var n = args.length;
-  var result = new common.ResultArray(n, cb);
-  for (var i = 0; i < n; i++) {
-    evaluateFormWithoutMacros(
-      localVars, args[i],
-      result.makeSetter(i));
-  }
-}
-
 
 
 
