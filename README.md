@@ -57,6 +57,9 @@ var filecatMany = dd.makeAfn([],
 				 [fs.readFile, dd.sym('fname'), 'utf8']],
 				[dd.butLast, dd.sym('arguments')]]]]);
 ```
+## Documentation
+Not yet written. Look at the test cases in the ```test/``` subdirectory for examples of how to use it.
+
 ## Common pitfalls
 
   * Forgetting comma between array elements.
