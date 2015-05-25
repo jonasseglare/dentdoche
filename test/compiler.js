@@ -125,7 +125,7 @@ describe('compilers', function() {
     });
   });
 
-  it('not macro', function() {
+  it('not function', function() {
     var k = c.compile([dd.array,
 		       [dd.not, false],
 		       [dd.not, true]]);
@@ -143,6 +143,24 @@ describe('compilers', function() {
       assert(common.isMacro(result[0]));
       assert(!result[1]);
       assert(result[2]);
+    });
+  });
+
+  it('should provoke an error', function() {
+    var k = c.compile([assert, false]);
+    c.eval(im, k, function(err, value) {
+      assert(err);
+      assert(!value);
+    });
+  });
+
+  it('should provoke an error2', function() {
+    var f = function(x) {if (!x) {throw new Error('mjao');}}
+    
+    var k = c.compile([f, false]);
+    c.eval(im, k, function(err, value) {
+      assert(err);
+      assert(!value);
     });
   });
 });
