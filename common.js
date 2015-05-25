@@ -80,6 +80,9 @@ function getName(x) {
 
 
 function bindFunctionArgs(lvars, symbols, values) {
+  console.log('Symbols and values');
+  console.log(symbols);
+  console.log(values);
   assert(symbols.length <= values.length);
   lvars = lvars.set('arguments', values);
   for (var i = 0; i < symbols.length; i++) {

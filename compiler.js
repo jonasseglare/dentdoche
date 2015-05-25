@@ -63,10 +63,13 @@ function MakeQuote(args) {
 }
 
 function evaluateInSequence(lvars, compiledForms, result, cb) {
+  assert(typeof cb == 'function');
   if (compiledForms.length == 0) {
     cb(null, result);
   } else {
     var a = first(compiledForms);
+    console.log('a is ');
+    console.log(a);
     eval(lvars, a, function(err, x) {
       evaluateInSequence(lvars, rest(compiledForms), x, cb);
     });
@@ -112,10 +115,17 @@ function MakeAfn(args) {
   return function(lvars0, cb) {
     //cb(null, 124);
     cb(null, common.async(function() {
+      
       var allArgs = common.argsToArray(arguments);
       var last = allArgs.length - 1;
-      var evaluatedArgs = allArgs.slice(last);
-      var resultCb = evaluatedArgs[last];
+      var evaluatedArgs = allArgs.slice(0, last);
+      var resultCb = allArgs[last];
+      assert(typeof resultCb == 'function');
+      console.log('all args');
+      console.log(allArgs);
+      console.log('the compile afn function was passed');
+      console.log(argList);
+      console.log(evaluatedArgs);
       lvars = common.bindFunctionArgs(lvars0, argList, evaluatedArgs);
       var assigned = false;
       var result = undefined;

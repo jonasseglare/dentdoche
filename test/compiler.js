@@ -178,8 +178,18 @@ describe('compilers', function() {
 		     ['+', dd.sym('a'),
 				  ['*', dd.sym('b'), dd.sym('b')]]);
     assert(typeof f == 'function');
-    //assert(f(2, 3) == 2 + 3*3);
-    console.log('f(2, 3) = ', f(2, 3));
+    assert(f(2, 3) == 2 + 3*3);
+  });
+
+  it('Async function', function() {
+    var f = c.makeAfn(['a', 'b'],
+		      ['+', dd.sym('a'),
+		       ['*', dd.sym('b'), dd.sym('b')]]);
+    assert(typeof f == 'function');
+    f(2, 3, function(err, result) {
+      assert(!err);
+      assert(result == 11);
+    });
   });
 
   
