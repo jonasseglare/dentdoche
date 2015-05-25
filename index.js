@@ -14,7 +14,6 @@
 
 	       that is rewritten into something with iterate.
 	       
-     * Eval-function (mark it as withLVars so that it can access local context).
      * More thorough validation of async method calls, as well as sync ones.
 
 
