@@ -207,20 +207,6 @@ function resolveFunction(localVars, fun, wf) {
   }
 }
 
-function evaluateNow(localVars, form, cb) {
-  var wf = function(err, f) {
-    if (err) {
-      cb(err);
-    } else {
-      evaluateNowSub(f, localVars, form, cb);
-    }
-  }
-  
-  var fun = form[0];
-  resolveFunction(localVars, fun, wf);
-}
-
-
 
 // Marks a function as being a macro.
 function macro(x) {
@@ -464,7 +450,6 @@ function throwFun(x, cb) {
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.evaluateForm = compiler.evaluateForm;
-module.exports.evaluateNow = evaluateNow;
 module.exports.async = async;
 module.exports.isAsync = common.isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
