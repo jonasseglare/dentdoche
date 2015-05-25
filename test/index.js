@@ -282,7 +282,6 @@ describe('evaluateSymbol', function() {
        [dd.array, dd.S("x"), [dd.get, dd.S("x"), "RULLE"]]],
       function(err, value) {
 	assert(!err);
-	console.log("value = %j", value);
 	assert.equal(value.length, 2);
 	assert.equal(value[1], 119);
       }
@@ -304,7 +303,6 @@ describe('evaluateSymbol', function() {
   it('Should get all arguments', function() {
     var f = dd.makeFn([], dd.S("arguments"));
     var result = f(1, 2, 3);
-    console.log('result = %j', result);
     assert(result.length == 3);
     assert(result[1] == 2);
   });
@@ -507,8 +505,6 @@ describe('evaluateSymbol', function() {
 		  [dd.sym('inner'), dd.sym('n')]]);
     var n = 10;
     fun(n, function(err, sum) {
-      console.log('   err = ' + err);
-      console.log('   value = ' + sum);
       assert(!err);
       assert.equal((n*(n + 1))/2, sum);
       done();
@@ -714,7 +710,6 @@ describe('evaluateSymbol', function() {
 	      dd.sym('b'), ['+', dd.sym('a'), dd.sym('b')]]]]]]]]]);
     var dst = new Array(8);
     fib(dst);
-    console.log('dst = %j', dst);
     assert(dst[7] == 21);
   });
 });
