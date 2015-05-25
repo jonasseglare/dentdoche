@@ -330,6 +330,75 @@ function compileBoundFunction(args0) {
   }
 }
 
+function isPropertyAccess(f) {
+  if (typeof f == 'string') {
+    if (f.length > 0) {
+      if (f[0] == '.') {
+	return true;
+      }
+    }
+  }
+  return false;
+}
+
+function compileGetField(field, obj0) {
+  return function(lvars, cb) {
+    eval(lvars, obj0, function(err, obj) {
+      if (err) {
+	cb(err);
+      } else {
+	try {
+	  cb(null, obj[field]);
+	} catch (e) {
+	  cb(e);
+	}
+      }
+    });
+  };
+}
+
+function compileSetField(field, args0) {
+  return function(lvars, cb) {
+    evaluateArrayElements(lvars, args0, function(err, args) {
+      if (err) {
+	cb(err);
+      } else {
+	try {
+	  var dst = args[0];
+	  var newValue = args[1];
+	  dst[field] = newValue;
+	  cb();
+	} catch(e) {
+	  cb(e);
+	}
+      }
+    });
+  }
+}
+
+function compileFieldAccess(x) {
+  var f = first(x);
+  var args = compileArray(rest(x));
+  var field = f.slice(2);
+  assert(args.length == 1 || args.length == 2);
+  if (args.length == 1) {
+    return compileGetField(field, args[0]);
+  } else {
+    return compileSetField(field, args);
+  }
+}
+
+function compilePropertyAccess(x) {
+  var f = first(x);
+  if (f.length >= 2) {
+    if (f[1] == '-') {
+      return compileFieldAccess(x);
+    } else {
+      return compileMethodAccess(x);
+    }
+  }
+}
+
 function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
@@ -350,6 +419,8 @@ function compileComplex(x) {
       var opfun = common.getOperatorFunction(f);
       if (opfun) {
 	return compileComplex([opfun].concat(args));
+      } else if (isPropertyAccess(f)) {
+	return compilePropertyAccess(x);
       } else {
 	return compileBoundFunction(x);
       }
