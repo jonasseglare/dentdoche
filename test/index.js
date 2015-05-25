@@ -397,7 +397,7 @@ describe('evaluateSymbol', function() {
 	[dd.filter, odd,
 	 dd.S("arguments")]]]);
 
-    var f2 = dd.makeAfn(
+    /*var f2 = dd.makeAfn(
       [],
       ["do",
        [console.log, ["+", "You provided ",
@@ -406,15 +406,15 @@ describe('evaluateSymbol', function() {
        [dd.reduce, plus,
 	[dd.map, square,
 	 [dd.filter, odd,
-	  dd.S("arguments")]]]]);
+	  dd.S("arguments")]]]]);*/
     
     var result = f(1, 2, 3, 4, 5, 6, 7, 8, 9);
     assert.equal(result, 165);
-    f2(1, 2, 3, 4, 5, 6, 7, 8, 9, function(err, value) {
+    /*f2(1, 2, 3, 4, 5, 6, 7, 8, 9, function(err, value) {
       assert(!err);
       assert(value == 165);
       done();
-    });
+    });*/
   });
 
   it('Try files and async stuff', function(done) {
