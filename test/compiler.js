@@ -279,5 +279,15 @@ describe('compilers', function() {
     assert(out[0] == 33);
     assert(out[1] == 44);
   });
+
+  it('field access', function() {
+    var k = c.compile(['.-length', [dd.quote, [1, 2, 3]]]);
+    c.eval(im, k, function(err, value) {
+      assert(!err);
+      assert(value == 3);
+    });
+  });
+
+
 });
 

@@ -692,7 +692,7 @@ describe('evaluateSymbol', function() {
   it('fibonacci', function() {
     var fib = dd.makeFn(
       ['dst'],
-      [dd.let, ['n', ['.-length', dd.sym('dst')]],
+      [dd.let, ['n', 8], //['.-length', dd.sym('dst')]],
        [dd.iterate,
 	[dd.quote, [0, 0, 1]],
 	[dd.fn,
