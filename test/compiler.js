@@ -212,6 +212,16 @@ describe('compilers', function() {
     });
   });
 
+  it('Destructure', function() {
+    var a = ['a', 1];
+    var b = c.destructureBindings(a);
+    assert(a[0] == b[0]);
+    assert(a[1] == b[1]);
+    var x = c.destructureBindings([['a', 'b'], [dd.array, 3, 4]]);
+    assert(x[2] == 'a');
+    assert(x[4] == 'b');
+  });
+
   
   /*it('eval string', function() {
     var d = 119;

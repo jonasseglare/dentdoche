@@ -210,6 +210,14 @@ function evaluateSymbol(localVars, symbol) {
   }
 }
 
+function jsGet(obj, key) {
+  return obj[key];
+}
+
+function jsSet(obj, key, newValue) {
+  obj[key] = newValue;
+}
+
 
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
@@ -232,3 +240,5 @@ module.exports.isSymbol = isSymbol;
 module.exports.Symbol = Symbol;
 module.exports.getLocalVar = getLocalVar;
 module.exports.gensym = gensym;
+module.exports.jsGet = jsGet;
+module.exports.jsSet = jsSet;

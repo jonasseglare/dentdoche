@@ -20,11 +20,11 @@ function mergeSplits(splits) {
 
 function destructureBinding(x) {
   assert(x.length == 2);
-  if (isArray(x[0])) {
+  if (common.isArray(x[0])) {
     var vars = x[0];
     var n = vars.length;
     var dst = new Array(2, 2*n);
-    var temp = gensym();
+    var temp = common.gensym();
     dst[0] = temp;
     dst[1] = x[1];
     for (var i = 0; i < n; i++) {
@@ -32,6 +32,7 @@ function destructureBinding(x) {
       dst[offset + 0] = vars[i];
       dst[offset + 1] = [common.jsGet, temp, i];
     }
+    return dst;
   }
   return null;
 }
@@ -420,3 +421,4 @@ module.exports.compiled = compiled;
 module.exports.eval = eval;
 module.exports.makeAfn = makeAfn;
 module.exports.makeFn = makeFn;
+module.exports.destructureBindings = destructureBindings;

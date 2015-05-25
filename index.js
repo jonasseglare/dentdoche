@@ -25,6 +25,8 @@ var isSymbol = common.isSymbol;
 var Symbol = common.Symbol;
 var first = common.first;
 var rest = common.rest;
+var jsGet = common.jsGet;
+var jsSet = common.jsSet;
 
 function makeArrayFromArgs() {
   return argsToArray(arguments);
@@ -417,13 +419,6 @@ function evaluateForm(localVars, form, cb) {
     initLVars(localVars), expandedForm, cb);
 }
 
-function jsGet(obj, key) {
-  return obj[key];
-}
-
-function jsSet(obj, key, newValue) {
-  obj[key] = newValue;
-}
 
 function functionalMap() {
   var args = argsToArray(arguments);
