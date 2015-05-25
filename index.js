@@ -368,12 +368,6 @@ function expandMacros(x) {
   return x;
 }
 
-function evaluateForm(localVars, form, cb) {
-  var expandedForm = expandMacros(form);
-  evaluateFormWithoutMacros(
-    initLVars(localVars), expandedForm, cb);
-}
-
 
 
 function applySync(fun, args) {
@@ -489,6 +483,7 @@ function reduceAsync(fun0, coll, cb) {
   }
 } async(reduceAsync);
 
+
 function filterAsync(fun0, coll, cb) {
   var fun = convertToAsync(fun0);
   mapAsync(fun, coll, function(err, mask) {
@@ -507,6 +502,8 @@ function filterAsync(fun0, coll, cb) {
     }
   });
 } async(filterAsync);
+
+
 
 function makeSpecialFormMacro(keyword) {
   return macro(function() {
