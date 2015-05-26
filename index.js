@@ -367,6 +367,30 @@ function loopNext() {
   return [true, argsToArray(arguments)];
 }
 
+function tryMacro() {
+  var args = argsToArray(arguments);
+  var body = ["do"].concat(butLast(args));
+  var c = last(args);
+  if (!(c[0] == 'catch') && (typeof c[1] == 'string')) {
+    console.log('ERROR IN TRY MACRO');
+    console.log(args);
+    return null;
+  } else {
+    
+  }
+
+  var ev = common.gensym();
+
+  var err = function(e) {return e[0];};
+  var val = function(e) {return e[1];};
+
+  return ['let', [ev, ['errAndVal', body]],
+	  ['if', [err, ev],
+	   ['let', [c[1], [val, err]],
+	    ['do'].concat(c.slice(2))],
+	   [val, ev]]];
+} macro(tryMacro);
+
 
 
 
@@ -419,3 +443,4 @@ module.exports.loop = loop;
 module.exports.return = loopReturn;
 module.exports.next = loopNext;
 module.exports.echo = echo;
+module.exports.try = tryMacro;
