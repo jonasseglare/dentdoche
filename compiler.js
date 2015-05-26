@@ -233,6 +233,8 @@ function evaluateAndBindVars(lvars, symbols, compiled, cb) {
 
 function MakeLet(args) {
   var bindings = destructureBindings(first(args));
+  console.log('DESTRUCTURED BINDINGS:');
+  console.log(bindings);
   var body = rest(args);
   assert(bindings.length % 2 == 0);
   var symbolsAndCompiled = getSymbolsAndCompiled(bindings);

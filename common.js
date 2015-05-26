@@ -106,6 +106,10 @@ function getName(x) {
 
 
 function bindFunctionArgs(lvars, symbols, values) {
+  console.log('BIND FUNCTION ARGUMENTS:');
+  console.log('SYMBOLS: %j', symbols);
+  console.log('VALUES:  %j', values);
+
   assert(symbols.length <= values.length);
   lvars = lvars.set('arguments', values);
   for (var i = 0; i < symbols.length; i++) {

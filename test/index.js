@@ -779,6 +779,17 @@ describe('evaluateSymbol', function() {
 	//assert(value == 5*4*3*2*1);
       });
   });*/
+
+  it('localvar0', function() {
+    var f = dd.makeFn(['gensym0'],
+		      ['let',
+		       ['gensym1', dd.sym('gensym0'),
+			'ab', [dd.get, dd.sym('gensym1'), 0]],
+		       dd.sym('ab')]);
+    console.log(f([128]));
+    assert(128 == f([128]));
+
+  });
   
   it('loop4', function(done) {
     dd.evaluateForm(
@@ -789,10 +800,10 @@ describe('evaluateSymbol', function() {
 	[dd.array, false, 'Mjao'],
 	[dd.array, false, [dd.array, dd.sym('i')]]]], //['-', dd.sym('i'), 1]]]]], 
       function(err, value) {
-	  console.log('------>err = ');
-	  console.log(err);
-	  console.log('------>value = ');
-	  console.log(value);
+	  //console.log('------>err = ');
+	  //console.log(err);
+	  //console.log('------>value = ');
+	  //console.log(value);
 	  done();
 	});
   });
