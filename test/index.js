@@ -786,7 +786,6 @@ describe('evaluateSymbol', function() {
 		       ['gensym1', dd.sym('gensym0'),
 			'ab', [dd.get, dd.sym('gensym1'), 0]],
 		       dd.sym('ab')]);
-    console.log(f([128]));
     assert(128 == f([128]));
 
   });

@@ -238,8 +238,6 @@ function iterateSync(fun, initialState, cb) {
 }
 
 function iterate(initialState, fun, cb) {
-  console.log('INITIAL STATE IN ITERATE:');
-  console.log(initialState);
   if (typeof fun == 'function') {
     if (common.isAsync(fun)) {
       iterateAsync(fun, initialState, cb);
@@ -336,16 +334,15 @@ function mergeSymbolsAndExprs(symbols, exprs) {
     merged[offset + 0] = symbols[i];
     merged[offset + 1] = sym(exprs[i]);
   }
-  console.log('MERGED:');
-  return echo(merged);
+  return merged;
 }
 
 function compileLoopFun(symbols, body) {
   var inputParam = common.gensym();
-  var bindings = echo([symbols, sym(inputParam)]);
+  var bindings = [symbols, sym(inputParam)];
   var doBody = ['do'].concat(body);
-  return echo(['afn', [inputParam],
-	       ['let', bindings, doBody]]);
+  return ['afn', [inputParam],
+	  ['let', bindings, doBody]];
 	   
 }
 
