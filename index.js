@@ -376,9 +376,6 @@ function tryMacro() {
     console.log(args);
     return null;
   } else {
-    
-  }
-
   var ev = common.gensym();
 
   var err = function(e) {return e[0];};
@@ -388,7 +385,8 @@ function tryMacro() {
 	  ['if', [err, ev],
 	   ['let', [c[1], [val, err]],
 	    ['do'].concat(c.slice(2))],
-	   [val, ev]]];
+	   [val, ev]]];    
+  }
 } macro(tryMacro);
 
 
