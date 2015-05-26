@@ -1,9 +1,7 @@
 /*
   
   TODO:
-    * Ordered evaluation of arguments (through macro)
     * Try/catch-macro.
-    * Cond-macro.
     * Loop macro:
     [dd.loop, [['a', 'b'], dd.sym('c'),
                'd', 0],
@@ -14,7 +12,7 @@
 
 	       that is rewritten into something with iterate.
 	       
-     * More thorough validation of async method calls, as well as sync ones.
+    * More thorough validation of async method calls, as well as sync ones.
 
 
     
@@ -306,6 +304,75 @@ function cond() {
   }
 } macro(cond);
 
+// Evaluates the arguments of a function in order.
+function orderedArgs(frm) {
+  assert(common.isArray(frm));
+  var f = first(frm);
+  var args = rest(frm);
+  var n = args.length;
+  var symbols = new Array(n);
+  var bindings = new Array(2*n);
+  var newArgs = new Array(n);
+  for (var i = 0; i < n; i++) {
+    symbols[i] = common.gensym();
+    var offset = 2*i;
+    bindings[offset + 0] = symbols[i];
+    bindings[offset + 1] = args[i];
+    newArgs[i] = sym(symbols[i]);
+  }
+  return ['let', bindings, [f].concat(newArgs)];
+} macro(orderedArgs);
+
+
+
+function mergeSymbolsAndExprs(symbols, exprs) {
+  var n = symbols.length;
+  assert(n == exprs.length);
+  var merged = new Array(2*n);
+  for (var i = 0; i < n; i++) {
+    var offset = 2*i;
+    merged[offset + 0] = symbols[i];
+    merged[offset + 1] = sym(exprs[i]);
+  }
+  console.log('MERGED:');
+  return echo(merged);
+}
+
+function compileLoopFun(symbols, body) {
+  var inputParams = new Array(symbols.length);
+  for (var i = 0; i < inputParams.length; i++) {
+    inputParams[i] = common.gensym();
+  }
+  return ['afn', inputParams,
+	  ['let', echo(mergeSymbolsAndExprs(symbols, inputParams)),
+	   echo(['do'].concat(body))]];
+	   
+}
+
+function splitBindings(bindings) {
+  assert(bindings.length % 2 == 0);
+  var n = bindings.length/2;
+  var symbols = new Array(n);
+  var initialValues = new Array(n);
+  for (var i = 0; i < n; i++) {
+    var offset = 2*i;
+    symbols[i] = bindings[offset + 0];
+    initialValues[i] = bindings[offset + 1];
+  }
+  return [symbols, initialValues];
+}
+
+function loop() {
+  var args = argsToArray(arguments);
+  var split = splitBindings(first(args));
+  var symbols = split[0];
+  var initialState = split[1];
+  var body = rest(args);
+  return echo([iterate, initialState,
+	  compileLoopFun(symbols, body)]);
+} macro(loop);
+
+
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.evaluateForm = compiler.evaluateForm;
@@ -350,3 +417,5 @@ module.exports.last = last;
 module.exports.butLast = butLast;
 module.exports.eval = eval;
 module.exports.cond = cond;
+module.exports.orderedArgs = orderedArgs;
+module.exports.loop = loop;

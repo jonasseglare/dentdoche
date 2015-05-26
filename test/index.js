@@ -753,4 +753,45 @@ describe('evaluateSymbol', function() {
     assert.equal(digitToWord(3), 'three');
     assert.equal(digitToWord(0), 'unknown digit: 0');    
   });
+
+  it('orderedArgs', function() {
+    dd.evaluateForm(
+      null, [dd.orderedArgs, ['+', 1, 2, 3]], function(err, result) {
+	assert(result == 6);
+      });
+  });
+
+  /*it('loop3', function() {
+    dd.evaluateForm(
+      null,
+      [dd.loop,
+       ['i', 5,
+	'product', 1],
+       ['if', ['=', dd.sym('i'), 0],
+	[dd.array, false, dd.sym('product')],
+	[dd.array, true, [dd.array,
+			  ['-', dd.sym('i'), 1],
+			  ['*', dd.sym('i'), dd.sym('product')]]]]],
+      function(err, value) {
+	console.log('err = ' + err);
+	//assert(!err);
+	console.log('Result: ' + value);
+	//assert(value == 5*4*3*2*1);
+      });
+  });*/
+  it('loop4', function() {
+    dd.evaluateForm(
+      null,
+      [dd.loop,
+       ['i', 5],
+       [console.log, dd.sym('i')],
+       [dd.if, ['=', 0, dd.sym('i')],
+	[dd.array, false, 'Mjao'],
+	[dd.array, true, ['-', dd.sym('i'), 1]]]], function(err, value) {
+	  console.log('err = ');
+	  console.log(err);
+	  console.log('value = ');
+	  console.log(value);
+	});
+  });
 });
