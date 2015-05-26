@@ -355,7 +355,7 @@ function loop() { // Always async loops, with setTimeout.
   var symbols = split[0];
   var initialState = split[1];
   var body = rest(args);
-  return [iterate, ['quote', initialState], 
+  return [iterate, [common.array].concat(initialState),
 	  compileLoopFun(symbols, body)];
 } macro(loop);
 
