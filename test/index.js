@@ -824,7 +824,7 @@ describe('evaluateSymbol', function() {
       null,
       [dd.try,
        [assert, false],
-       ['catch', 'e',
+       [dd.catch, 'e',
 	['+', 'Caught error: ', dd.sym('e')]]],
       function(err, value) {
 	assert(!err);

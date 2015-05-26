@@ -442,3 +442,4 @@ module.exports.return = loopReturn;
 module.exports.next = loopNext;
 module.exports.echo = echo;
 module.exports.try = tryMacro;
+module.exports.catch = 'catch';
