@@ -2,16 +2,6 @@
   
   TODO:
     * Try/catch-macro.
-    * Loop macro:
-    [dd.loop, [['a', 'b'], dd.sym('c'),
-               'd', 0],
-	       ....
-	       [dd.next, ....],
-	       ...
-	       [dd.return, ...]]
-
-	       that is rewritten into something with iterate.
-	       
     * More thorough validation of async method calls, as well as sync ones.
 
 

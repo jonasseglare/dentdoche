@@ -761,24 +761,24 @@ describe('evaluateSymbol', function() {
       });
   });
 
-  /*it('loop3', function() {
+  it('loop3', function(done) {
     dd.evaluateForm(
       null,
       [dd.loop,
        ['i', 5,
 	'product', 1],
        ['if', ['=', dd.sym('i'), 0],
-	[dd.array, false, dd.sym('product')],
-	[dd.array, true, [dd.array,
-			  ['-', dd.sym('i'), 1],
-			  ['*', dd.sym('i'), dd.sym('product')]]]]],
+	[dd.return, dd.sym('product')],
+	[dd.next,
+	 ['-', dd.sym('i'), 1],
+	 ['*', dd.sym('i'), dd.sym('product')]]]],
       function(err, value) {
 	console.log('err = ' + err);
-	//assert(!err);
-	console.log('Result: ' + value);
-	//assert(value == 5*4*3*2*1);
+	assert(!err);
+	assert(value == 5*4*3*2*1);
+	done();
       });
-  });*/
+  });
 
   it('localvar0', function() {
     var f = dd.makeFn(['gensym0'],
