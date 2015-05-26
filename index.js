@@ -369,6 +369,16 @@ function loop() {
 	  compileLoopFun(symbols, body)];
 } macro(loop);
 
+function loopReturn(value) {
+  return [false, value];
+}
+
+function loopNext() {
+  return [true, argsToArray(arguments)];
+}
+
+
+
 
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
@@ -416,4 +426,6 @@ module.exports.eval = eval;
 module.exports.cond = cond;
 module.exports.orderedArgs = orderedArgs;
 module.exports.loop = loop;
+module.exports.return = loopReturn;
+module.exports.next = loopNext;
 module.exports.echo = echo;
