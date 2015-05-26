@@ -201,30 +201,17 @@ function makeFn(keyword) {
 }
 
 function iterateAsync(fun, initialState, cb) {
-  console.log('INITIAL STATE IN ITERATE ASYNC: ');
-  console.log(initialState);
   var state = initialState;
   var iterate = function() {
     fun(state, function(err, value) {
-      console.log('COMPLETED ITERATION WITH VALUES: ');
-      console.log(value);
       if (err) {
-	console.log('ERROR: ');
-	console.log(err);
 	cb(err);
       } else {
-	console.log('value: [%j]', value);
 	var cont = value[0];
-	console.log('cont = [%j]', cont);
-	console.log(cont);
 	state = value[1];
-	console.log('state = [%j]', state);
-	console.log(state);
 	if (cont) {
-	  console.log('CONTINUE');
 	  setTimeout(iterate, 0);
 	} else {
-	  console.log('DONE');
 	  cb(null, state);
 	}
       }
@@ -355,12 +342,9 @@ function mergeSymbolsAndExprs(symbols, exprs) {
 
 function compileLoopFun(symbols, body) {
   var inputParam = common.gensym();
-  console.log('BINDINGS:');
   var bindings = echo([symbols, sym(inputParam)]);
   var doBody = ['do'].concat(body);
-  console.log('FULL EXPR');
   return echo(['afn', [inputParam],
-	       [console.log, ['+', "INPUT PARAM RUNTIME: ", sym(inputParam)]],
 	       ['let', bindings, doBody]]);
 	   
 }
@@ -384,10 +368,6 @@ function loop() {
   var symbols = split[0];
   var initialState = split[1];
   var body = rest(args);
-  console.log('SYMBOLS:');
-  echo(symbols);
-  console.log('INITIAL STATE IN MACRO:');
-  echo(initialState);
   return [iterate, ['quote', initialState], 
 	  compileLoopFun(symbols, body)];
 } macro(loop);

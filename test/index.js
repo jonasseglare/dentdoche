@@ -800,11 +800,9 @@ describe('evaluateSymbol', function() {
 	[dd.array, false, 'Mjao'],
 	[dd.array, true, [dd.array, ['-', dd.sym('i'), 1]]]]],
       function(err, value) {
-	  //console.log('------>err = ');
-	  //console.log(err);
-	  //console.log('------>value = ');
-	  //console.log(value);
-	  done();
-	});
+	assert(!err);
+	assert(value == 'Mjao');
+	done();
+      });
   });
 });
