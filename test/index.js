@@ -794,10 +794,10 @@ describe('evaluateSymbol', function() {
     dd.evaluateForm(
       null,
       [dd.loop,
-       ['i', 5],
+       ['i', 5], // <-- initialization of loop state (like let binding)
        [dd.if, ['=', 0, dd.sym('i')],
-	[dd.array, false, 'Mjao'],
-	[dd.array, true, [dd.array, ['-', dd.sym('i'), 1]]]]],
+	[dd.return, 'Mjao'],
+	[dd.next, ['-', dd.sym('i'), 1]]]],
       function(err, value) {
 	assert(!err);
 	assert(value == 'Mjao');
