@@ -779,19 +779,21 @@ describe('evaluateSymbol', function() {
 	//assert(value == 5*4*3*2*1);
       });
   });*/
-  it('loop4', function() {
+  
+  it('loop4', function(done) {
     dd.evaluateForm(
       null,
       [dd.loop,
        ['i', 5],
-       [console.log, dd.sym('i')],
        [dd.if, ['=', 0, dd.sym('i')],
 	[dd.array, false, 'Mjao'],
-	[dd.array, true, ['-', dd.sym('i'), 1]]]], function(err, value) {
-	  console.log('err = ');
+	[dd.array, false, [dd.array, dd.sym('i')]]]], //['-', dd.sym('i'), 1]]]]], 
+      function(err, value) {
+	  console.log('------>err = ');
 	  console.log(err);
-	  console.log('value = ');
+	  console.log('------>value = ');
 	  console.log(value);
+	  done();
 	});
   });
 });

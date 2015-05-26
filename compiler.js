@@ -488,6 +488,8 @@ function compileComplex(x) {
 function compileBindingEvaluator(sym) {
   var key = common.getName(sym);
   return function(lvars, cb) {
+    console.log('RESOLVE SYMBOL %j WITH VARS', sym);
+    console.log(lvars);
     if (lvars.has(key)) {
       cb(null, common.getLocalVar(lvars, key));
     } else {
