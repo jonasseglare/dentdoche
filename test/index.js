@@ -798,7 +798,7 @@ describe('evaluateSymbol', function() {
        ['i', 5],
        [dd.if, ['=', 0, dd.sym('i')],
 	[dd.array, false, 'Mjao'],
-	[dd.array, false, [dd.array, dd.sym('i')]]]], //['-', dd.sym('i'), 1]]]]], 
+	[dd.array, true, [dd.array, dd.sym('i')]]]], //['-', dd.sym('i'), 1]]]]], 
       function(err, value) {
 	  //console.log('------>err = ');
 	  //console.log(err);
