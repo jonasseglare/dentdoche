@@ -361,9 +361,7 @@ function compileLoopFun(symbols, body) {
   console.log('FULL EXPR');
   return echo(['afn', [inputParam],
 	       [console.log, ['+', "INPUT PARAM RUNTIME: ", sym(inputParam)]],
-//	       ['let', [], 119]]);
-	       ['let', bindings, 119]]);
-//	   doBody]]);
+	       ['let', bindings, doBody]]);
 	   
 }
 
