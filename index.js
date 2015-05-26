@@ -349,7 +349,7 @@ function splitBindings(bindings) {
   return [symbols, initialValues];
 }
 
-function loop() {
+function loop() { // Always async loops, with setTimeout.
   var args = argsToArray(arguments);
   var split = splitBindings(first(args));
   var symbols = split[0];
@@ -382,10 +382,10 @@ function tryMacro() {
   var val = function(e) {return e[1];};
 
   return ['let', [ev, ['errAndVal', body]],
-	  ['if', [err, ev],
-	   ['let', [c[1], [val, err]],
+	  ['if', [err, sym(ev)],
+	   ['let', [c[1], [err, sym(ev)]],
 	    ['do'].concat(c.slice(2))],
-	   [val, ev]]];    
+	   [val, sym(ev)]]];
   }
 } macro(tryMacro);
 

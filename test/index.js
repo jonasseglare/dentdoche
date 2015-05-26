@@ -804,4 +804,32 @@ describe('evaluateSymbol', function() {
 	done();
       });
   });
+
+  it('try', function() {
+    dd.evaluateForm(
+      null,
+      [dd.try,
+       119,
+       ['catch', 'e',
+	['+', 'Caught error: ', dd.sym('e')]]],
+      function(err, value) {
+	assert(!err);
+	assert(value == 119);
+      }
+    );
+  });
+
+  it('try2', function() {
+    dd.evaluateForm(
+      null,
+      [dd.try,
+       [assert, false],
+       ['catch', 'e',
+	['+', 'Caught error: ', dd.sym('e')]]],
+      function(err, value) {
+	assert(!err);
+	assert(typeof value == 'string');
+      }
+    );
+  });
 });
