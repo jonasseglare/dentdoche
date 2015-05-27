@@ -73,14 +73,27 @@ describe('Trying eval', function() {
     assert.equal(katt(3, 4), 7);
   });
 
-  it('Product', function() {
+  it('Product', function(done) {
+    var lg = function(x) {console.log(x);}
+
+    var y = dd.sym("console.log", eval("try{console.log;} catch(e) {null;}"));
     var x = parser.parse('(dafn katt (n) (loop (product 1 i 1) '+
+                         '(console.log (+ "ITERATION " i))' +
                          '(if (= i n) (return product) (next (* product i) (+ i 1)))))');
-    //console.log(x);
+    console.log(x);
     eval(x);
     katt(5, function(err, value) {
       assert(value == 5*4*3*2*1);
+      done();
     });
     //assert.equal(katt(3, 4), 7);
+  });
+
+  it('Quote', function(done) {
+    eval(dd.parse('(dafn katt (x) (+ "Input: " x))'));
+    katt("Mjao", function(err, value) {
+      assert(value == 'Input: Mjao');
+      done();
+    });
   });
 });

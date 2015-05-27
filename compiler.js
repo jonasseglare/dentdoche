@@ -418,6 +418,7 @@ function compileStringForm(x, f, args) {
   // Treat strings and symbols the same when
   // they appear in the beginning of an S-expr.
   f = common.getName(f);
+  console.log('Compile form from ' + f);
   
   /* Can be
      
@@ -471,7 +472,7 @@ function compileGeneratedFunctionCall(x) {
 function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
-  var symfun = common.isSymbolWithFunction(x);
+  var symfun = common.isSymbolWithFunction(f);
   if (typeof f == 'function' || symfun) {
     if (symfun) {
       f = symfun;
