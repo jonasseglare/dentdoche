@@ -15,7 +15,7 @@ function isParsedSymbolOrNumber(x) {
 
 function compileSymbolResolution(x) {
   assert(isParsedSymbolOrNumber(x));
-  return 'eval("try{' + x + ';} catch(e) {dd.sym(\\"' + jsesc(x) + '\\");}")';
+  return 'dd.sym(\"' + jsesc(x) + '\", eval("try{' + x + ';} catch(e) {null;}"))';
 }
 
 var special = {'do': "dd.do"};

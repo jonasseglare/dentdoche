@@ -40,7 +40,7 @@ describe('Trying eval', function() {
     assert(!parser.isParsedString(parser.parseRaw('abc')));
   });
 
-  it('Symbol res', function() {
+  /*it('Symbol res', function() {
 
     
     var p = eval(parser.compileSymbolResolution('abra'));
@@ -50,7 +50,7 @@ describe('Trying eval', function() {
     assert(typeof q == 'function');
     assert(q != fs.writeFile);
     assert(q == fs.readFile);
-  });
+  });*/
 
   it('General experiments', function() {
     var x = parser.buildEvalString([1, 2, 3, new String("Mjao"), "rulle"]);
@@ -68,6 +68,7 @@ describe('Trying eval', function() {
 
   it('Function defs', function() {
     var x = parser.parse('(dfn katt (a b) (+ a b))');
+    console.log(x);
     eval(x);
     assert.equal(katt(3, 4), 7);
   });
