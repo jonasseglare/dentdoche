@@ -471,16 +471,16 @@ function compileGeneratedFunctionCall(x) {
 function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
-  if (typeof f == 'string' || common.isSymbol(f)) {
-    return compiled(compileStringForm(x, f, args));
-  } else if (typeof f == 'function') {
+  if (typeof f == 'function') {
      if (common.isMacro(f)) {
        assert(!common.isAsync(f));
        return compile(f.apply(null, args));
     } else {
       return compileCall(x);
     }
-  } else if (common.isArray(f)) {
+  } else if (typeof f == 'string' || common.isSymbol(f)) {
+    return compiled(compileStringForm(x, f, args));
+  }   else if (common.isArray(f)) {
     return compileGeneratedFunctionCall(x);
   }
 }
