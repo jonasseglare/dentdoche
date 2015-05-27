@@ -8,6 +8,7 @@
 // https://nodejsmodules.org/tags/s-expressions
 
 var assert = require('assert');
+var parser = require('../parser.js');
 
 describe('Trying eval', function() {
   it('Should load fs using eval', function() {
