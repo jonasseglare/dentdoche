@@ -12,6 +12,7 @@
     "deep-equal-ident": "^1.0.0",
     "immutable": "^3.7.3",
     "s-expression": "^3.0.1",
+    "string-escape": "^0.3.0",
     "traverse": "^0.6.6"
   }
 }
