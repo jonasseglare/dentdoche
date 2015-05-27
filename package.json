@@ -10,6 +10,7 @@
   "license": "EPL (Eclipse public licence)",
   "dependencies": {
     "deep-equal-ident": "^1.0.0",
-    "immutable": "^3.7.3"
+    "immutable": "^3.7.3",
+    "s-expression": "^3.0.1"
   }
 }
