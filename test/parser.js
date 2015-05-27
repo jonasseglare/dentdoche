@@ -114,7 +114,6 @@ describe('Trying eval', function() {
 
   it('TrySomething', function(done) {
     var x = dd.parse('(dafn katt (x) (console.log "WRITE SOMETHING"))');
-    console.log('x: ' + x);
     eval(x);
     katt('9', function(err, value) {
       done();
