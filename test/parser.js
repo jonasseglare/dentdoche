@@ -30,4 +30,11 @@ describe('Trying eval', function() {
     var x = eval('[1, 2, eval("try{add;} catch(e) {119;}")]');
     assert.equal(x[2](100, 19), 119);
   });
+
+  it('Parse a string', function() {
+    assert(parser.isParsedSymbol(parser.parseRaw('abc')));
+    assert(!parser.isParsedSymbol(parser.parseRaw('"abc"')));
+    assert(parser.isParsedString(parser.parseRaw('"abc"')));
+    assert(!parser.isParsedString(parser.parseRaw('abc')));
+  });
 });
