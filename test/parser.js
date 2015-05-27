@@ -9,6 +9,8 @@
 
 var assert = require('assert');
 var parser = require('../parser.js');
+var dd = require('../index.js');
+var fs = require('fs');
 
 describe('Trying eval', function() {
   it('Should load fs using eval', function() {
@@ -36,5 +38,17 @@ describe('Trying eval', function() {
     assert(!parser.isParsedSymbol(parser.parseRaw('"abc"')));
     assert(parser.isParsedString(parser.parseRaw('"abc"')));
     assert(!parser.isParsedString(parser.parseRaw('abc')));
+  });
+
+  it('Symbol res', function() {
+
+    
+    var p = eval(parser.compileSymbolResolution('abra'));
+    assert(dd.isSymbol(p));
+
+    var q = eval(parser.compileSymbolResolution('fs.readFile'));
+    assert(typeof q == 'function');
+    assert(q != fs.writeFile);
+    assert(q == fs.readFile);
   });
 });

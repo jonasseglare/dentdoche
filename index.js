@@ -448,3 +448,4 @@ module.exports.next = loopNext;
 module.exports.echo = echo;
 module.exports.try = tryMacro;
 module.exports.catch = 'catch';
+module.exports.isSymbol = isSymbol;
