@@ -68,7 +68,7 @@ describe('Trying eval', function() {
 
   it('Function defs', function() {
     var x = parser.parse('(dfn katt (a b) (+ a b))');
-    console.log(x);
+    //console.log(x);
     eval(x);
     assert.equal(katt(3, 4), 7);
   });
