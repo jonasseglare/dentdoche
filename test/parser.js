@@ -54,22 +54,16 @@ describe('Trying eval', function() {
 
   it('General experiments', function() {
     var x = parser.buildEvalString([1, 2, 3, new String("Mjao"), "rulle"]);
+    var z2 = parser.parseToEvalString('(1 2 3 "Mjao" rulle)');
+
     console.log(x);
-    var z = eval(x);
-    
-    var z2 = parser.parseRaw/*ToEvalString*/('(1 2 3 "Mjao" rulle)');
-
     console.log(z2);
+    assert(x == z2);
 
-    /*
-    var k = [z, z2];
-
-    for (var i = 0; i < 2; i++) {
-      var y = k[i];
-      assert(y.length == 5);
-      assert(typeof y[0] == 'number');
-      assert(typeof y[3] == 'string');
-      assert(dd.isSymbol(y[4]));
-    }*/
+    var y = eval(x);
+    assert(y.length == 5);
+    assert(typeof y[0] == 'number');
+    assert(typeof y[3] == 'string');
+    assert(dd.isSymbol(y[4]));
   });
 });
