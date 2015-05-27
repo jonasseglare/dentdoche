@@ -449,3 +449,4 @@ module.exports.echo = echo;
 module.exports.try = tryMacro;
 module.exports.catch = 'catch';
 module.exports.isSymbol = isSymbol;
+module.exports.parse = require('./parser.js').parse;
