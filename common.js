@@ -150,6 +150,10 @@ function getOperatorFunctionSub(x) {
   return opmap[x];
 }
 
+function isOperator(x) {
+  return opmap[x];
+}
+
 
 function getOperatorFunction(x) {
   if (x == '-') {
@@ -309,3 +313,4 @@ module.exports.tagged = tagged;
 module.exports.makeImmutableMap = makeImmutableMap;
 module.exports.isWithLVars = isWithLVars;
 module.exports.withLVars = withLVars;
+module.exports.isOperator = isOperator;

@@ -66,4 +66,10 @@ describe('Trying eval', function() {
     assert(typeof y[3] == 'string');
     assert(dd.isSymbol(y[4]));
   });
+
+  it('Function defs', function() {
+    var x = parser.parse('(dfn katt (a b) (+ a b))');
+    eval(x);
+    assert.equal(katt(3, 4), 7);
+  });
 });
