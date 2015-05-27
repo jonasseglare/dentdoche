@@ -23,4 +23,10 @@ describe('Trying eval', function() {
     var x = eval('[1, 2, eval("try{rulleMjao;} catch(e) {3;}")]');
     assert.equal(x[2], 3);
   });
+
+  it('nested eval to function', function() {
+    var add = function(a, b) {return a + b;};
+    var x = eval('[1, 2, eval("try{add;} catch(e) {119;}")]');
+    assert.equal(x[2](100, 19), 119);
+  });
 });
