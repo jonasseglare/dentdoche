@@ -3,7 +3,12 @@
   TODO:
     * Try/catch-macro.
     * More thorough validation of async method calls, as well as sync ones.
-
+    * Default string literals to symbols, and annotate all strings with
+        dd.str(...). There can be a preproc-phase where strings are replaced
+	by symbols and str(...) objects are replaced by strings. Maybe. Or
+	that will mean problems when recursing. Better to handle it directly in
+	the compiler, maybe. Whenever there is a dd.str object, compile it
+	to a string value. Otherwise, any string should be treated as a symbol.
 
     
   */
