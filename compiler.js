@@ -418,7 +418,6 @@ function compileStringForm(x, f, args) {
   // Treat strings and symbols the same when
   // they appear in the beginning of an S-expr.
   f = common.getName(f);
-  console.log('Compile form from ' + f);
   
   /* Can be
      

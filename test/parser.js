@@ -77,14 +77,14 @@ describe('Trying eval', function() {
     var lg = function(x) {console.log(x);}
 
     var y = dd.sym("console.log", eval("try{console.log;} catch(e) {null;}"));
-    var x = parser.parse('(dafn katt (n) (loop (product 1 i 1) '+
-                         '(console.log (+ "ITERATION " i))' +
-                         '(if (= i n) (return product) (next (* product i) (+ i 1)))))');
-    console.log(x);
+    var x = parser.parse('(dafn katt (n) (loop (product 1 i n) '+
+                         //'(console.log (+ "ITERATION " i))' +
+                         '(if (= i 0) (return product) (next (* product i) (- i 1)))))');
     eval(x);
     katt(5, function(err, value) {
-      assert(value == 5*4*3*2*1);
+      console.log('Value: ' + value);
       done();
+      assert(value == 5*4*3*2*1);
     });
     //assert.equal(katt(3, 4), 7);
   });
