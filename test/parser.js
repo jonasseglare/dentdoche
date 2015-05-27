@@ -94,10 +94,8 @@ describe('Trying eval', function() {
     var x = parser.parse('(dafn katt (n) (loop (product 1 i n) '+
                          '(console.log "asdf")' +
                          '(if (= i 0) (return product) (next (* product i) (- i 1)))))');
-    console.log(x);
     eval(x);
     katt(5, function(err, value) {
-      console.log('err:' + err);
       assert(value == 5*4*3*2*1);
       done();
     });
