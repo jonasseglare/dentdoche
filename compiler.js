@@ -471,12 +471,6 @@ function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
   var symfun = common.isSymbolWithFunction(f);
-  if (common.isSymbol(f)) {
-    console.log('PARSING SYMBOL: "' + common.getName(f) + '"');
-  } else {
-    console.log('Something else.');
-  }
-  
   if (typeof f == 'function' || symfun) {
     if (symfun) {
       f = symfun;
@@ -486,11 +480,9 @@ function compileComplex(x) {
       assert(!common.isAsync(f));
       return compile(f.apply(null, args));
     } else {
-      console.log('Compile call to ' + f);
       return compileCall(f, x.slice(1));
     }
   } else if (typeof f == 'string' || common.isSymbol(f)) {
-    console.log('GOT STRING: ' + common.getName(f));
     return compiled(compileStringForm(x, f, args));
   }   else if (common.isArray(f)) {
     return compileGeneratedFunctionCall(x);

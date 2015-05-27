@@ -91,8 +91,9 @@ describe('Trying eval', function() {
     var lg = function(x) {console.log(x);}
 
     var y = dd.sym("console.log", eval("try{console.log;} catch(e) {null;}"));
+    
     var x = parser.parse('(dafn katt (n) (loop (product 1 i n) '+
-                         '(console.log "asdf")' +
+                         '(console.log (+ "Iterations left: " i))' +
                          '(if (= i 0) (return product) (next (* product i) (- i 1)))))');
     eval(x);
     katt(5, function(err, value) {
