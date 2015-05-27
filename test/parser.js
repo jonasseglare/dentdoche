@@ -92,11 +92,12 @@ describe('Trying eval', function() {
 
     var y = dd.sym("console.log", eval("try{console.log;} catch(e) {null;}"));
     var x = parser.parse('(dafn katt (n) (loop (product 1 i n) '+
-                         '(console.log (+ "Iterations: " 1))' + 
-                         ' (if (= i 0) (return product) (next (* product i) (- i 1)))))');
+                         '(console.log "asdf")' +
+                         '(if (= i 0) (return product) (next (* product i) (- i 1)))))');
+    console.log(x);
     eval(x);
     katt(5, function(err, value) {
-      
+      console.log('err:' + err);
       assert(value == 5*4*3*2*1);
       done();
     });
@@ -107,6 +108,15 @@ describe('Trying eval', function() {
     eval(dd.parse('(dafn katt (x) (+ "Input: " x))'));
     katt("Mjao", function(err, value) {
       assert(value == 'Input: Mjao');
+      done();
+    });
+  });
+
+  it('TrySomething', function(done) {
+    var x = dd.parse('(dafn katt (x) (console.log "WRITE SOMETHING"))');
+    console.log('x: ' + x);
+    eval(x);
+    katt('9', function(err, value) {
       done();
     });
   });

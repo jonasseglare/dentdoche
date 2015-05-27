@@ -280,9 +280,8 @@ var specialForms = {
 };
 
 
-function compileCall(x) {
-  var f = first(x);
-  var args = compileArray(rest(x));
+function compileCall(f, args0) {
+  var args = compileArray(args0);
   var n = args.length;
   return function(lvars, cb) {
     var result = new common.ResultArray(n, function(err, evaluatedArgs) {
@@ -472,17 +471,26 @@ function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
   var symfun = common.isSymbolWithFunction(f);
+  if (common.isSymbol(f)) {
+    console.log('PARSING SYMBOL: "' + common.getName(f) + '"');
+  } else {
+    console.log('Something else.');
+  }
+  
   if (typeof f == 'function' || symfun) {
     if (symfun) {
       f = symfun;
+      assert(typeof f == 'function');
     }
     if (common.isMacro(f)) {
       assert(!common.isAsync(f));
       return compile(f.apply(null, args));
     } else {
-      return compileCall(x);
+      console.log('Compile call to ' + f);
+      return compileCall(f, x.slice(1));
     }
   } else if (typeof f == 'string' || common.isSymbol(f)) {
+    console.log('GOT STRING: ' + common.getName(f));
     return compiled(compileStringForm(x, f, args));
   }   else if (common.isArray(f)) {
     return compileGeneratedFunctionCall(x);
