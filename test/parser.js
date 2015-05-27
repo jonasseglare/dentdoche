@@ -78,11 +78,9 @@ describe('Trying eval', function() {
 
     var y = dd.sym("console.log", eval("try{console.log;} catch(e) {null;}"));
     var x = parser.parse('(dafn katt (n) (loop (product 1 i n) '+
-                         //'(console.log (+ "ITERATION " i))' +
-                         '(if (= i 0) (return product) (next (* product i) (- i 1)))))');
+                         ' (if (= i 0) (return product) (next (* product i) (- i 1)))))');
     eval(x);
     katt(5, function(err, value) {
-      console.log('Value: ' + value);
       done();
       assert(value == 5*4*3*2*1);
     });
