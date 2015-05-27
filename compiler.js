@@ -471,10 +471,14 @@ function compileGeneratedFunctionCall(x) {
 function compileComplex(x) {
   var f = first(x);
   var args = rest(x);
-  if (typeof f == 'function') {
-     if (common.isMacro(f)) {
-       assert(!common.isAsync(f));
-       return compile(f.apply(null, args));
+  var symfun = common.isSymbolWithFunction(x);
+  if (typeof f == 'function' || symfun) {
+    if (symfun) {
+      f = symfun;
+    }
+    if (common.isMacro(f)) {
+      assert(!common.isAsync(f));
+      return compile(f.apply(null, args));
     } else {
       return compileCall(x);
     }

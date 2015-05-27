@@ -198,6 +198,15 @@ function isSymbol(x) {
   return x instanceof Symbol;
 }
 
+function isSymbolWithFunction(x) {
+  if (isSymbol(x)) {
+    if (x.fun) {
+      return x.fun;
+    }
+  }
+  return false;
+}
+
 function getLocalVar(localVars, key) {
   var v = localVars.get(key);
   if (v instanceof PromisedValue) {
@@ -315,3 +324,4 @@ module.exports.makeImmutableMap = makeImmutableMap;
 module.exports.isWithLVars = isWithLVars;
 module.exports.withLVars = withLVars;
 module.exports.isOperator = isOperator;
+module.exports.isSymbolWithFunction = isSymbolWithFunction;
