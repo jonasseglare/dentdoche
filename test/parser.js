@@ -72,4 +72,14 @@ describe('Trying eval', function() {
     eval(x);
     assert.equal(katt(3, 4), 7);
   });
+
+  it('Product', function() {
+    var x = parser.parse('(dafn katt (n) (loop (product 1 i 1) (if (= i n) (return product) (next (* product i) (+ i 1)))))');
+    //console.log(x);
+    eval(x);
+    katt(5, function(err, value) {
+      assert(value == 5*4*3*2*1);
+    });
+    //assert.equal(katt(3, 4), 7);
+  });
 });

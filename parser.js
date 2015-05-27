@@ -18,7 +18,19 @@ function compileSymbolResolution(x) {
   return 'dd.sym(\"' + jsesc(x) + '\", eval("try{' + x + ';} catch(e) {null;}"))';
 }
 
-var special = {'do': "dd.do"};
+var special = {
+  'do': 'dd.do',
+  'let': 'dd.let',
+  'if': 'dd.if',
+  'cond': 'dd.cond',
+  'try': 'dd.try',
+  'catch': 'dd.catch',
+  'fn': 'dd.fn',
+  'afn': 'dd.afn',
+  'loop': 'dd.loop',
+  'return': 'dd.return',
+  'next': 'dd.next'
+};
 
 function buildEvalString(x) {
   if (x instanceof Array) {
