@@ -188,8 +188,9 @@ function getOperatorFunction(x) {
   }
 }
 
-function Symbol(x) {
+function Symbol(x, y) {
   this.name = x;
+  this.fun = y; // Optional function: So that something that resolve to a symbol can be a js func..
 }
 
 
@@ -236,15 +237,15 @@ function jsSet(obj, key, newValue) {
   obj[key] = newValue;
 }
 
-function sym(x) {
-  return toSymbol(x);
+function sym(x, y) {
+  return toSymbol(x, y);
 }
 
-function toSymbol(x) {
+function toSymbol(x, y) {
   if (isSymbol(x)) {
     return x;
   }
-  return new Symbol(x);
+  return new Symbol(x, y);
 }
 
 function tagged(cb, str) {
