@@ -51,4 +51,14 @@ describe('Trying eval', function() {
     assert(q != fs.writeFile);
     assert(q == fs.readFile);
   });
+
+  it('General experiments', function() {
+    var x = parser.buildEvalString([1, 2, 3, new String("Mjao"), "rulle"]);
+    console.log(x);
+    var y = eval(x);
+    assert(y.length == 5);
+    assert(typeof y[0] == 'number');
+    assert(typeof y[3] == 'string');
+    assert(dd.isSymbol(y[4]));
+  });
 });
