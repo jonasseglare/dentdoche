@@ -110,12 +110,27 @@ function makeFunctionDef(parsed) {
   }
 }
 
+function makeBinding(x) {
+  try {
+    var dstSym = x[1];
+    var expr = x[2];
+    return 'var ' + dstSym +
+      ' = undefined;\n dd.evaluateForm(null, ' + buildEvalString(expr) + ', function(err, value) {'
+      + ' if (err) {console.log("Error in binding " + ' + dstSym + '+ ": "); console.log(err);} else {' +
+      dstSym + ' = value;}});';
+  } catch (e) {
+    console.log('Failed to make binding from ' + x);
+  }
+}
+
 function parseSub(parsed) {
   if (parsed instanceof Array) {
     if (parsed.length > 1) {
       var f = parsed[0];
       if (f == 'dfn' || f == 'dafn') {
         return makeFunctionDef(parsed);
+      } else if (f == 'def') {
+        return makeBinding(parsed);
       }
     }
   }

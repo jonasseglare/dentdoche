@@ -15,7 +15,6 @@ var fs = require('fs');
 eval(dd.parse("(dfn fib (x) (if (< x 2) x (+ (fib (- x 1)) (fib (- x 2)))))"
               + "(dafn fiba (x) (if (< x 2) x (later (+ (fiba (- x 1)) (fiba (- x 2))))))"));
 
-
 describe('Trying eval', function() {
   it('Should load fs using eval', function() {
     eval('var fs = require("fs"); var abc = fs.readFile');
@@ -142,16 +141,16 @@ describe('Trying eval', function() {
       done();
     });
   });
-  /*it('this', function(done) {
-    var p = dd.parse('(dfn countDown (x) countDown)'); //(if (== 0 x) x (this (- x 1))))')
-    console.log(p);
-    eval(p);
-    var result = countDown(5);
-    console.log('result = ');
-    console.log(result);
-    console.log(typeof result);
-    assert(result == 0);
+
+  it('binding', function(done) {
+    var x = dd.parse('(def rulleMjaoMjao (+ 3 4))');
+    //var rulleMjaoMjao = undefined;
+// dd.evaluateForm(null, [dd.sym("+"),3,4], function(err, value) { if (err) {console.log("Error in binding " + rulleMjaoMjao + ": "); console.log(err);} else {rulleMjaoMjao = value;}});
+    
+    console.log(x);
+    eval(x);
+    assert(rulleMjaoMjao == 7);
     done();
-  });*/
+  });
 });
 
