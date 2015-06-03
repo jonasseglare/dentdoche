@@ -6,9 +6,8 @@ var rest = common.rest;
 var tagged = common.tagged;
 
 function getCallingMode(fun, context) {
-  var cmode = context.get('async');
-  if (cmode) {
-    return cmode;
+  if (context.has('async')) {
+    return context.get('async');
   } else {
     return fun.async;
   }
@@ -272,8 +271,8 @@ function MakeErrAndVal(args) {
   }
 }
 
-function MakeLater(args0) {
-  var args = compileArray(args0);
+function MakeLater(args0, context) {
+  var args = compileArray(args0, context);
   return function(lvars, cb) {
     setTimeout(function() {
       evaluateInSequence(lvars, args, undefined, cb);
@@ -281,7 +280,27 @@ function MakeLater(args0) {
   };
 }
 
+function MakeS(args, value, context) {
+  context.set('async', value);
+  return MakeDo(args, context);
+}
+
+function MakeAsync1(args, context) {
+  return MakeS(args, 1, context);
+}
+
+function MakeAsync(args, context) {
+  return MakeS(args, true, context);
+}
+
+function MakeSync(args, context) {
+  return MakeS(args, false, context);
+}
+
 var specialForms = {
+  'async1': MakeAsync1,
+  'async': MakeAsync,
+  'sync': MakeSync,
   'if': MakeIf,
   'quote': MakeQuote,
   'do': MakeDo,
@@ -443,7 +462,7 @@ function compileStringForm(x, f, args, context) {
      
   */
   if (common.contains(specialForms, f)) {
-    var v = specialForms[f](args);
+    var v = specialForms[f](args, context);
     assert(v);
     return v;
   } else {
