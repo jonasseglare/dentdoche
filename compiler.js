@@ -281,6 +281,7 @@ var specialForms = {
 
 
 function compileCall(f, args0, context) {
+  assert(context);
   var args = compileArray(args0);
   var n = args.length;
   return function(lvars, cb) {
@@ -307,6 +308,7 @@ function evaluateArrayElements(lvars, array, cb) {
 }
 
 function compileBoundFunction(args0, context) {
+  assert(context);
   var key = common.getName(first(args0))
   var args = compileArray(rest(args0));
   return function(lvars, cb) {
@@ -402,7 +404,8 @@ function compileMethodAccess(x) {
   };
 }
 
-function compilePropertyAccess(x) {
+function compilePropertyAccess(x, context) {
+  assert(context);
   var f = first(x);
   if (f.length >= 2) {
     if (f[1] == '-') {
@@ -468,6 +471,7 @@ function compileGeneratedFunctionCall(x, context) {
 }
 
 function compileComplex(x, context) {
+  assert(context);
   var f = first(x);
   var args = rest(x);
   var symfun = common.isSymbolWithFunction(f);
