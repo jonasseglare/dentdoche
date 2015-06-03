@@ -119,7 +119,7 @@ function makeBinding(x) {
     var expr = x[2];
     return 'var ' + dstSym +
       ' = undefined;\n dd.evaluateForm(null, ' + buildEvalString(expr) + ', function(err, value) {'
-      + ' if (err) {console.log("Error in binding " + ' + dstSym + '+ ": "); console.log(err);} else {' +
+      + ' if (err) {console.log("Error in binding ' + dstSym + ': "); console.log(err);} else {' +
       dstSym + ' = value;}});';
   } catch (e) {
     console.log('Failed to make binding from ' + x);

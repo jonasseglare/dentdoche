@@ -20,8 +20,10 @@ function applyFunction(lvars, fun, args, context, cb) {
     args = [lvars].concat(args);
   }
   try {
-    var mode = getCallingMode(fun, context);
-    if (mode == true) {
+    var amode = getCallingMode(fun, context);
+    if (amode === 1) {
+      fun.apply(null, args.concat([function(result) {cb(null, result);}]));
+    } else if (amode) {
       fun.apply(null, args.concat([cb]));
     } else {
       cb(null, fun.apply(null, args));

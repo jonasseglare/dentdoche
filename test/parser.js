@@ -152,5 +152,17 @@ describe('Trying eval', function() {
     eval(dd.parse('(def myLocalFs (require "fs"))'));
     assert(myLocalFs.writeFile);
   });
+
+  it('async1', function() {
+    function someFunction(a, b, cb) {
+      cb(a + b);
+    }
+    dd.setAsync1(someFunction);
+
+    var x = dd.parse('(def result (someFunction 3 6))');
+    console.log(x);
+    eval(x);
+    assert(result == 9);
+  });
 });
 
