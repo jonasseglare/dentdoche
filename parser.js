@@ -36,8 +36,16 @@ var special = {
   'loop': 'dd.loop',
   'return': 'dd.return',
   'next': 'dd.next',
-  'quote': 'dd.quote'
+  'quote': 'dd.quote',
+  'new': 'dd.new'
 };
+
+function isPropertyAccess(x) {
+  if (0 < x.length) {
+    return x[0] == '.';
+  }
+  return false;
+}
 
 function buildEvalString(x) {
   if (x instanceof Array) {
@@ -58,6 +66,8 @@ function buildEvalString(x) {
         return 'dd.sym("' + x + '")';
       } else if (special[x]) {
         return special[x];
+      } else if (isPropertyAccess(x)) {
+        return '"' + x + '"';
       } else {
         return compileSymbolResolution(x);
       }
@@ -126,6 +136,11 @@ function makeBinding(x) {
   }
 }
 
+function makeStatement(x) {
+  return 'dd.evaluateForm(null, ' + buildEvalString(x) +
+    ', function(err) {if (err) {console.log(err);};});';
+}
+
 function parseSub(parsed) {
   if (parsed instanceof Array) {
     if (parsed.length > 1) {
@@ -134,6 +149,8 @@ function parseSub(parsed) {
         return makeFunctionDef(parsed);
       } else if (f == 'def') {
         return makeBinding(parsed);
+      } else {
+        return makeStatement(parsed);
       }
     }
   }

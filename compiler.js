@@ -567,6 +567,8 @@ function compile(x, context) {
     var fun = common.getOperatorFunction(common.getName(x));
     if (fun) {
       return fun;
+    } else if (x.fun) {
+      return x.fun;
     } else {
       return compiled(compileBindingEvaluator(x));
     }

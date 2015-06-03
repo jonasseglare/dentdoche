@@ -15,6 +15,21 @@ var fs = require('fs');
 eval(dd.parse("(dfn fib (x) (if (< x 2) x (+ (fib (- x 1)) (fib (- x 2)))))"
               + "(dafn fiba (x) (if (< x 2) x (later (+ (fiba (- x 1)) (fiba (- x 2))))))"));
 
+function Obj() {
+  this.param = 119;
+}
+
+Obj.prototype.getParamSync = function() {
+  return this.param;
+};
+
+Obj.prototype.getParamAsync = dd.setAsync(function(cb) {
+  cb(null, this.param);
+});
+
+var obj = new Obj();
+
+
 describe('Trying eval', function() {
   it('Should load fs using eval', function() {
     eval('var fs = require("fs"); var abc = fs.readFile');
@@ -189,6 +204,17 @@ describe('Trying eval', function() {
     eval(dd.parse('(def a (myFun 3 4)) (def b (sync (myFun 3 4)))'));
     assert(a == 3 + 4);
     assert(b == 3*4);
+  });
+
+  it('Property access', function() {
+    assert(eval("try{Obj;} catch(e) {null;}"));
+    assert(eval("try{obj;} catch(e) {null;}"));
+    var x = dd.parse(//'(def obj (new Obj)) ' +
+                     '(console.log (+ "Obj is " obj))' +
+                     '(def a (.getParamSync obj)) (def b (.getParamAsync obj))'+
+                  ' (def c (.-param obj))');
+    console.log(x);
+    eval(x);
   });
 });
 
