@@ -20,7 +20,7 @@ function compileSymbolResolution(x) {
 }
 
 var special = {
-  'later': 'later',
+  'later': 'dd.later',
   'this': 'this',
   'do': 'dd.do',
   'let': 'dd.let',
