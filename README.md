@@ -111,6 +111,7 @@ or
 dd.setAsync(fs.readFile);
 eval(dd.parse('(dafn loadFile (fname) (fs.readFile fname))'));
 ```
+Note that in the above two functions, we must use ```dafn``` and not ```dfn```, because the expression inside involves asynchronous computations.
 
 Anonymous functions can also be defined, either as delivering their result through return value (using ```fn```) or by calling a callback (using ```afn```):
 ```js
