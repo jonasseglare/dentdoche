@@ -437,18 +437,6 @@ function compileMethodAccess(x, context) {
       var args = rest(evaluated);
       var fun = obj[f];
       applyFunction(lvars, fun, args, context, cb, obj);
-
-     /* try {
-                
-	if (common.isAsync(fun)) {
-	  fun.apply(obj, args.concat([cb]));
-	} else {
-	  cb(null, fun.apply(obj, args));
-	}
-        
-      } catch (e) {
-	cb(e);
-      }*/
     });
   };
 }
