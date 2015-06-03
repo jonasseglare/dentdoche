@@ -66,7 +66,14 @@ var filecatMany = dd.makeAfn(
      [dd.butLast, dd.sym('arguments')]]]]);
 ```
 ## Documentation
-Not yet written. Look at the test cases in the ```test/``` subdirectory for examples of how to use it.
+The documentation is partial and written for the Dentdoche in *parsed* mode. In parsed mode, the included Dentdoche module must be named **dd** as in
+```js
+var dd = require('dentdoche');
+```
+This is because the generated code will assume that the exported symbols can be referred to as ```dd.symbolName```.
+
+
+
 
 ### Macros
 Macros are regular Javascript functions that transform programs. Here is a macro that defines ```or``` in a lazy way:
