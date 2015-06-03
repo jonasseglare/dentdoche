@@ -35,16 +35,24 @@ var dd = require('dentdoche');
 dd.setAsync(fs.readFile);
 dd.setAsync(fs.writeFile);
 
-var filecat = dd.makeAfn(['srcA', 'srcB', 'dst'],
-			 [fs.writeFile,
-			  dd.sym('dst'),
-			  ['+',
-			   [fs.readFile,
-			    dd.sym('srcA'), 'utf8'],
-			   [fs.readFile,
-			    dd.sym('srcB'), 'utf8']]]);
+var filecat = dd.makeAfn(
+  ['srcA', 'srcB', 'dst'],
+  [fs.writeFile,
+   dd.sym('dst'),
+   ['+',
+    [fs.readFile,
+     dd.sym('srcA'), 'utf8'],
+    [fs.readFile,
+     dd.sym('srcB'), 'utf8']]]);
 ```
-which may not be that much shorter. The structure, however, is a lot simpler. All the callbacks and error forwarding code is gone. Also, generalizing the function for more files is simple.
+which may not be that much shorter. The structure, however, is a lot simpler. All the callbacks and error forwarding code is gone. It can also be expressed as Lisp code:
+```js
+eval(dd.parse(
+  '(dafn filecat2 (srcA srcB dst) '+
+    '(fs.writeFile dst '+
+    '  (+ (fs.readFile srcA "utf8") (fs.readFile srcB "utf8"))))'));
+```
+Also, generalizing the function for more files is simple.
 ```js
 var filecatMany = dd.makeAfn([],
 			     [fs.writeFile,

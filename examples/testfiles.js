@@ -16,10 +16,10 @@ var makeFiles = dd.makeAfn(
     dd.sym('fullname')]],
    dd.sym('args')]);
 
-/*makeFiles(['mjao.txt', 'dd.txt', 'katt.txt'], function(err, value) {
+makeFiles(['mjao.txt', 'dd.txt', 'katt.txt'], function(err, value) {
   console.log('Error: ');
   console.log(err);
   console.log('Value: ');
   console.log(value);
-});*/
+});
 
