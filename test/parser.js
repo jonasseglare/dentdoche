@@ -163,5 +163,32 @@ describe('Trying eval', function() {
     eval(x);
     assert(result == 9);
   });
+
+  it('sync modes', function() {
+    function myFun(a, b, cb) {
+      if (cb) {
+        cb(null, a + b);
+      }
+      return a*b;
+    }
+
+    eval(dd.parse('(def a (async (myFun 3 4))) (def b (myFun 3 4))'));
+    assert(a == 3 + 4);
+    assert(b == 3*4);
+  });
+  
+  it('sync modes 2', function() {
+    function myFun(a, b, cb) {
+      if (cb) {
+        cb(null, a + b);
+      }
+      return a*b;
+    }
+    dd.setAsync(myFun);
+
+    eval(dd.parse('(def a (myFun 3 4)) (def b (sync (myFun 3 4)))'));
+    assert(a == 3 + 4);
+    assert(b == 3*4);
+  });
 });
 
