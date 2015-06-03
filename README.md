@@ -122,7 +122,13 @@ fb(3, 4, function(err, value) {
   assert(value == 25);
 });
 ```
-### Macros
+The ```sync``` keyword can also be used to override a function that was previously set to being async:
+```js
+dd.setAsync(fs.readFile);
+eval(dd.parse('(sync (fs.readFile "somefile" (fn (err value) (console.log "Maybe loaded."))))'));
+```
+
+
 Macros are regular Javascript functions that transform programs. Here is a macro that defines ```or``` in a lazy way:
 ```js
 function or() {
@@ -134,6 +140,8 @@ function or() {
   }
 } macro(or);
 ```
+
+See the test cases in the 
 
 ## Common pitfalls
 

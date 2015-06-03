@@ -236,8 +236,10 @@ describe('Trying eval', function() {
     });
   });
 
-  it('sync', function(done) {
-    eval(dd.parse('(sync (fs.readFile "nonexistantfile" (fn (err value) (done))))'));
+  it('override with sync', function(done) {
+    dd.setAsync(fs.readFile);
+    eval(dd.parse('(def y (sync (fs.readFile "nonexistantfile" (fn (err value) (done)))))'));
+    assert(!y);
   });
 });
 
