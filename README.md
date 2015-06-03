@@ -66,7 +66,7 @@ var filecatMany = dd.makeAfn(
      [dd.butLast, dd.sym('arguments')]]]]);
 ```
 ## Documentation
-The documentation is partial and written for the Dentdoche in *parsed* mode. In parsed mode, the included Dentdoche module must be named **dd** as in
+The documentation is partial and written for the Dentdoche in *parsed* mode. Please see the [test cases](test/) for up-to-date usage examples. In parsed mode, the included Dentdoche module must be named **dd** as in
 ```js
 var dd = require('dentdoche');
 ```

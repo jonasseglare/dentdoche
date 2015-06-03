@@ -5,14 +5,15 @@ var assert = require('assert');
 dd.setAsync(fs.readFile);
 dd.setAsync(fs.writeFile);
 
-var filecat = dd.makeAfn(['srcA', 'srcB', 'dst'],
-			 [fs.writeFile,
-			  dd.sym('dst'),
-			  ['+',
-			   [fs.readFile,
-			    dd.sym('srcA'), 'utf8'],
-			   [fs.readFile,
-			    dd.sym('srcB'), 'utf8']]]);
+var filecat = dd.makeAfn(
+  ['srcA', 'srcB', 'dst'],
+  [fs.writeFile,
+   dd.sym('dst'),
+   ['+',
+    [fs.readFile,
+     dd.sym('srcA'), 'utf8'],
+    [fs.readFile,
+     dd.sym('srcB'), 'utf8']]]);
 
 eval(dd.parse(
   '(dafn filecat2 (srcA srcB dst) '+
