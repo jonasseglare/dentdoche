@@ -5,7 +5,7 @@ var first = common.first;
 var rest = common.rest;
 var tagged = common.tagged;
 
-function applyFunction(lvars, fun, args, cb) {
+function applyFunction(lvars, fun, args, context, cb) {
   if (common.isWithLVars(fun)) {
     args = [lvars].concat(args);
   }
@@ -280,7 +280,7 @@ var specialForms = {
 };
 
 
-function compileCall(f, args0) {
+function compileCall(f, args0, context) {
   var args = compileArray(args0);
   var n = args.length;
   return function(lvars, cb) {
@@ -288,7 +288,7 @@ function compileCall(f, args0) {
       if (err) {
 	cb(err);
       } else {
-	applyFunction(lvars, f, evaluatedArgs, cb);
+	applyFunction(lvars, f, evaluatedArgs, context, cb);
       }
     });
     for (var i = 0; i < n; i++) {
@@ -306,14 +306,14 @@ function evaluateArrayElements(lvars, array, cb) {
   }
 }
 
-function compileBoundFunction(args0) {
+function compileBoundFunction(args0, context) {
   var key = common.getName(first(args0))
   var args = compileArray(rest(args0));
   return function(lvars, cb) {
     evaluateArrayElements(lvars, args, function(err, evaluated) {
       var f = common.getLocalVar(lvars, key);
       if (typeof f == 'function') {
-	applyFunction(lvars, f, evaluated, cb);
+	applyFunction(lvars, f, evaluated, context, cb);
       } else {
 	console.log('THE LVARS ARE: ');
 	console.log(lvars);
@@ -413,7 +413,7 @@ function compilePropertyAccess(x) {
   }
 }
 
-function compileStringForm(x, f, args) {
+function compileStringForm(x, f, args, context) {
   // Treat strings and symbols the same when
   // they appear in the beginning of an S-expr.
   f = common.getName(f);
@@ -433,11 +433,11 @@ function compileStringForm(x, f, args) {
   } else {
     var opfun = common.getOperatorFunction(f);
     if (opfun) {
-      return compileComplex([opfun].concat(args));
+      return compileComplex([opfun].concat(args), context);
     } else if (isPropertyAccess(f)) {
-      return compilePropertyAccess(x);
+      return compilePropertyAccess(x, context);
     } else {
-      return compileBoundFunction(x);
+      return compileBoundFunction(x, context);
     }
     console.log('Failed to compile:');
     console.log(x);
@@ -446,7 +446,7 @@ function compileStringForm(x, f, args) {
   }
 }
 
-function compileGeneratedFunctionCall(x) {
+function compileGeneratedFunctionCall(x, context) {
   var allArgs = compileArray(x);
   var f = first(allArgs);
   var args = rest(allArgs);
@@ -460,14 +460,14 @@ function compileGeneratedFunctionCall(x) {
 	cb(new Error('Not a function return from form'));
       } else {
 	evaluateArrayElements(lvars, args, function(err, evaluatedArgs) {
-	  applyFunction(lvars, fun, evaluatedArgs, cb);
+	  applyFunction(lvars, fun, evaluatedArgs, context, cb);
 	});
       }
     });
   };
 }
 
-function compileComplex(x) {
+function compileComplex(x, context) {
   var f = first(x);
   var args = rest(x);
   var symfun = common.isSymbolWithFunction(f);
@@ -480,12 +480,12 @@ function compileComplex(x) {
       assert(!common.isAsync(f));
       return compile(f.apply(null, args));
     } else {
-      return compileCall(f, x.slice(1));
+      return compileCall(f, x.slice(1), context);
     }
   } else if (typeof f == 'string' || common.isSymbol(f)) {
-    return compiled(compileStringForm(x, f, args));
-  }   else if (common.isArray(f)) {
-    return compileGeneratedFunctionCall(x);
+    return compiled(compileStringForm(x, f, args, context));
+  } else if (common.isArray(f)) {
+    return compileGeneratedFunctionCall(x, context);
   }
 }
 
@@ -506,10 +506,11 @@ function compileBindingEvaluator(sym) {
   };
 }
 
-function compile(x) {
+function compile(x, context) {
+  context = context || immutable.Map({});
   if (common.isArray(x)) {
     if (x.length > 0) {
-      return compiled(compileComplex(x));
+      return compiled(compileComplex(x, context));
     }
   } else if (common.isSymbol(x)) {
     var fun = common.getOperatorFunction(common.getName(x));
