@@ -112,6 +112,7 @@ function eval(lvars, x, cb) {
 }
 
 function compileArray(x, context) {
+  assert(context);
   var y = new Array(x.length);
   for (var i = 0; i < x.length; i++) {
     y[i] = compile(x[i], context);
@@ -120,6 +121,7 @@ function compileArray(x, context) {
 }
 
 function MakeIf(args, context) {
+  assert(context);
   var cArgs = compileArray(args, context);
   assert(args.length == 2 || args.length == 3);
   return function(lvars, cb) {
@@ -157,6 +159,7 @@ function evaluateInSequence(lvars, compiledForms, result, cb) {
 }
 
 function MakeDo(args0, context) {
+  assert(context);
   var args = compileArray(args0, context);
   return function(lvars, cb) {
     evaluateInSequence(lvars, args, undefined, cb);
@@ -164,6 +167,7 @@ function MakeDo(args0, context) {
 }
 
 function MakeFn(args, context) {
+  assert(context);
   var argList = first(args);
   var body = rest(args);
   var compiledBody = compileArray(body, context);
@@ -193,6 +197,7 @@ function MakeFn(args, context) {
 }
 
 function MakeAfn(args, context) {
+  assert(context);
   var argList = first(args);
   var compiledBody = compileArray(rest(args), context);
   return function(lvars0, cb) {
@@ -213,6 +218,7 @@ function MakeAfn(args, context) {
 }
 
 function getSymbolsAndCompiled(bindings, context) {
+  assert(context);
   var n = bindings.length/2;
   var symbols = new Array(n);
   var compiled = new Array(n);
@@ -244,6 +250,7 @@ function evaluateAndBindVars(lvars, symbols, compiled, cb) {
 }
 
 function MakeLet(args, context) {
+  assert(context);
   var bindings = destructureBindings(first(args));
   var body = rest(args);
   assert(bindings.length % 2 == 0);
@@ -262,6 +269,7 @@ function MakeLet(args, context) {
 }
 
 function MakeErrAndVal(args, context) {
+  assert(context);
   assert(args.length == 1);
   var c = compile(args[0], context);
   return function(lvars, cb) {
@@ -272,6 +280,7 @@ function MakeErrAndVal(args, context) {
 }
 
 function MakeLater(args0, context) {
+  assert(context);
   var args = compileArray(args0, context);
   return function(lvars, cb) {
     setTimeout(function() {
@@ -281,6 +290,7 @@ function MakeLater(args0, context) {
 }
 
 function MakeS(args, value, context) {
+  assert(context);
   context.set('async', value);
   return MakeDo(args, context);
 }
@@ -385,6 +395,7 @@ function compileGetField(field, obj0, context) {
 }
 
 function compileSetField(field, args0, context) {
+  assert(context);
   return function(lvars, cb) {
     evaluateArrayElements(lvars, args0, function(err, args) {
       if (err) {
