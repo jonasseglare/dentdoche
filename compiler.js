@@ -384,7 +384,7 @@ function compileGetField(field, obj0, context) {
   };
 }
 
-function compileSetField(field, args0) {
+function compileSetField(field, args0, context) {
   return function(lvars, cb) {
     evaluateArrayElements(lvars, args0, function(err, args) {
       if (err) {
@@ -403,21 +403,21 @@ function compileSetField(field, args0) {
   }
 }
 
-function compileFieldAccess(x) {
+function compileFieldAccess(x, context) {
   var f = first(x);
-  var args = compileArray(rest(x));
+  var args = compileArray(rest(x), context);
   var field = f.slice(2);
   assert(args.length == 1 || args.length == 2);
   if (args.length == 1) {
-    return compileGetField(field, args[0]);
+    return compileGetField(field, args[0], context);
   } else {
-    return compileSetField(field, args);
+    return compileSetField(field, args, context);
   }
 }
 
-function compileMethodAccess(x) {
+function compileMethodAccess(x, context) {
   var f = first(x).slice(1);
-  var args0 = compileArray(rest(x));
+  var args0 = compileArray(rest(x), context);
   return function(lvars, cb) {
     evaluateArrayElements(lvars, args0, function(err, evaluated) {
       var obj = first(evaluated);
@@ -441,9 +441,9 @@ function compilePropertyAccess(x, context) {
   var f = first(x);
   if (f.length >= 2) {
     if (f[1] == '-') {
-      return compileFieldAccess(x);
+      return compileFieldAccess(x, context);
     } else {
-      return compileMethodAccess(x);
+      return compileMethodAccess(x, context);
     }
   }
 }
