@@ -291,8 +291,7 @@ function MakeLater(args0, context) {
 
 function MakeS(args, value, context) {
   assert(context);
-  context.set('async', value);
-  return MakeDo(args, context);
+  return MakeDo(args, context.set('async', value));
 }
 
 function MakeAsync1(args, context) {
@@ -379,6 +378,7 @@ function isPropertyAccess(f) {
 }
 
 function compileGetField(field, obj0, context) {
+  assert(context);
   return function(lvars, cb) {
     eval(lvars, obj0, function(err, obj) {
       if (err) {
@@ -415,6 +415,7 @@ function compileSetField(field, args0, context) {
 }
 
 function compileFieldAccess(x, context) {
+  assert(context);
   var f = first(x);
   var args = compileArray(rest(x), context);
   var field = f.slice(2);
@@ -427,6 +428,7 @@ function compileFieldAccess(x, context) {
 }
 
 function compileMethodAccess(x, context) {
+  assert(context);
   var f = first(x).slice(1);
   var args0 = compileArray(rest(x), context);
   return function(lvars, cb) {
@@ -460,6 +462,7 @@ function compilePropertyAccess(x, context) {
 }
 
 function compileStringForm(x, f, args, context) {
+  assert(context);
   // Treat strings and symbols the same when
   // they appear in the beginning of an S-expr.
   f = common.getName(f);
@@ -493,6 +496,7 @@ function compileStringForm(x, f, args, context) {
 }
 
 function compileGeneratedFunctionCall(x, context) {
+  assert(context);
   var allArgs = compileArray(x, context);
   var f = first(allArgs);
   var args = rest(allArgs);
