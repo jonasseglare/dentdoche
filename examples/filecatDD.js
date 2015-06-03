@@ -16,3 +16,8 @@ var filecat = dd.makeAfn(['srcA', 'srcB', 'dst'],
 filecat('/tmp/mjao.txt', '/tmp/katt.txt', '/tmp/abrakadabra.txt', function(err, value) {
   console.log('Done.');
 });
+
+eval(dd.parse(
+  '(dafn filecat2 (srcA srcB dst) '+
+    '(fs.writeFile dst '+
+    '  (+ (fs.readFile srcA "utf8") (fs.readFile srcB "utf8"))))'));
