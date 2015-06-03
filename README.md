@@ -4,7 +4,7 @@ Dentdoche is a Lisp interpreter in node.js that abstracts away the difficulties 
 
 Dentdoche is just a regular node library that is included in the source code, so *no extra build step* is necessary. Functions defined in Dentdoche can call Javascript functions, and Javascript functions can call functions defined with Dentdoche, because Dentdoche functions compile to Javascript functions. The two languages can be used and live together, side by side, in the same source file.
 
-Dentdoche code can be written either as Javascript literals, or as S-expressions that are parsed.
+Dentdoche code can be written either as Javascript literals, or as S-expressions that are parsed. The parsed S-expression compile to Javascript literals, that in turn compile into something that can be evaluated in Javascript.
 
 ## Example usage
 Consider this Javascript function that concatenates files:
