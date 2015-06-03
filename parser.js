@@ -20,6 +20,8 @@ function compileSymbolResolution(x) {
 }
 
 var special = {
+  'later': 'later',
+  'this': 'this',
   'do': 'dd.do',
   'let': 'dd.let',
   'if': 'dd.if',
@@ -30,7 +32,8 @@ var special = {
   'afn': 'dd.afn',
   'loop': 'dd.loop',
   'return': 'dd.return',
-  'next': 'dd.next'
+  'next': 'dd.next',
+  'quote': 'dd.quote'
 };
 
 function buildEvalString(x) {
@@ -64,15 +67,21 @@ function buildEvalString(x) {
 
 
 function buildArgList(x) {
+  console.log('x = %j', x);
+  if (!x) {
+    console.log('Return this');
+    return '[]';
+  }
   var result = '[';
   var last = x.length - 1;
   for (var i = 0; i < x.length; i++) {
     result += "'" + x[i] + "'";
-    if (i == last) {
-      return result + "]";
+    if (i != last) {
+      result += ",";
     }
-    result += ",";
   }
+  return result + "]";
+
 }
 
 function parseToEvalString(x) {

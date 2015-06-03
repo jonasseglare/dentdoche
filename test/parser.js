@@ -95,6 +95,7 @@ describe('Trying eval', function() {
     var x = parser.parse('(dafn katt (n) (loop (product 1 i n) '+
                          '(console.log (+ "Iterations left: " i))' +
                          '(if (= i 0) (return product) (next (* product i) (- i 1)))))');
+    console.log(x);
     eval(x);
     katt(5, function(err, value) {
       assert(value == 5*4*3*2*1);
@@ -118,4 +119,25 @@ describe('Trying eval', function() {
       done();
     });
   });
+
+  it('Quote', function(done) {
+    var x = dd.parse("(dfn m () '(1 2 3))")
+    console.log('x = ' + x);
+    eval(x);
+    console.log('m = %j', m());
+    done();
+  });
+
+  it('fibAsync', function(done) {
+    var fibRef = function(x) {return (x < 2? x : fibRef(x-1) + fibRef(x-2));}
+    var x = dd.parse("(dafn fib (x) (if (< x 2) x (+ (this (- x 1)) (this (- x 2)))))");
+    eval(x);
+    fib(2, function(err, value) {
+      assert(!err);
+      console.log('value = ' + value);
+      assert(value == fibRef(5));
+      done();
+    });
+  });
 });
+

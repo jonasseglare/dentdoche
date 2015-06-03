@@ -1,7 +1,6 @@
 /*
   
   TODO:
-    * Try/catch-macro.
     * More thorough validation of async method calls, as well as sync ones.
     * Default string literals to symbols, and annotate all strings with
         dd.str(...). There can be a preproc-phase where strings are replaced
