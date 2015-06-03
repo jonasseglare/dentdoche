@@ -128,7 +128,7 @@ dd.setAsync(fs.readFile);
 eval(dd.parse('(sync (fs.readFile "somefile" (fn (err value) '+
                      +'(console.log "Maybe loaded."))))'));
 ```
-
+This means that you can write regular callback-style code in Dentdoche, but with Lisp syntax.
 
 Macros are regular Javascript functions that transform programs. Here is a macro that defines ```or``` in a lazy way:
 ```js
