@@ -15,7 +15,7 @@ Adder.prototype.add = function(x) {
   return this.secret + x;
 }
 
-Adder.prototype.add2 = common.async(function(x, cb) {
+Adder.prototype.add2 = common.setAsync(function(x, cb) {
   cb(null, this.secret + x);
 });
 
@@ -97,7 +97,7 @@ describe('compilers', function() {
   });
 
   it('async funcall', function() {
-    var norm = dd.async(function(a, b, cb) {
+    var norm = dd.setAsync(function(a, b, cb) {
       cb(null, Math.sqrt(a*a + b*b));
     });
     var k = c.compile([norm, 3, 4]);

@@ -115,7 +115,7 @@ function bindFunctionArgs(lvars, symbols, values) {
 }
 
 // Mark a function as async.
-function async(x) {
+function setAsync(x) {
   assert(typeof x == 'function');
   x.async = true;
   return x;
@@ -305,7 +305,7 @@ module.exports.isArray = isArray;
 module.exports.argsToArray = argsToArray;
 module.exports.bindFunctionArgs = bindFunctionArgs;
 module.exports.getName = getName;
-module.exports.async = async;
+module.exports.setAsync = setAsync;
 module.exports.PromisedValue = PromisedValue;
 module.exports.opmap = opmap;
 module.exports.getOperatorFunctionSub = getOperatorFunctionSub;

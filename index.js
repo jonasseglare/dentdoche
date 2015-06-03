@@ -19,7 +19,7 @@ var compiler = require('./compiler.js');
 var isArray = common.isArray;
 var argsToArray = common.argsToArray;
 var getName = common.getName;
-var async = common.async;
+var setAsync = common.setAsync;
 var PromisedValue = common.PromisedValue;
 var opmap = common.opmap;
 var getOperatorFunctionSub = common.getOperatorFunctionSub;
@@ -53,7 +53,7 @@ function convertToAsync(f) {
   if (common.isAsync(f)) {
     return f;
   } else {
-    return async(function() {
+    return setAsync(function() {
       var allArgs = argsToArray(arguments);
       var index = allArgs.length-1;
       var butCB = allArgs.slice(0, index);
@@ -76,7 +76,7 @@ function applyAsync(fun0, args, cb) {
   fun.apply(null, args.concat([cb]));
 }
 
-async(applyAsync);
+setAsync(applyAsync);
 
 // http://stackoverflow.com/questions/3362471/how-can-i-call-a-javascript-constructor-using-call-or-apply
 function callConstructorWithArgs(Constructor) {
@@ -120,7 +120,7 @@ function mapAsync(fun0) {
     }
     fun.apply(null, localArgs);
   }
-} async(mapAsync);
+} setAsync(mapAsync);
 
 function reduceAsync(fun0, coll, cb) {
   if (coll.length == undefined) {
@@ -154,7 +154,7 @@ function reduceAsync(fun0, coll, cb) {
       gotValue(err);
     });
   }
-} async(reduceAsync);
+} setAsync(reduceAsync);
 
 
 function filterAsync(fun0, coll, cb) {
@@ -174,7 +174,7 @@ function filterAsync(fun0, coll, cb) {
       cb(null, dst.slice(0, counter));
     }
   });
-} async(filterAsync);
+} setAsync(filterAsync);
 
 
 
@@ -241,7 +241,7 @@ function iterate(initialState, fun, cb) {
   } else {
     cb(new Error(util.format('This is not a function: %j', fun)));
   }
-} async(iterate);
+} setAsync(iterate);
 
 function and() {
   var args = argsToArray(arguments);
@@ -281,11 +281,11 @@ function butLast(x) {
 
 function throwFun(x, cb) {
   cb(x);
-} async(throwFun)
+} setAsync(throwFun)
 
 function eval(lvars, frm, cb) {
   compiler.eval(lvars, compiler.compile(frm), cb);
-} async(eval); common.withLVars(eval);
+} setAsync(eval); common.withLVars(eval);
 
 function cond() {
   var args = common.argsToArray(arguments);
@@ -399,7 +399,7 @@ function tryMacro() {
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.evaluateForm = compiler.evaluateForm;
-module.exports.async = async;
+module.exports.setAsync = setAsync;
 module.exports.isAsync = common.isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.S = sym;

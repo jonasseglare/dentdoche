@@ -185,7 +185,7 @@ function MakeAfn(args) {
   var compiledBody = compileArray(rest(args));
   return function(lvars0, cb) {
     //cb(null, 124);
-    cb(null, common.async(function() {
+    cb(null, common.setAsync(function() {
       
       var allArgs = common.argsToArray(arguments);
       var last = allArgs.length - 1;

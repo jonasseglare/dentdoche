@@ -23,7 +23,7 @@ var fsubAsync = dd.makeAfn(
 
 function factorialAsync() {
   fsubAsync.apply(this, dd.argsToArray(arguments));
-} dd.async(factorialAsync);
+} dd.setAsync(factorialAsync);
 
 describe('evaluateSymbol', function() {
   it('Should evaluate a symbol', function() {
@@ -34,7 +34,7 @@ describe('evaluateSymbol', function() {
   
   it('Should study async tagging', function() {
     var x = function(x) {console.log('mjao, %j', x);};
-    assert(dd.isAsync(dd.async(x)));
+    assert(dd.isAsync(dd.setAsync(x)));
     assert(!dd.isAsync(console.log));
   });
   
@@ -403,7 +403,7 @@ describe('evaluateSymbol', function() {
       return x*x;
     }
 
-    var myFilter = dd.async(function(a, b, cb) {
+    var myFilter = dd.setAsync(function(a, b, cb) {
       cb(null, 'So you want to filter ' + b);
     });
 
@@ -439,8 +439,8 @@ describe('evaluateSymbol', function() {
   });
 
   it('Try files and async stuff', function(done) {
-    dd.async(fs.readFile);
-    dd.async(fs.writeFile);
+    dd.setAsync(fs.readFile);
+    dd.setAsync(fs.writeFile);
     
     var addTmp = function(x) {
       return "/tmp/" + x;
@@ -594,8 +594,8 @@ describe('evaluateSymbol', function() {
     // as being asynchronous
     // style. Calling a callback
     // when done.
-    dd.async(fs.readFile);
-    dd.async(fs.writeFile);
+    dd.setAsync(fs.readFile);
+    dd.setAsync(fs.writeFile);
 
     var appendBasePath = dd.makeFn( // <--  A regular synchronous function
       ['fname'], // <-- Accepting a single argument

@@ -98,7 +98,7 @@ function makeFunctionDef(parsed) {
     var body = ['do'].concat(parsed.slice(3));
     var wrapper = 'function ' + name +
       '() { return ' + implName +
-      '.apply(this, dd.argsToArray(arguments))}; ' + (isSync? "" : "dd.async(" + name + ");");
+      '.apply(this, dd.argsToArray(arguments))}; ' + (isSync? "" : "dd.setAsync(" + name + ");");
     var mainDef = 'var ' + implName + ' = ' + maker +
       '('+ buildArgList(args) + ',' + buildEvalString(body) + ');';
     return wrapper + mainDef;
