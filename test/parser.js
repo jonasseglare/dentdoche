@@ -205,12 +205,15 @@ describe('Trying eval', function() {
   });
 
   it('Property access', function() {
+    var secret = 119;
     var x = dd.parse('(def obj (new Obj)) ' +
                      '(console.log (+ "Obj is " obj))' +
                      '(def a (.getParamSync obj)) (def b (.getParamAsync obj))'+
                      ' (def c (.-param obj))');
-    console.log(x);
     eval(x);
+    assert(a == secret);
+    assert(b == secret);
+    assert(c == secret);
   });
 });
 
