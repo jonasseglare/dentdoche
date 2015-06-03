@@ -15,8 +15,8 @@ var fs = require('fs');
 eval(dd.parse("(dfn fib (x) (if (< x 2) x (+ (fib (- x 1)) (fib (- x 2)))))"
               + "(dafn fiba (x) (if (< x 2) x (later (+ (fiba (- x 1)) (fiba (- x 2))))))"));
 
-function Obj() {
-  this.param = 119;
+function Obj(secret) {
+  this.param = secret;
 }
 
 Obj.prototype.getParamSync = function() {
@@ -206,10 +206,10 @@ describe('Trying eval', function() {
 
   it('Property access', function() {
     var secret = 119;
-    var x = dd.parse('(def obj (new Obj)) ' +
+    var x = dd.parse('(def obj (new Obj secret)) ' +
                      '(console.log (+ "Obj is " obj))' +
                      '(def a (.getParamSync obj)) (def b (.getParamAsync obj))'+
-                     ' (def c (.-param obj))');
+                     '(def c (.-param obj))');
     eval(x);
     assert(a == secret);
     assert(b == secret);
