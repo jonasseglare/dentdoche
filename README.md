@@ -54,15 +54,16 @@ eval(dd.parse(
 ```
 Also, generalizing the function for more files is simple.
 ```js
-var filecatMany = dd.makeAfn([],
-			     [fs.writeFile,
-			      [dd.last, dd.sym('arguments')],
-			      [dd.reduce,
-			       dd.sym('+'),
-			       [dd.map,
-				[dd.afn, ['fname'], 
-				 [fs.readFile, dd.sym('fname'), 'utf8']],
-				[dd.butLast, dd.sym('arguments')]]]]);
+var filecatMany = dd.makeAfn(
+  [],
+  [fs.writeFile,
+   [dd.last, dd.sym('arguments')],
+   [dd.reduce,
+    dd.sym('+'),
+    [dd.map,
+     [dd.afn, ['fname'], 
+      [fs.readFile, dd.sym('fname'), 'utf8']],
+     [dd.butLast, dd.sym('arguments')]]]]);
 ```
 ## Documentation
 Not yet written. Look at the test cases in the ```test/``` subdirectory for examples of how to use it.
