@@ -1,8 +1,8 @@
 var fs = require('fs');
 var dd = require('../index.js');
 
-dd.async(fs.readFile);
-dd.async(fs.writeFile);
+dd.setAsync(fs.readFile);
+dd.setAsync(fs.writeFile);
 
 var filecatMany = dd.makeAfn([],
 			     [fs.writeFile,
