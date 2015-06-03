@@ -224,5 +224,16 @@ describe('Trying eval', function() {
     assert(d == 12);
     assert(e == 12);
   });
+
+  it('local funs', function(done) {
+    eval(dd.parse('(def fa (fn (a b) (+ (* a a) (* b b))))'));
+    eval(dd.parse('(def fb (afn (a b) (+ (* a a) (* b b))))'));
+    assert(fa(3, 4) == 25);
+    fb(3, 4, function(err, value) {
+      assert(!err);
+      assert(value == 25);
+      done();
+    });
+  });
 });
 
