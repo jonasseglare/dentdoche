@@ -142,13 +142,8 @@ function or() {
 } macro(or);
 ```
 
-See the test cases in the 
+See the [test cases!](test/) in order to understand how to really make use of Dentdoche.
 
-## Common pitfalls
-
-  * Forgetting comma between array elements.
-  * Using ```fn``` instead of ```afn```, or ```makeFn``` instead of ```makeAfn```.
- 
 ## Licence
 Copyright Jonas Östlund 2015.
 Released under EPL (Eclipse Public Licence).
