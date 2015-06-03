@@ -102,8 +102,25 @@ fiba(7, function(err, value) {
   assert(value == 13);
 });            
 ```
+By default, functions not defined by Dentdoche will be assumed to return their results through their return value. However, Dentdoche can be told that they deliver their results through a callback:
+```js
+eval(dd.parse('(dafn loadFile (fname) (async (fs.readFile fname)))'));
+```
+or
+```js
+dd.setAsync(fs.readFile);
+eval(dd.parse('(dafn loadFile (fname) (fs.readFile fname))'));
+```
 
-
+Anonymous functions can also be defined, either as delivering their result through return value (using ```fn```) or by calling a callback (using ```afn```):
+```js
+eval(dd.parse('(def fa (fn (a b) (+ (* a a) (* b b))))'));
+eval(dd.parse('(def fb (afn (a b) (+ (* a a) (* b b))))'));
+assert(fa(3, 4) == 25);
+fb(3, 4, function(err, value) {
+  assert(value == 25);
+});
+```
 ### Macros
 Macros are regular Javascript functions that transform programs. Here is a macro that defines ```or``` in a lazy way:
 ```js
