@@ -235,5 +235,9 @@ describe('Trying eval', function() {
       done();
     });
   });
+
+  it('sync', function(done) {
+    eval(dd.parse('(sync (fs.readFile "nonexistantfile" (fn (err value) (done))))'));
+  });
 });
 
