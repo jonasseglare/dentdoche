@@ -143,14 +143,14 @@ describe('Trying eval', function() {
   });
 
   it('binding', function(done) {
-    var x = dd.parse('(def rulleMjaoMjao (+ 3 4))');
-    //var rulleMjaoMjao = undefined;
-// dd.evaluateForm(null, [dd.sym("+"),3,4], function(err, value) { if (err) {console.log("Error in binding " + rulleMjaoMjao + ": "); console.log(err);} else {rulleMjaoMjao = value;}});
-    
-    console.log(x);
-    eval(x);
+    eval(dd.parse('(def rulleMjaoMjao (+ 3 4))'));
     assert(rulleMjaoMjao == 7);
     done();
+  });
+
+  it('require', function() {
+    eval(dd.parse('(def myLocalFs (require "fs"))'));
+    assert(myLocalFs.writeFile);
   });
 });
 
