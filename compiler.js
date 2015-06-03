@@ -111,16 +111,16 @@ function eval(lvars, x, cb) {
   }
 }
 
-function compileArray(x) {
+function compileArray(x, context) {
   var y = new Array(x.length);
   for (var i = 0; i < x.length; i++) {
-    y[i] = compile(x[i]);
+    y[i] = compile(x[i], context);
   }
   return y;
 }
 
-function MakeIf(args) {
-  var cArgs = compileArray(args);
+function MakeIf(args, context) {
+  var cArgs = compileArray(args, context);
   assert(args.length == 2 || args.length == 3);
   return function(lvars, cb) {
     eval(lvars, cArgs[0], function(err, value) {
@@ -156,17 +156,17 @@ function evaluateInSequence(lvars, compiledForms, result, cb) {
   }
 }
 
-function MakeDo(args0) {
-  var args = compileArray(args0);
+function MakeDo(args0, context) {
+  var args = compileArray(args0, context);
   return function(lvars, cb) {
     evaluateInSequence(lvars, args, undefined, cb);
   }
 }
 
-function MakeFn(args) {
+function MakeFn(args, context) {
   var argList = first(args);
   var body = rest(args);
-  var compiledBody = compileArray(body);
+  var compiledBody = compileArray(body, context);
   
   return function(lvars0, cb) {
     //cb(null, 124);
@@ -192,9 +192,9 @@ function MakeFn(args) {
   }
 }
 
-function MakeAfn(args) {
+function MakeAfn(args, context) {
   var argList = first(args);
-  var compiledBody = compileArray(rest(args));
+  var compiledBody = compileArray(rest(args), context);
   return function(lvars0, cb) {
     //cb(null, 124);
     cb(null, common.setAsync(function() {
@@ -212,14 +212,14 @@ function MakeAfn(args) {
   }
 }
 
-function getSymbolsAndCompiled(bindings) {
+function getSymbolsAndCompiled(bindings, context) {
   var n = bindings.length/2;
   var symbols = new Array(n);
   var compiled = new Array(n);
   for (var i = 0; i < n; i++) {
     var offset = 2*i;
     symbols[i] = bindings[offset + 0];
-    compiled[i] = compile(bindings[offset + 1]);
+    compiled[i] = compile(bindings[offset + 1], context);
   }
   return [symbols, compiled];
 }
@@ -243,11 +243,11 @@ function evaluateAndBindVars(lvars, symbols, compiled, cb) {
   }
 }
 
-function MakeLet(args) {
+function MakeLet(args, context) {
   var bindings = destructureBindings(first(args));
   var body = rest(args);
   assert(bindings.length % 2 == 0);
-  var symbolsAndCompiled = getSymbolsAndCompiled(bindings);
+  var symbolsAndCompiled = getSymbolsAndCompiled(bindings, context);
   var symbols = symbolsAndCompiled[0];
   var compiled = symbolsAndCompiled[1];
   return function(lvars0, cb) {
@@ -255,15 +255,15 @@ function MakeLet(args) {
       if (err) {
 	cb(err);
       } else {
-	evaluateInSequence(lvars, compileArray(body), undefined, cb);
+	evaluateInSequence(lvars, compileArray(body, context), undefined, cb);
       }
     });
   };
 }
 
-function MakeErrAndVal(args) {
+function MakeErrAndVal(args, context) {
   assert(args.length == 1);
-  var c = compile(args[0]);
+  var c = compile(args[0], context);
   return function(lvars, cb) {
     eval(lvars, c, function(err, value) {
       cb(null, [err, value]);
@@ -314,7 +314,7 @@ var specialForms = {
 
 function compileCall(f, args0, context) {
   assert(context);
-  var args = compileArray(args0);
+  var args = compileArray(args0, context);
   var n = args.length;
   return function(lvars, cb) {
     var result = new common.ResultArray(n, function(err, evaluatedArgs) {
@@ -342,7 +342,7 @@ function evaluateArrayElements(lvars, array, cb) {
 function compileBoundFunction(args0, context) {
   assert(context);
   var key = common.getName(first(args0))
-  var args = compileArray(rest(args0));
+  var args = compileArray(rest(args0), context);
   return function(lvars, cb) {
     evaluateArrayElements(lvars, args, function(err, evaluated) {
       var f = common.getLocalVar(lvars, key);
@@ -368,7 +368,7 @@ function isPropertyAccess(f) {
   return false;
 }
 
-function compileGetField(field, obj0) {
+function compileGetField(field, obj0, context) {
   return function(lvars, cb) {
     eval(lvars, obj0, function(err, obj) {
       if (err) {
@@ -482,7 +482,7 @@ function compileStringForm(x, f, args, context) {
 }
 
 function compileGeneratedFunctionCall(x, context) {
-  var allArgs = compileArray(x);
+  var allArgs = compileArray(x, context);
   var f = first(allArgs);
   var args = rest(allArgs);
   return function(lvars, cb) {
@@ -514,7 +514,7 @@ function compileComplex(x, context) {
     }
     if (common.isMacro(f)) {
       assert(!common.isAsync(f));
-      return compile(f.apply(null, args));
+      return compile(f.apply(null, args), context);
     } else {
       return compileCall(f, x.slice(1), context);
     }
@@ -543,7 +543,7 @@ function compileBindingEvaluator(sym) {
 }
 
 function compile(x, context) {
-  context = context || immutable.Map({});
+  assert(context);
   if (common.isArray(x)) {
     if (x.length > 0) {
       return compiled(compileComplex(x, context));
@@ -559,8 +559,12 @@ function compile(x, context) {
   return x;
 }
 
+function compileTop(x) {
+  return compile(x, immutable.Map({}));
+}
+
 function makeAnyFun(builder, args) {
-  var fnBuilder = builder(args);
+  var fnBuilder = builder(args, immutable.Map({}));
   var fun = undefined;
   fnBuilder(immutable.Map({}), function(err, compiledFun) {
     fun = compiledFun;
@@ -580,7 +584,7 @@ function makeAfn() {
 
 
 function evaluateForm(lvars, frm, cb) {
-  var c = compile(frm);
+  var c = compileTop(frm);
   eval(common.makeImmutableMap(lvars), c, cb);
 }
 
@@ -590,7 +594,7 @@ function evaluateForm(lvars, frm, cb) {
 
 
 module.exports.isCompiled = isCompiled;
-module.exports.compile = compile;
+module.exports.compile = compileTop;
 module.exports.compiled = compiled;
 module.exports.eval = eval;
 module.exports.makeAfn = makeAfn;
