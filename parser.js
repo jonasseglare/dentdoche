@@ -37,7 +37,12 @@ var special = {
   'return': 'dd.return',
   'next': 'dd.next',
   'quote': 'dd.quote',
-  'new': 'dd.new'
+  'new': 'dd.new',
+  'map': 'dd.map',
+  'reduce': 'dd.reduce',
+  'and': 'dd.and',
+  'or': 'dd.or',
+  'not': 'dd.not'
 };
 
 function isPropertyAccess(x) {
