@@ -72,7 +72,10 @@ var dd = require('dentdoche');
 ```
 This is because the generated code will assume that the exported symbols can be referred to as ```dd.symbolName```.
 
-
+In order to just run some code for side effects, you can
+```js
+eval(dd.parse('(console.log (+ "Three plus four is " (+ 3 4)))'));
+```
 
 
 ### Macros
