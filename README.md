@@ -122,7 +122,7 @@ fb(3, 4, function(err, value) {
   assert(value == 25);
 });
 ```
-The ```sync``` keyword can also be used to override a function that was previously set to being async:
+The ```sync``` keyword can also be used to override a function that was previously set to being async. All these keywords (```sync```, ```async``` and ```async1```) override what was previously associated with a function:
 ```js
 dd.setAsync(fs.readFile);
 eval(dd.parse('(sync (fs.readFile "somefile" (fn (err value) '+
