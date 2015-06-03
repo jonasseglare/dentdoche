@@ -128,7 +128,7 @@ describe('Trying eval', function() {
     done();
   });
 
-  it('fibAsync', function(done) {
+  /*it('fibAsync', function(done) {
     var fibRef = function(x) {return (x < 2? x : fibRef(x-1) + fibRef(x-2));}
     var x = dd.parse("(dafn fib (x) (if (< x 2) x (+ (this (- x 1)) (this (- x 2)))))");
     eval(x);
@@ -138,6 +138,17 @@ describe('Trying eval', function() {
       assert(value == fibRef(5));
       done();
     });
+  });*/
+  it('this', function(done) {
+    var p = dd.parse('(dfn countDown (x) countDown)'); //(if (== 0 x) x (this (- x 1))))')
+    console.log(p);
+    eval(p);
+    var result = countDown(5);
+    console.log('result = ');
+    console.log(result);
+    console.log(typeof result);
+    assert(result == 0);
+    done();
   });
 });
 

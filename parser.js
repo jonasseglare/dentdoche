@@ -90,12 +90,18 @@ function parseToEvalString(x) {
 
 function makeFunctionDef(parsed) {
   try {
+    var implName = common.gensym();
     var f = parsed[0];
     var maker = (f == 'dfn'? 'dd.makeFn' : 'dd.makeAfn');
     var name = parsed[1];
     var args = parsed[2];
     var body = ['do'].concat(parsed.slice(3));
-    return 'var ' + name + ' = ' + maker +
+    /*var wrapper = 'function ' + name + '() { return ' + implName +
+      '.apply(this, dd.argsToArray(arguments))};';
+    var mainDef = 'var ' + implName + ' = ' + maker +
+      '('+ buildArgList(args) + ',' + buildEvalString(body) + ');';
+    return wrapper + mainDef;*/
+    return 'var ' + name + ' = function() {};\n var ' + name + ' = ' + maker +
       '('+ buildArgList(args) + ',' + buildEvalString(body) + ');';
   } catch (e) {
     console.log('Failed to make function definition from ' + parsed);
