@@ -13,7 +13,7 @@ function getCallingMode(fun, context) {
   }
 }
 
-function applyFunction(lvars, fun, args, context, cb) {
+function applyFunction(lvars, fun, args, context, cb, self) {
   assert(context instanceof immutable.Map);
   if (common.isWithLVars(fun)) {
     args = [lvars].concat(args);
@@ -21,11 +21,11 @@ function applyFunction(lvars, fun, args, context, cb) {
   try {
     var amode = getCallingMode(fun, context);
     if (amode === 1) {
-      fun.apply(null, args.concat([function(result) {cb(null, result);}]));
+      fun.apply(self, args.concat([function(result) {cb(null, result);}]));
     } else if (amode) {
-      fun.apply(null, args.concat([cb]));
+      fun.apply(self, args.concat([cb]));
     } else {
-      cb(null, fun.apply(null, args));
+      cb(null, fun.apply(self, args));
     }
   } catch (e) {
     cb(e);
@@ -436,15 +436,19 @@ function compileMethodAccess(x, context) {
       var obj = first(evaluated);
       var args = rest(evaluated);
       var fun = obj[f];
-      try {
+      applyFunction(lvars, fun, args, context, cb, obj);
+
+     /* try {
+                
 	if (common.isAsync(fun)) {
 	  fun.apply(obj, args.concat([cb]));
 	} else {
 	  cb(null, fun.apply(obj, args));
 	}
+        
       } catch (e) {
 	cb(e);
-      }
+      }*/
     });
   };
 }

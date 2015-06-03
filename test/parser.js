@@ -27,6 +27,10 @@ Obj.prototype.getParamAsync = dd.setAsync(function(cb) {
   cb(null, this.param);
 });
 
+Obj.prototype.getParamAsync1 = dd.setAsync1(function(cb) {
+  cb(this.param);
+});
+
 
 describe('Trying eval', function() {
   it('Should load fs using eval', function() {
@@ -211,12 +215,14 @@ describe('Trying eval', function() {
                      '(def a (.getParamSync obj)) (def b (.getParamAsync obj))'+
                      '(def c (.-param obj))' +
                      '(.-param obj 12)'+
-                     '(def d (.-param obj))');
+                     '(def d (.-param obj))'+
+                     '(def e (.getParamAsync1 obj))');
     eval(x);
     assert(a == secret);
     assert(b == secret);
     assert(c == secret);
     assert(d == 12);
+    assert(e == 12);
   });
 });
 

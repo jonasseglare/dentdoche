@@ -394,7 +394,7 @@ function tryMacro() {
 } macro(tryMacro);
 
 function setAsync1(x) {
-  setAsync(x, 1);
+  return setAsync(x, 1);
 }
 
 
