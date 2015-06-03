@@ -14,7 +14,7 @@ function getCallingMode(fun, context) {
 }
 
 function applyFunction(lvars, fun, args, context, cb) {
-  assert(context);
+  assert(context instanceof immutable.Map);
   if (common.isWithLVars(fun)) {
     args = [lvars].concat(args);
   }
