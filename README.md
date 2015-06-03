@@ -33,8 +33,8 @@ In Dentdoche, you would write
 var fs = require('fs');
 var dd = require('dentdoche');
 
-dd.async(fs.readFile);
-dd.async(fs.writeFile);
+dd.setAsync(fs.readFile);
+dd.setAsync(fs.writeFile);
 
 var filecat = dd.makeAfn(['srcA', 'srcB', 'dst'],
 			 [fs.writeFile,
