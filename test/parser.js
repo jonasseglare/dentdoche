@@ -13,6 +13,7 @@ var dd = require('../index.js');
 var fs = require('fs');
 
 eval(dd.parse("(dfn fib (x) (if (< x 2) x (+ (fib (- x 1)) (fib (- x 2)))))"));
+eval(dd.parse("(dafn fiba (x) (if (< x 2) x (+ (fiba (- x 1)) (fiba (- x 2)))))"));
 
 
 describe('Trying eval', function() {
@@ -135,7 +136,11 @@ describe('Trying eval', function() {
     var fibRef = function(x) {return (x < 2? x : fibRef(x-1) + fibRef(x-2));}
     var value = fib(7);
     assert(value == 13);
-    done();
+    fiba(7, function(err, value) {
+      assert(!err);
+      assert(value == 13);
+      done();
+    });
   });
   /*it('this', function(done) {
     var p = dd.parse('(dfn countDown (x) countDown)'); //(if (== 0 x) x (this (- x 1))))')

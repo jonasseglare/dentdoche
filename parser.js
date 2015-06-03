@@ -96,8 +96,9 @@ function makeFunctionDef(parsed) {
     var name = parsed[1];
     var args = parsed[2];
     var body = ['do'].concat(parsed.slice(3));
-    var wrapper = 'function ' + name + '() { return ' + implName +
-      '.apply(this, dd.argsToArray(arguments))}; '; // + (isSync? "" : "dd.async(" + implName + ");");
+    var wrapper = 'function ' + name +
+      '() { return ' + implName +
+      '.apply(this, dd.argsToArray(arguments))}; ' + (isSync? "" : "dd.async(" + name + ");");
     var mainDef = 'var ' + implName + ' = ' + maker +
       '('+ buildArgList(args) + ',' + buildEvalString(body) + ');';
     return wrapper + mainDef;
