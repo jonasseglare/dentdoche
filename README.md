@@ -142,7 +142,7 @@ function or() {
 } macro(or);
 ```
 
-See the [test cases!](test/) in order to understand how to really make use of Dentdoche.
+See the [test cases](test/) in order to understand how to really make use of Dentdoche.
 
 ## Licence
 Copyright Jonas Östlund 2015.
