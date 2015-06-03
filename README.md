@@ -80,6 +80,14 @@ Several expressions can be evaluated within the same string:
 ```js
 eval(dd.parse('(console.log (+ "Three plus four is " (+ 3 4))) (console.log "Hello!")'));
 ```
+Global variables can be defined with ```def```:
+```js
+eval(dd.parse('(def seven (+ 3 4))'));
+```
+or as in
+```js
+eval(dd.parse('(def fs (require "fs"))'));
+```
 
 ### Macros
 Macros are regular Javascript functions that transform programs. Here is a macro that defines ```or``` in a lazy way:
