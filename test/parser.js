@@ -12,8 +12,8 @@ var parser = require('../parser.js');
 var dd = require('../index.js');
 var fs = require('fs');
 
-eval(dd.parse("(dfn fib (x) (if (< x 2) x (+ (fib (- x 1)) (fib (- x 2)))))"));
-eval(dd.parse("(dafn fiba (x) (if (< x 2) x (later (+ (fiba (- x 1)) (fiba (- x 2))))))"));
+eval(dd.parse("(dfn fib (x) (if (< x 2) x (+ (fib (- x 1)) (fib (- x 2)))))"
+              + "(dafn fiba (x) (if (< x 2) x (later (+ (fiba (- x 1)) (fiba (- x 2))))))"));
 
 
 describe('Trying eval', function() {

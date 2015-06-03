@@ -110,9 +110,7 @@ function makeFunctionDef(parsed) {
   }
 }
 
-// User method
-function parse(x) {
-  var parsed = Parse(x);
+function parseSub(parsed) {
   if (parsed instanceof Array) {
     if (parsed.length > 1) {
       var f = parsed[0];
@@ -123,6 +121,17 @@ function parse(x) {
   }
   console.log('parser.js: FAILED TO EVALUATE THIS: ' + x);
   return '';
+}
+
+
+// User method
+function parse(x) {
+  var parsed = Parse('(' + x + ')');
+  var output = '';
+  for (var i = 0; i < parsed.length; i++) {
+    output += parseSub(parsed[i]);
+  }
+  return output;
 }
 
 
