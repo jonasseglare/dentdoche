@@ -205,7 +205,7 @@ describe('Trying eval', function() {
   });
 
   it('Property access', function() {
-    var secret = 119;
+    var secret = 199;
     var x = dd.parse('(def obj (new Obj secret)) ' +
                      '(console.log (+ "Obj is " obj))' +
                      '(def a (.getParamSync obj)) (def b (.getParamAsync obj))'+
