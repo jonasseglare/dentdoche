@@ -91,10 +91,16 @@ eval(dd.parse('(def fs (require "fs"))'));
 A function that delivers its result as return value can be defined with ```dfn```:
 ```js
 eval(dd.parse('(dfn fib (x) (if (< x 2) x (+ (fib (- x 1)) (fib (- x 2)))))'));
+
+assert(fib(7) == 13);
 ```
 and likewise, a function that calls a callback ```cb``` as ```cb(error, result)```, can be defined as
 ```js
 eval(dd.parse('(dafn fiba (x) (if (< x 2) x (+ (fiba (- x 1)) (fiba (- x 2)))))'));
+
+fiba(7, function(err, value) {
+  assert(value == 13);
+});            
 ```
 
 
