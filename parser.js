@@ -91,12 +91,13 @@ function makeFunctionDef(parsed) {
   try {
     var implName = common.gensym();
     var f = parsed[0];
-    var maker = (f == 'dfn'? 'dd.makeFn' : 'dd.makeAfn');
+    var isSync = f == 'dfn';
+    var maker = (isSync? 'dd.makeFn' : 'dd.makeAfn');
     var name = parsed[1];
     var args = parsed[2];
     var body = ['do'].concat(parsed.slice(3));
     var wrapper = 'function ' + name + '() { return ' + implName +
-      '.apply(this, dd.argsToArray(arguments))};';
+      '.apply(this, dd.argsToArray(arguments))}; '; // + (isSync? "" : "dd.async(" + implName + ");");
     var mainDef = 'var ' + implName + ' = ' + maker +
       '('+ buildArgList(args) + ',' + buildEvalString(body) + ');';
     return wrapper + mainDef;
