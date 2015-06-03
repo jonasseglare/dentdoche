@@ -67,7 +67,6 @@ function buildEvalString(x) {
 
 
 function buildArgList(x) {
-  console.log('x = %j', x);
   if (!x) {
     console.log('Return this');
     return '[]';
@@ -96,13 +95,13 @@ function makeFunctionDef(parsed) {
     var name = parsed[1];
     var args = parsed[2];
     var body = ['do'].concat(parsed.slice(3));
-    /*var wrapper = 'function ' + name + '() { return ' + implName +
+    var wrapper = 'function ' + name + '() { return ' + implName +
       '.apply(this, dd.argsToArray(arguments))};';
     var mainDef = 'var ' + implName + ' = ' + maker +
       '('+ buildArgList(args) + ',' + buildEvalString(body) + ');';
-    return wrapper + mainDef;*/
-    return 'var ' + name + ' = function() {};\n var ' + name + ' = ' + maker +
-      '('+ buildArgList(args) + ',' + buildEvalString(body) + ');';
+    return wrapper + mainDef;
+    /*return 'var ' + name + ' = ' + maker +
+      '('+ buildArgList(args) + ',' + buildEvalString(body) + ');';*/
   } catch (e) {
     console.log('Failed to make function definition from ' + parsed);
     return '';

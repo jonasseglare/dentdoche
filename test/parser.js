@@ -12,6 +12,9 @@ var parser = require('../parser.js');
 var dd = require('../index.js');
 var fs = require('fs');
 
+eval(dd.parse("(dfn fib (x) (if (< x 2) x (+ (fib (- x 1)) (fib (- x 2)))))"));
+
+
 describe('Trying eval', function() {
   it('Should load fs using eval', function() {
     eval('var fs = require("fs"); var abc = fs.readFile');
@@ -128,18 +131,13 @@ describe('Trying eval', function() {
     done();
   });
 
-  /*it('fibAsync', function(done) {
+  it('fibSync', function(done) {
     var fibRef = function(x) {return (x < 2? x : fibRef(x-1) + fibRef(x-2));}
-    var x = dd.parse("(dafn fib (x) (if (< x 2) x (+ (this (- x 1)) (this (- x 2)))))");
-    eval(x);
-    fib(2, function(err, value) {
-      assert(!err);
-      console.log('value = ' + value);
-      assert(value == fibRef(5));
-      done();
-    });
-  });*/
-  it('this', function(done) {
+    var value = fib(7);
+    assert(value == 13);
+    done();
+  });
+  /*it('this', function(done) {
     var p = dd.parse('(dfn countDown (x) countDown)'); //(if (== 0 x) x (this (- x 1))))')
     console.log(p);
     eval(p);
@@ -149,6 +147,6 @@ describe('Trying eval', function() {
     console.log(typeof result);
     assert(result == 0);
     done();
-  });
+  });*/
 });
 
