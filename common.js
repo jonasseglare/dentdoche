@@ -115,9 +115,10 @@ function bindFunctionArgs(lvars, symbols, values) {
 }
 
 // Mark a function as async.
-function setAsync(x) {
+function setAsync(x, value) {
+  var value = value || true;
   assert(typeof x == 'function');
-  x.async = true;
+  x.async = value;
   return x;
 }
 

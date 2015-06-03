@@ -393,13 +393,16 @@ function tryMacro() {
   }
 } macro(tryMacro);
 
-
+function setAsync1(x) {
+  setAsync(x, 1);
+}
 
 
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.evaluateForm = compiler.evaluateForm;
 module.exports.setAsync = setAsync;
+module.exports.setAsync1 = setAsync1;
 module.exports.isAsync = common.isAsync;
 module.exports.getOperatorFunction = getOperatorFunction;
 module.exports.S = sym;
