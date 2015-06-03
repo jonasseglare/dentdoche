@@ -27,8 +27,6 @@ Obj.prototype.getParamAsync = dd.setAsync(function(cb) {
   cb(null, this.param);
 });
 
-var obj = new Obj();
-
 
 describe('Trying eval', function() {
   it('Should load fs using eval', function() {
@@ -207,12 +205,10 @@ describe('Trying eval', function() {
   });
 
   it('Property access', function() {
-    assert(eval("try{Obj;} catch(e) {null;}"));
-    assert(eval("try{obj;} catch(e) {null;}"));
-    var x = dd.parse(//'(def obj (new Obj)) ' +
+    var x = dd.parse('(def obj (new Obj)) ' +
                      '(console.log (+ "Obj is " obj))' +
                      '(def a (.getParamSync obj)) (def b (.getParamAsync obj))'+
-                  ' (def c (.-param obj))');
+                     ' (def c (.-param obj))');
     console.log(x);
     eval(x);
   });
