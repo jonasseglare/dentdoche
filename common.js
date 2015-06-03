@@ -64,7 +64,7 @@ function getParamNames(func) {
 
 function isAsync(x) {
   if (typeof x == 'function') {
-    return x.async;
+    return x.async == true;
   }
   return false;
 }

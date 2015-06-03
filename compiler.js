@@ -5,12 +5,23 @@ var first = common.first;
 var rest = common.rest;
 var tagged = common.tagged;
 
+function getCallingMode(fun, context) {
+  var cmode = context.get('async');
+  if (cmode) {
+    return cmode;
+  } else {
+    return fun.async;
+  }
+}
+
 function applyFunction(lvars, fun, args, context, cb) {
+  assert(context);
   if (common.isWithLVars(fun)) {
     args = [lvars].concat(args);
   }
   try {
-    if (common.isAsync(fun)) {
+    var mode = getCallingMode(fun, context);
+    if (mode == true) {
       fun.apply(null, args.concat([cb]));
     } else {
       cb(null, fun.apply(null, args));
