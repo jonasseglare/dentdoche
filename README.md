@@ -76,7 +76,10 @@ In order to just run some code for side effects, you can
 ```js
 eval(dd.parse('(console.log (+ "Three plus four is " (+ 3 4)))'));
 ```
-
+Several expressions can be evaluated within the same string:
+```js
+eval(dd.parse('(console.log (+ "Three plus four is " (+ 3 4))) (console.log "Hello!")'));
+```
 
 ### Macros
 Macros are regular Javascript functions that transform programs. Here is a macro that defines ```or``` in a lazy way:
