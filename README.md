@@ -35,7 +35,20 @@ var dd = require('dentdoche');
 dd.setAsync(fs.readFile);
 dd.setAsync(fs.writeFile);
 
-var filecat = dd.makeAfn(
+eval(dd.parse(
+  '(dafn filecat (srcA srcB dst) '+
+    '(fs.writeFile dst '+
+    '  (+ (fs.readFile srcA "utf8") (fs.readFile srcB "utf8"))))'));
+```
+but one could also write it directly using Javascript literals:
+```js
+var fs = require('fs');
+var dd = require('dentdoche');
+
+dd.setAsync(fs.readFile);
+dd.setAsync(fs.writeFile);
+
+var filecat2 = dd.makeAfn(
   ['srcA', 'srcB', 'dst'],
   [fs.writeFile,
    dd.sym('dst'),
@@ -44,13 +57,6 @@ var filecat = dd.makeAfn(
      dd.sym('srcA'), 'utf8'],
     [fs.readFile,
      dd.sym('srcB'), 'utf8']]]);
-```
-which may not be that much shorter. The structure, however, is a lot simpler. All the callbacks and error forwarding code is gone. It can also be expressed as Lisp code:
-```js
-eval(dd.parse(
-  '(dafn filecat2 (srcA srcB dst) '+
-    '(fs.writeFile dst '+
-    '  (+ (fs.readFile srcA "utf8") (fs.readFile srcB "utf8"))))'));
 ```
 Also, generalizing the function for more files is simple.
 ```js
