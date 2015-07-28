@@ -399,6 +399,8 @@ function setAsync1(x) {
   return setAsync(x, 1);
 }
 
+
+
 function makeObject() {
   var args = argsToArray(arguments);
   var n = Math.floor(args.length/2);
@@ -414,6 +416,12 @@ function makeObject() {
     throw new Exception('Failed to make JSON object from ' + JSON.stringify(args));
   }
 }
+
+// a single async call
+var acall = macro(function() {
+  var args = argsToArray(arguments);
+  return ['async', args];
+});
 
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
@@ -475,3 +483,4 @@ module.exports.declareAsyncMethods = common.declareAsyncMethods;
 module.exports.first = first;
 module.exports.rest = rest;
 module.exports.gensym = common.gensym;
+module.exports.acall = acall;

@@ -20,6 +20,7 @@ function compileSymbolResolution(x) {
 }
 
 var special = {
+  'acall': 'dd.acall',
   'async': '"async"',
   'async1': '"async1"',
   'sync': '"sync"',
