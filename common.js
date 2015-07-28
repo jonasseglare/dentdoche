@@ -300,11 +300,14 @@ function makeArrayFromArgs() {
 
 function anyAsync(arr) {
   if (isArray(arr)) {
+    console.log('anyAsync on ' + JSON.stringify(arr));
     for (var i = 0; i < arr.length; i++) {
       if (arr[i].async) {
+        console.log(' YES!!!!');
         return true;
       }
     }
+    console.log(' NO!!!!');
     return false;
   } else {
     return anyAsync(argsToArray(arguments));
@@ -314,7 +317,11 @@ function anyAsync(arr) {
 function setAsyncCond(cond, x, optValue) {
   assert(typeof x == 'function');
   optValue = optValue || true; // Can be 1.
-  return setAsync(x, (cond? optValue : undefined));
+  if (cond) {
+    return setAsync(x, (cond? optValue : undefined));
+  } else {
+    return x;
+  }
 }
 
 

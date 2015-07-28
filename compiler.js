@@ -163,9 +163,9 @@ function evaluateInSequence(lvars, compiledForms, result, cb) {
 function MakeDo(args0, context) {
   assert(context);
   var args = compileArray(args0, context);
-  return function(lvars, cb) {
+  return setAsyncCond(anyAsync(args), function(lvars, cb) {
     evaluateInSequence(lvars, args, undefined, cb);
-  }
+  });
 }
 
 function resultNotAssignedError(args) {
@@ -183,28 +183,36 @@ function MakeFn(args, context) {
   var argList = first(args);
   var body = rest(args);
   var compiledBody = compileArray(body, context);
-  
-  return function(lvars0, cb) {
-    //cb(null, 124);
-    cb(null, function() {
-      var evaluatedArgs = common.argsToArray(arguments);
-      lvars = common.bindFunctionArgs(lvars0, argList, evaluatedArgs);
-      var assigned = false;
-      var result = undefined;
-      var err = undefined;
-      evaluateInSequence(lvars, compiledBody, undefined, function(err0, value) {
-	assigned = true;
-	result = value;
-	err = err0;
+  if (anyAsync(compiledBody)) {
+    console.log('Dentdoche compilation warning:');
+    console.log('  In "fn" or "dfn", automatically switched to "afn" or "dafn"');
+    console.log('  because parts of the computation are asynchronous.');
+    console.log('  args = ');
+    console.log(JSON.stringify(args));
+    return MakeAfn(args, context);
+  } else {
+    return function(lvars0, cb) {
+      //cb(null, 124);
+      cb(null, function() {
+        var evaluatedArgs = common.argsToArray(arguments);
+        lvars = common.bindFunctionArgs(lvars0, argList, evaluatedArgs);
+        var assigned = false;
+        var result = undefined;
+        var err = undefined;
+        evaluateInSequence(lvars, compiledBody, undefined, function(err0, value) {
+	  assigned = true;
+	  result = value;
+	  err = err0;
+        });
+        
+        if (!assigned) {
+          resultNotAssignedError(args);
+        } else if (err) {
+	  throw err;
+        }
+        return result;
       });
-      
-      if (!assigned) {
-        resultNotAssignedError(args);
-      } else if (err) {
-	throw err;
-      }
-      return result;
-    });
+    }
   }
 }
 
