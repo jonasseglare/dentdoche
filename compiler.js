@@ -277,7 +277,7 @@ function MakeLet(args, context) {
   var symbolsAndCompiled = getSymbolsAndCompiled(bindings, context);
   var symbols = symbolsAndCompiled[0];
   var compiled = symbolsAndCompiled[1];
-  return function(lvars0, cb) {
+  return setAsyncCond(anyAsync(compiled), function(lvars0, cb) {
     evaluateAndBindVars(lvars0, symbols, compiled, function(err, lvars) {
       if (err) {
 	cb(err);
@@ -285,7 +285,7 @@ function MakeLet(args, context) {
 	evaluateInSequence(lvars, compileArray(body, context), undefined, cb);
       }
     });
-  };
+  });
 }
 
 function MakeErrAndVal(args, context) {
