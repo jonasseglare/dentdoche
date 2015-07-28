@@ -300,14 +300,11 @@ function makeArrayFromArgs() {
 
 function anyAsync(arr) {
   if (isArray(arr)) {
-    console.log('anyAsync on ' + JSON.stringify(arr));
     for (var i = 0; i < arr.length; i++) {
       if (arr[i].async) {
-        console.log(' YES!!!!');
         return true;
       }
     }
-    console.log(' NO!!!!');
     return false;
   } else {
     return anyAsync(argsToArray(arguments));
