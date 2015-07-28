@@ -127,7 +127,7 @@ function MakeIf(args, context) {
   assert(context);
   var cArgs = compileArray(args, context);
   assert(args.length == 2 || args.length == 3);
-  return setAsyncCond(anyAsync(cArgs), function(lvars, cb) {
+  return function(lvars, cb) {
     eval(lvars, cArgs[0], function(err, value) {
       if (value) {
 	eval(lvars, cArgs[1], cb);
@@ -137,7 +137,7 @@ function MakeIf(args, context) {
 	cb();
       }
     });
-  });
+  };
 }
 
 function MakeQuote(args) {
@@ -164,9 +164,9 @@ function evaluateInSequence(lvars, compiledForms, result, cb) {
 function MakeDo(args0, context) {
   assert(context);
   var args = compileArray(args0, context);
-  return setAsyncCond(anyAsync(args), function(lvars, cb) {
+  return function(lvars, cb) {
     evaluateInSequence(lvars, args, undefined, cb);
-  });
+  }
 }
 
 function resultNotAssignedError(args) {
@@ -278,7 +278,7 @@ function MakeLet(args, context) {
   var symbolsAndCompiled = getSymbolsAndCompiled(bindings, context);
   var symbols = symbolsAndCompiled[0];
   var compiled = symbolsAndCompiled[1];
-  return setAsyncCond(anyAsync(compiled), function(lvars0, cb) {
+  return function(lvars0, cb) {
     evaluateAndBindVars(lvars0, symbols, compiled, function(err, lvars) {
       if (err) {
 	cb(err);
@@ -286,18 +286,18 @@ function MakeLet(args, context) {
 	evaluateInSequence(lvars, compileArray(body, context), undefined, cb);
       }
     });
-  });
+  }
 }
 
 function MakeErrAndVal(args, context) {
   assert(context);
   assert(args.length == 1);
   var c = compile(args[0], context);
-  return setAsyncCond(anyAsync(c), function(lvars, cb) {
+  return function(lvars, cb) {
     eval(lvars, c, function(err, value) {
       cb(null, [err, value]);
     });
-  });
+  }
 }
 
 function MakeLater(args0, context) {
