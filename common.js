@@ -320,6 +320,7 @@ function setAsyncCond(cond, x, optValue) {
   if (cond) {
     return setAsync(x, (cond? optValue : undefined));
   } else {
+    x.async = undefined;
     return x;
   }
 }
