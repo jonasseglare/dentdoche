@@ -381,7 +381,7 @@ function compileBoundFunction(args0, context) {
       } else {
 	console.log('THE LVARS ARE: ');
 	console.log(lvars);
-	console.log(new Error('Unbound function ' + key));
+	console.log(new Error('Attempting to evaluate function: ' + JSON.stringify(key)));
       }
     });
   }

@@ -37,6 +37,7 @@ var special = {
   'return': 'dd.return',
   'next': 'dd.next',
   'quote': 'dd.quote',
+  'array': 'dd.array',
   'new': 'dd.new',
   'map': 'dd.map',
   'reduce': 'dd.reduce',
