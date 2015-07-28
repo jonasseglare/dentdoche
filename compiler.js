@@ -4,6 +4,8 @@ var assert = require('assert');
 var first = common.first;
 var rest = common.rest;
 var tagged = common.tagged;
+var setAsyncCond = common.setAsyncCond;
+var anyAsync = common.anyAsync;
 
 function getCallingMode(fun, context) {
   if (context.has('async')) {
@@ -124,7 +126,7 @@ function MakeIf(args, context) {
   assert(context);
   var cArgs = compileArray(args, context);
   assert(args.length == 2 || args.length == 3);
-  return function(lvars, cb) {
+  return setAsyncCond(anyAsync(cArgs), function(lvars, cb) {
     eval(lvars, cArgs[0], function(err, value) {
       if (value) {
 	eval(lvars, cArgs[1], cb);
@@ -134,7 +136,7 @@ function MakeIf(args, context) {
 	cb();
       }
     });
-  }
+  });
 }
 
 function MakeQuote(args) {
@@ -166,6 +168,16 @@ function MakeDo(args0, context) {
   }
 }
 
+function resultNotAssignedError(args) {
+  console.log('\n======== Result-not-assigned error ========');
+  console.log('A function (created using "fn" or "dfn", did not have its result assigned.');
+  console.log('A likely reason for this is that its result depends on some asynchronous value.');
+  console.log('In order to fix it, please make the function using "afn" or "dafn"');
+  throw new Error('Result not assigned in function with args ' + args);
+}
+
+
+
 function MakeFn(args, context) {
   assert(context);
   var argList = first(args);
@@ -187,7 +199,7 @@ function MakeFn(args, context) {
       });
       
       if (!assigned) {
-	throw new Error('Result not assigned in function ' + args);
+        resultNotAssignedError(args);
       } else if (err) {
 	throw err;
       }

@@ -393,10 +393,11 @@ function tryMacro() {
   }
 } macro(tryMacro);
 
+
+// For the special case of functions with no error code
 function setAsync1(x) {
   return setAsync(x, 1);
 }
-
 
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;

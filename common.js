@@ -298,6 +298,26 @@ function makeArrayFromArgs() {
   return argsToArray(arguments);
 }
 
+function anyAsync(arr) {
+  if (isArray(arr)) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].async) {
+        return true;
+      }
+    }
+    return false;
+  } else {
+    return anyAsync(argsToArray(arguments));
+  }
+}
+
+function setAsyncCond(cond, x, optValue) {
+  assert(typeof x == 'function');
+  optValue = optValue || true; // Can be 1.
+  return setAsync(x, (cond? optValue : undefined));
+}
+
+
 module.exports.array = makeArrayFromArgs;
 module.exports.ResultArray = ResultArray;
 module.exports.getParamNames = getParamNames;
@@ -330,3 +350,5 @@ module.exports.isWithLVars = isWithLVars;
 module.exports.withLVars = withLVars;
 module.exports.isOperator = isOperator;
 module.exports.isSymbolWithFunction = isSymbolWithFunction;
+module.exports.setAsyncCond = setAsyncCond;
+module.exports.anyAsync = anyAsync;
