@@ -292,11 +292,11 @@ function MakeErrAndVal(args, context) {
   assert(context);
   assert(args.length == 1);
   var c = compile(args[0], context);
-  return function(lvars, cb) {
+  return setAsyncCond(anyAsync(c), function(lvars, cb) {
     eval(lvars, c, function(err, value) {
       cb(null, [err, value]);
     });
-  }
+  });
 }
 
 function MakeLater(args0, context) {
