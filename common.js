@@ -322,6 +322,41 @@ function setAsyncCond(cond, x, optValue) {
   }
 }
 
+function getArgIndsOfType(args, type) {
+  return args.map(function(arg, index) {
+    if (typeof arg == type) {
+      return index;
+    }
+    return -1;
+  }).filter(function(arg) {
+    return arg != -1;
+  });
+}
+
+function declareAsyncSub(x, arg) {
+  setAsync(x, arg == 1);
+}
+
+function declareAsync() {
+  var args = argsToArray(arguments);
+  var functionInds = getArgIndsOfType(args, 'function');
+  for (var i = 0; i < functionInds.length; i++) {
+    var index = functionInds[i];
+    declareAsyncSub(args[index], args[index + 1]);
+  }
+}
+
+function declareAsyncMethods() {
+  var args0 = argsToArray(arguments);
+  var dst = args0[0];
+  var args = args0.slice(1);
+  var functionInds = getArgIndsOfType(args, 'string');
+  for (var i = 0; i < args.length; i++) {
+    var index = functionInds[i];
+    declareAsyncSub(dst.prototype[args[index]], args[index + 1]);
+  }
+}
+
 
 module.exports.array = makeArrayFromArgs;
 module.exports.ResultArray = ResultArray;
@@ -357,3 +392,5 @@ module.exports.isOperator = isOperator;
 module.exports.isSymbolWithFunction = isSymbolWithFunction;
 module.exports.setAsyncCond = setAsyncCond;
 module.exports.anyAsync = anyAsync;
+module.exports.declareAsync = declareAsync;
+module.exports.declareAsyncMethods = declareAsyncMethods;

@@ -34,6 +34,8 @@ var special = {
   'catch': 'dd.catch',
   'fn': 'dd.fn',
   'afn': 'dd.afn',
+  'get': 'dd.get',
+  'set': 'dd.set',
   'loop': 'dd.loop',
   'return': 'dd.return',
   'next': 'dd.next',
@@ -44,7 +46,9 @@ var special = {
   'reduce': 'dd.reduce',
   'and': 'dd.and',
   'or': 'dd.or',
-  'not': 'dd.not'
+  'not': 'dd.not',
+  'first': 'dd.first',
+  'rest' : 'dd.rest'
 };
 
 function isPropertyAccess(x) {
