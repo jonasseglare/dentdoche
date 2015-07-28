@@ -780,6 +780,11 @@ describe('evaluateSymbol', function() {
       });
   });
 
+  // it('doseq', function(done) {
+  //   dd.evaluateForm(
+  //     null, [dd.doseq, ['i', [dd.array, 0, 1, 2]], [console.log, i]]
+  // });
+
   it('localvar0', function() {
     var f = dd.makeFn(['gensym0'],
 		      ['let',

@@ -271,6 +271,10 @@ function tagged(cb, str) {
   }
 }
 
+function empty(x) {
+  return x.length == 0;
+}
+
 function makeImmutableMap(x) {
   if (x) {
     if (x instanceof immutable.Map) {
@@ -394,3 +398,4 @@ module.exports.setAsyncCond = setAsyncCond;
 module.exports.anyAsync = anyAsync;
 module.exports.declareAsync = declareAsync;
 module.exports.declareAsyncMethods = declareAsyncMethods;
+module.exports.empty = empty;

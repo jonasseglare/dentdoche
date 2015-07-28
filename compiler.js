@@ -344,7 +344,7 @@ var specialForms = {
 
 function compileCall(f, args0, context) {
   assert(context);
-  var args = compileArray(args0, context);
+  var args = compileArray(args0, context.delete('async'));
   var n = args.length;
   return function(lvars, cb) {
     var result = new common.ResultArray(n, function(err, evaluatedArgs) {
@@ -372,7 +372,7 @@ function evaluateArrayElements(lvars, array, cb) {
 function compileBoundFunction(args0, context) {
   assert(context);
   var key = common.getName(first(args0))
-  var args = compileArray(rest(args0), context);
+  var args = compileArray(rest(args0), context.delete('async'));
   return function(lvars, cb) {
     evaluateArrayElements(lvars, args, function(err, evaluated) {
       var f = common.getLocalVar(lvars, key);
@@ -451,7 +451,7 @@ function compileFieldAccess(x, context) {
 function compileMethodAccess(x, context) {
   assert(context);
   var f = first(x).slice(1);
-  var args0 = compileArray(rest(x), context);
+  var args0 = compileArray(rest(x), context.delete('async'));
   return function(lvars, cb) {
     evaluateArrayElements(lvars, args0, function(err, evaluated) {
       var obj = first(evaluated);
@@ -510,7 +510,7 @@ function compileStringForm(x, f, args, context) {
 
 function compileGeneratedFunctionCall(x, context) {
   assert(context);
-  var allArgs = compileArray(x, context);
+  var allArgs = compileArray(x, context.delete('async'));
   var f = first(allArgs);
   var args = rest(allArgs);
   return function(lvars, cb) {

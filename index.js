@@ -371,6 +371,19 @@ function loopNext() {
   return [true, argsToArray(arguments)];
 }
 
+function doseq() {
+  var args = argsToArray(arguments);
+  var binding = args[0];
+  var vars = binding[0];
+  var data = binding[1];
+  var seq = common.gensym();
+  var body = ['do'].concat(bindings);
+  return [loop, [seq, data], ['let', [vars, [common.first, seq]],
+                              ['if', [common.empty, seq], [loopReturn, null],
+                               ['do', body, [loopNext, [common.rest, seq]]]]]];
+  
+} macro(doseq);
+
 function tryMacro() {
   var args = argsToArray(arguments);
   var body = ["do"].concat(butLast(args));
@@ -414,6 +427,17 @@ function makeObject() {
     return dst;
   } catch (e) {
     throw new Exception('Failed to make JSON object from ' + JSON.stringify(args));
+  }
+}
+
+function makeAsync(fun) {
+  if (common.isAsync(fun)) {
+    return fun;
+  } else {
+    return setAsync(function() {
+      var args = argsToArray(arguments);
+      return fun.apply(null, args);
+    });
   }
 }
 
@@ -484,3 +508,4 @@ module.exports.first = first;
 module.exports.rest = rest;
 module.exports.gensym = common.gensym;
 module.exports.acall = acall;
+module.exports.makeAsync = makeAsync;
