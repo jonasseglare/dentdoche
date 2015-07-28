@@ -6,6 +6,7 @@ var rest = common.rest;
 var tagged = common.tagged;
 var setAsyncCond = common.setAsyncCond;
 var anyAsync = common.anyAsync;
+var setAsync = common.setAsync;
 
 function getCallingMode(fun, context) {
   if (context.has('async')) {
@@ -220,7 +221,7 @@ function MakeAfn(args, context) {
   assert(context);
   var argList = first(args);
   var compiledBody = compileArray(rest(args), context);
-  return function(lvars0, cb) {
+  return setAsync(function(lvars0, cb) {
     //cb(null, 124);
     cb(null, common.setAsync(function() {
       
@@ -234,7 +235,7 @@ function MakeAfn(args, context) {
 	lvars,
 	compiledBody, undefined, resultCb);
     }));
-  }
+  });
 }
 
 function getSymbolsAndCompiled(bindings, context) {
@@ -302,11 +303,11 @@ function MakeErrAndVal(args, context) {
 function MakeLater(args0, context) {
   assert(context);
   var args = compileArray(args0, context);
-  return function(lvars, cb) {
+  return setAsync(function(lvars, cb) {
     setTimeout(function() {
       evaluateInSequence(lvars, args, undefined, cb);
     }, 0);
-  };
+  });
 }
 
 function MakeS(args, value, context) {
