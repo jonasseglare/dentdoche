@@ -399,6 +399,22 @@ function setAsync1(x) {
   return setAsync(x, 1);
 }
 
+function makeObject() {
+  var args = argsToArray(arguments);
+  var n = Math.floor(args.length/2);
+  assert(2*n - args.length == 0, 'An even number of arguments (key-value-pairs) must be provided in order to make a json object');
+  try {
+    var dst = {};
+    for (var i = 0; i < n; i++) {
+      var offset = 2*i;
+      dst[args[offset + 0]] = args[offset + 1];
+    }
+    return dst;
+  } catch (e) {
+    throw new Exception('Failed to make JSON object from ' + JSON.stringify(args));
+  }
+}
+
 module.exports.evaluateSymbol = evaluateSymbol;
 module.exports.Symbol = Symbol;
 module.exports.evaluateForm = compiler.evaluateForm;
@@ -427,6 +443,7 @@ module.exports.filter = filterAsync;
 module.exports.quote = makeSpecialFormMacro("quote");
 module.exports.let = makeSpecialFormMacro("let");
 module.exports.do = makeSpecialFormMacro("do");
+module.exports.object = makeObject;
 
 // Use for local functions, instead of fn and afn:
 // Those function will not capture local variables.

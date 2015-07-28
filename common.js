@@ -121,7 +121,7 @@ function bindFunctionArgs(lvars, symbols, values) {
 // Mark a function as async.
 function setAsync(x, value) {
   var value = value || true;
-  assert(typeof x == 'function');
+  assert(typeof x == 'function', 'You must pass a function to setAsync, but you passed ' + JSON.stringify(x));
   x.async = value;
   return x;
 }

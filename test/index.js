@@ -832,4 +832,11 @@ describe('evaluateSymbol', function() {
       }
     );
   });
+
+  it('object notation', function() {
+    dd.evaluateForm(null, [dd.object, 'a', 0, 'b', 1], function(err, value) {
+      assert(value.a == 0);
+      assert(value.b == 1);
+    });
+  });
 });

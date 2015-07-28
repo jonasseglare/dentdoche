@@ -27,6 +27,7 @@ var special = {
   'this': 'this',
   'do': 'dd.do',
   'let': 'dd.let',
+  'object': 'dd.object',
   'if': 'dd.if',
   'cond': 'dd.cond',
   'try': 'dd.try',
